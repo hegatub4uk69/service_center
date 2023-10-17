@@ -1,11 +1,8 @@
 <template>
   <v-card class="fill-height">
-    <v-container>
-      <v-row no-gutters=""
-      style="height: 800px; width: 1800px"
-      >
-        <v-col></v-col>
-        <v-col align-self="center">
+    <v-container class="fill-height" fluid="">
+      <v-row align="center" justify="center" dense="">
+        <v-col cols="12" sm="8" md="4" lg="4">
           <v-form
             v-model="form"
             @submit.prevent="onSubmit"
@@ -45,7 +42,7 @@
                 color="info"
                 size="large"
                 class="ma-2"
-              >Регистрация
+              >{{reg_btn_name}}
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn
@@ -57,12 +54,11 @@
                 color="success"
                 size="large"
                 class="ma-2"
-              >Авторизация
+              >{{log_btn_name}}
               </v-btn>
             </v-card-actions>
           </v-form>
         </v-col>
-        <v-col></v-col>
       </v-row>
     </v-container>
   </v-card>
@@ -79,6 +75,8 @@ export default {
     loading: false,
     authorize: false,
     register: false,
+    log_btn_name: 'Авторизация',
+    reg_btn_name: 'Регистрация',
   }),
 
   methods: {
