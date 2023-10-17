@@ -3,11 +3,16 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 
 const routes = [
-  {
+  /*{
     path: '/',
-    name: 'Reg_Log',
+    name: '*',
     component: () => import('@/views/Reg_Log.vue'),
-  },
+  },*/
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/Reg_Log.vue'),
+  }
 ]
 
 const router = createRouter({

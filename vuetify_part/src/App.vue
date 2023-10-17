@@ -3,12 +3,65 @@
 
     <v-app-bar
       app
-      color="blue"
+      color="primary"
+      theme="dark"
+      image="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
     >
       <v-app-bar-title>
-        <h3 class="text-h4 white--text">Service_Center</h3>
+        <h3 class="text-h4 white--text">{{ app_name }}</h3>
       </v-app-bar-title>
     </v-app-bar>
+
+    <v-navigation-drawer
+      image="https://www.fonstola.ru/images/201111/fonstola.ru_52146.jpg"
+      permanent="" expand-on-hover="" rail="">
+      <v-list>
+        <v-list-item
+          prepend-avatar="https://www.vippng.com/png/full/363-3631840_profile-icon-png-profile-icon-png-white-transparent.png"
+          :title="user.fullName"
+          :subtitle="user.email"
+        ></v-list-item>
+      </v-list>
+
+      <v-divider></v-divider>
+
+      <v-list density="compact" nav="">
+        <v-list-item
+          to="/"
+          color=""
+          base-color="white"
+          variant=""
+          prepend-icon="mdi-account-circle-outline"
+          :title="nav_menu.btn_lk"
+          value="myfiles">
+        </v-list-item>
+        <v-list-item
+          to="/login"
+          color=""
+          base-color="white"
+          variant=""
+          prepend-icon="mdi-archive-outline"
+          :title="nav_menu.btn_services"
+          value="shared">
+        </v-list-item>
+        <v-list-item
+          color=""
+          base-color="white"
+          variant=""
+          prepend-icon="mdi-card-plus-outline"
+          :title="nav_menu.btn_reg_serv"
+          value="starred">
+        </v-list-item>
+        <v-list-item
+          color=""
+          base-color="white"
+          variant=""
+          prepend-icon="mdi-logout"
+          :title="nav_menu.btn_logout"
+          value="starred">
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
 
     <v-main>
       <router-view></router-view>
@@ -18,7 +71,24 @@
 </template>
 
 <script>
-  export default {
-    name: 'App'
-  }
+export default {
+  name: 'App',
+  data: () => ({
+    app_name: 'Service_center',
+    user: {
+      fullName: 'Test Test',
+      email: 'test@gmail.com'
+    },
+    nav_menu: {
+      btn_lk: 'Личный кабинет',
+      btn_services: 'Архив услуг',
+      btn_reg_serv: 'Оформление услуги',
+      btn_logout: 'Выход',
+    },
+    links: {
+      main: '/',
+      login: '/login',
+    },
+  }),
+}
 </script>

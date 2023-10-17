@@ -66,7 +66,7 @@
 
 <script>
 export default {
-  name: 'Reg_Log',
+  name: 'LoginPage',
   data: () => ({
     showPassword: false,
     form: false,
