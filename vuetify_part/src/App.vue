@@ -17,7 +17,7 @@
       permanent="" expand-on-hover="" rail="">
       <v-list>
         <v-list-item
-          prepend-avatar="https://www.vippng.com/png/full/363-3631840_profile-icon-png-profile-icon-png-white-transparent.png"
+          prepend-avatar="/kompyuternyj-servis.png"
           :title="user.fullName"
           :subtitle="user.email"
         ></v-list-item>
@@ -27,8 +27,8 @@
 
       <v-list density="compact" nav="">
         <v-list-item
-          to=""
-          color=""
+          :to="links.profile"
+          color="red"
           base-color="white"
           variant=""
           prepend-icon="mdi-account-circle-outline"
@@ -36,8 +36,8 @@
           value="lk">
         </v-list-item>
         <v-list-item
-          to=""
-          color=""
+          :to="links.login"
+          color="red"
           base-color="white"
           variant=""
           prepend-icon="mdi-archive-outline"
@@ -45,7 +45,7 @@
           value="archive">
         </v-list-item>
         <v-list-item
-          color=""
+          color="red"
           base-color="white"
           variant=""
           prepend-icon="mdi-card-plus-outline"
@@ -53,7 +53,7 @@
           value="new_serv">
         </v-list-item>
         <v-list-item
-          color=""
+          color="red"
           base-color="white"
           variant=""
           prepend-icon="mdi-logout"
@@ -74,7 +74,7 @@
 export default {
   name: 'App',
   data: () => ({
-    app_name: 'Service_center',
+    app_name: 'Сервисный центр',
     user: {
       fullName: 'Test Test',
       email: 'test@gmail.com'
@@ -88,6 +88,7 @@ export default {
     links: {
       main: '/',
       login: '/login',
+      profile: '/profile',
     },
   }),
 }
