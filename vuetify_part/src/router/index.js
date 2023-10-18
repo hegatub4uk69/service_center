@@ -6,12 +6,12 @@ const routes = [
   /*{
     path: '/',
     name: '*',
-    component: () => import('@/views/Reg_Log.vue'),
+    component: () => import('@/views/LoginPage.vue'),
   },*/
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/views/Reg_Log.vue'),
+    component: () => import('@/views/LoginPage.vue'),
   }
 ]
 

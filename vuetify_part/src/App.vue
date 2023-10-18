@@ -5,7 +5,7 @@
       app
       color="primary"
       theme="dark"
-      image="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
+      image="https://www.fonstola.ru/images/201111/fonstola.ru_52146.jpg"
     >
       <v-app-bar-title>
         <h3 class="text-h4 white--text">{{ app_name }}</h3>
@@ -27,22 +27,22 @@
 
       <v-list density="compact" nav="">
         <v-list-item
-          to="/"
+          to=""
           color=""
           base-color="white"
           variant=""
           prepend-icon="mdi-account-circle-outline"
           :title="nav_menu.btn_lk"
-          value="myfiles">
+          value="lk">
         </v-list-item>
         <v-list-item
-          to="/login"
+          to=""
           color=""
           base-color="white"
           variant=""
           prepend-icon="mdi-archive-outline"
           :title="nav_menu.btn_services"
-          value="shared">
+          value="archive">
         </v-list-item>
         <v-list-item
           color=""
@@ -50,7 +50,7 @@
           variant=""
           prepend-icon="mdi-card-plus-outline"
           :title="nav_menu.btn_reg_serv"
-          value="starred">
+          value="new_serv">
         </v-list-item>
         <v-list-item
           color=""
@@ -58,7 +58,7 @@
           variant=""
           prepend-icon="mdi-logout"
           :title="nav_menu.btn_logout"
-          value="starred">
+          value="logout">
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
