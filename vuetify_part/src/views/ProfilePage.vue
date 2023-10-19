@@ -10,49 +10,42 @@
             <span class="title text-secondary py-2 font-weight-bold">{{ name }}</span>
           </v-row>
           <v-text-field
-            label="First Name"
-            prepend-inner-icon="mdi-account-outline"
+            :rules="[required]"
+            label="Фамилия"
+            prepend-inner-icon="mdi-card-account-details-outline"
           ></v-text-field>
           <v-text-field
-            label="Last Name"
-            prepend-inner-icon="mdi-account-outline"
+            :rules="[required]"
+            label="Имя"
+            prepend-inner-icon="mdi-card-account-details-outline"
           ></v-text-field>
           <v-text-field
-            label="Username"
-            prepend-inner-icon="mdi-account-outline"
+            label="Отчество (не обязательно)"
+            prepend-inner-icon="mdi-card-account-details-outline"
           ></v-text-field>
           <v-text-field
-            label="Email"
+            :rules="[required]"
+            label="Логин"
+            prepend-inner-icon="mdi-alpha-l-box-outline"
+          ></v-text-field>
+          <v-text-field
+            label="Электронная почта (не обязательно)"
             prepend-inner-icon="mdi-email-outline"
           ></v-text-field>
           <v-text-field
-            label="Address"
-            prepend-inner-icon="mdi-map-marker-outline"
-          ></v-text-field>
-          <v-text-field
-            label="Phone Number"
+            :rules="[required]"
+            label="Номер телефона"
             prepend-inner-icon="mdi-phone-outline"
           ></v-text-field>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-btn
-                color="secondary"
-                text
-                block
-                tile
-                elevation="0"
-                class="pa-6 font-weight-bold"
-              >Cancel
-              </v-btn>
-            </v-col>
+          <v-row align="center" justify="center">
             <v-col cols="12" md="6">
               <v-btn
                 color="info"
                 class="pa-6 font-weight-bold"
-                block
+                block=""
                 tile
                 elevation="0"
-              >Update
+              >Изменить
               </v-btn>
             </v-col>
           </v-row>
@@ -65,5 +58,15 @@
 <script>
 export default {
   name: 'ProfilePage',
+  methods: {
+    onSubmit() {
+      if (!this.form) return
+      this.loading = true
+      setTimeout(() => (this.loading = false), 2000)
+    },
+    required(value) {
+      return !!value || 'Поле обязательно для заполнения'
+    },
+  },
 };
 </script>

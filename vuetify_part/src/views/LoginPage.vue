@@ -16,7 +16,7 @@
                 label="Username"
                 color="primary"
                 prepend-inner-icon="mdi-account-circle-outline"
-                hint="Enter your login to access to website"
+                hint="Введите логин для доступа к сайту"
               />
               <v-text-field
                 v-model="password"
@@ -27,7 +27,7 @@
                 label="Password"
                 color="primary"
                 prepend-inner-icon="mdi-lock-outline"
-                hint="Enter your password to access to website"
+                hint="Введите пароль для доступа к сайту"
                 :append-inner-icon="showPassword ? 'mdi-eye-outline' : 'mdi-eye-off-outline' "
                 @click:append-inner="showPassword = !showPassword"
               />
@@ -86,7 +86,7 @@ export default {
       setTimeout(() => (this.loading = false), 2000)
     },
     required(value) {
-      return !!value || 'Field is required'
+      return !!value || 'Поле обязательно для заполнения'
     },
   },
 }

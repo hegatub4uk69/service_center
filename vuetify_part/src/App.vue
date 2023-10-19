@@ -13,10 +13,12 @@
     </v-app-bar>
 
     <v-navigation-drawer
+
       image="https://www.fonstola.ru/images/201111/fonstola.ru_52146.jpg"
       permanent="" expand-on-hover="" rail="">
       <v-list>
         <v-list-item
+          base-color="white"
           prepend-avatar="/kompyuternyj-servis.png"
           :title="user.fullName"
           :subtitle="user.email"
@@ -36,7 +38,7 @@
           value="lk">
         </v-list-item>
         <v-list-item
-          :to="links.login"
+          :to="links.services"
           color="red"
           base-color="white"
           variant=""
@@ -89,6 +91,7 @@ export default {
       main: '/',
       login: '/login',
       profile: '/profile',
+      services: '/services',
     },
   }),
 }
