@@ -43,7 +43,8 @@
           <v-divider color="black"></v-divider>
           <v-card-actions>
             <v-btn
-              color="orange-lighten-2" variant="text">Explore</v-btn>
+              color="orange-lighten-2" variant="text">Explore
+            </v-btn>
             <v-spacer></v-spacer>
             <v-btn
               :icon="item.show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
@@ -65,39 +66,39 @@
 
 <script>
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: 'List',
+  name: 'Services_List',
   data: () => ({
     show: false,
-    items_list: [
-      {
-        id: 0,
-        status: 'Ожидание',
-        staff: 'Test Test Test',
-        name: 'gt 710',
-        category: 'Видеокарты',
-        description: 'Не заполнено',
-        show: false
-      },
-      {
-        id: 1,
-        status: 'Ожидание',
-        staff: 'Test Test Test',
-        name: 'r5 3600',
-        category: 'Процессор',
-        description: 'Не заполнено',
-        show: false
-      },
-      {
-        id: 2,
-        status: 'Ожидание',
-        staff: 'Test Test Test',
-        name: 'r5 3600',
-        category: 'Процессор',
-        description: 'Не заполнено',
-        show: false
-      },
-    ]
-  })
+    items_list:
+      [
+        {
+          id: 0,
+          status: 'Ожидание',
+          staff: 'Test Test Test',
+          name: 'gt 710',
+          category: 'Видеокарты',
+          description: 'Не заполнено',
+          show: false
+        },
+        {
+          id: 1,
+          status: 'Ожидание',
+          staff: 'Test Test Test',
+          name: 'r5 3600',
+          category: 'Процессор',
+          description: 'Не заполнено',
+          show: false
+        },
+        {
+          id: 2,
+          status: 'Ожидание',
+          staff: 'Test Test Test',
+          name: 'r5 3600',
+          category: 'Процессор',
+          description: 'Не заполнено',
+          show: false
+        },
+      ]
+  }),
 }
 </script>
