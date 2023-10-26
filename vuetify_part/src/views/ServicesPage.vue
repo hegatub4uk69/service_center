@@ -1,5 +1,25 @@
 <template>
   <v-container>
+    <v-row align="center" justify="center" dense="">
+      <v-col>
+        <v-card class="card-filter">
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-radio label="Все" color="red" value="red"></v-radio>
+            <v-radio label="Ожидание" color="red" value="red"></v-radio>
+            <v-radio label="В_работе" color="red" value="red"></v-radio>
+            <v-radio label="Исполнен" color="red" value="red"></v-radio>
+<!--            <v-btn color="primary" variant="outlined">Все</v-btn>
+            <v-btn color="primary" variant="outlined">Ожидание</v-btn>
+            <v-btn color="primary" variant="outlined">В работе</v-btn>
+            <v-btn color="primary" variant="outlined">Исполнен</v-btn>-->
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+  <v-container>
     <v-row dense="">
       <v-col>
         <v-data-table
@@ -8,13 +28,13 @@
           :items="services"
           item-value="id"
           show-expand=""
-          class="elevation-1"
+          class="elevation-1 table"
         >
           <template v-slot:top>
             <v-toolbar flat="">
               <v-toolbar-title>
                 <v-icon icon="mdi-book-outline"></v-icon>
-                Таблица оформленных услуг
+                Заказы
               </v-toolbar-title>
               <v-divider
                 class="mx-4"
@@ -30,11 +50,11 @@
                   <v-btn
                     color="purple"
                     dark
-                    class="mb-2"
+                    class="mb-2 btn-new"
                     v-bind="props"
                     variant="outlined"
+                    icon="mdi-plus"
                   >
-                    Новая услуга
                   </v-btn>
                 </template>
                 <v-card>
@@ -117,7 +137,7 @@
             </v-chip>
           </template>
           <template v-slot:expanded-row="{ columns, item }">
-            <tr bgcolor="black">
+            <tr>
               <td :colspan="columns.length">
                 Описание дефектов {{ item.name }}:
                 {{ item.description }}
@@ -298,7 +318,7 @@ export default {
       this.dialogDelete = true
     },
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1)
+      this.services.splice(this.editedIndex, 1)
       this.closeDelete()
     },
     close() {
@@ -328,7 +348,20 @@ export default {
 </script>
 
 <style scoped>
-/*.table-header {
-  background-color: #ce6666;
-}*/
+.table {
+  background: #fff;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+.table-header {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  /*background-color: #ce6666;*/
+}
+.btn-new {
+  border-radius: 10px;
+}
+.card-filter {
+  justify-content: center;
+}
 </style>
