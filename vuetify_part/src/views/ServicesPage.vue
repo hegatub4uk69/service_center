@@ -1,23 +1,22 @@
 <template>
-  <v-container>
-    <v-row align="center" justify="center" dense="">
-      <v-col>
-        <v-card class="card-filter">
-          <v-card-actions>
+  <v-container style="height: 50px">
+    <v-card style="height: 40px" color="">
+      <v-row align="center" justify="center" dense="">
+        <v-col cols="12" sm="8" md="4" lg="8">
+          <v-radio-group inline>
             <v-spacer></v-spacer>
-            <v-radio label="Все" color="red" value="red"></v-radio>
-            <v-radio label="Ожидание" color="red" value="red"></v-radio>
-            <v-radio label="В_работе" color="red" value="red"></v-radio>
-            <v-radio label="Исполнен" color="red" value="red"></v-radio>
-<!--            <v-btn color="primary" variant="outlined">Все</v-btn>
-            <v-btn color="primary" variant="outlined">Ожидание</v-btn>
-            <v-btn color="primary" variant="outlined">В работе</v-btn>
-            <v-btn color="primary" variant="outlined">Исполнен</v-btn>-->
+            <v-radio class="radio-btn" label="Все" color="red" value="all"></v-radio>
             <v-spacer></v-spacer>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
+            <v-radio class="radio-btn" label="Ожидание" color="red" value="wait"></v-radio>
+            <v-spacer></v-spacer>
+            <v-radio class="radio-btn" label="В_работе" color="red" value="work"></v-radio>
+            <v-spacer></v-spacer>
+            <v-radio class="radio-btn" label="Готов" color="red" value="done"></v-radio>
+            <v-spacer></v-spacer>
+          </v-radio-group>
+        </v-col>
+      </v-row>
+    </v-card>
   </v-container>
   <v-container>
     <v-row dense="">
@@ -25,22 +24,32 @@
         <v-data-table
           v-model:expanded="expanded"
           :headers="servicesHeaders"
+          :search="search"
           :items="services"
           item-value="id"
           show-expand=""
           class="elevation-1 table"
         >
           <template v-slot:top>
-            <v-toolbar flat="">
-              <v-toolbar-title>
-                <v-icon icon="mdi-book-outline"></v-icon>
-                Заказы
+            <v-toolbar flat="" color="white">
+              <v-toolbar-title style="">
+                <v-card
+                  class="text-center"
+                  position="fixed"
+                  color="success"
+                  style="bottom: 775px; top: 100px; height: 80px; width: 80px">
+                  <v-icon color="" class="my-5" size="40px" icon="mdi-book"></v-icon>
+                </v-card>
+                <label style="margin-left: 100px; font-size: 25px;">Заказы</label>
               </v-toolbar-title>
-              <v-divider
-                class="mx-4"
-                inset=""
-                vertical=""
-              ></v-divider>
+              <v-text-field
+                v-model="search"
+                variant="underlined"
+                prepend-inner-icon="mdi-table-search"
+                label="Введите поисковое значение"
+                single-line
+                hide-details
+              ></v-text-field>
               <v-spacer></v-spacer>
               <v-dialog
                 v-model="dialog"
@@ -50,18 +59,16 @@
                   <v-btn
                     color="purple"
                     dark
-                    class="mb-2 btn-new"
+                    class="mb-2"
                     v-bind="props"
                     variant="outlined"
-                    icon="mdi-plus"
-                  >
+                  >Оформить
                   </v-btn>
                 </template>
                 <v-card>
                   <v-card-title>
                     <span class="text-h5">{{ formTitle }}</span>
                   </v-card-title>
-
                   <v-card-text>
                     <v-container>
                       <v-row>
@@ -173,6 +180,7 @@ export default {
     return {
       dialog: false,
       dialogDelete: false,
+      search: '',
       expanded: [],
       servicesHeaders: [
         {
@@ -220,7 +228,7 @@ export default {
         },
         {
           id: 2,
-          status: 'Исполнен',
+          status: 'Готов',
           staff: 'Test Test Test',
           name: 'r5 3600',
           category: 'Процессоры',
@@ -353,15 +361,12 @@ export default {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
 }
-.table-header {
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  /*background-color: #ce6666;*/
+
+.radio-btn /deep/ label {
+  color: #181818;
 }
-.btn-new {
-  border-radius: 10px;
-}
-.card-filter {
-  justify-content: center;
+
+.table-title /deep/ label {
+  color: #181818;
 }
 </style>
