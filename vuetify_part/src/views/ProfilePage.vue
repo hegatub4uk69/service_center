@@ -1,61 +1,47 @@
 <template>
-  <v-card class="fill-height">
-    <v-container>
-      <v-row align="center" justify="center" dense="">
-        <v-col cols="12" sm="8" md="4" lg="6">
-          <v-row align="center" justify="center" dense="">
-            <v-avatar image="/kompyuternyj-servis.png" size="300px"/>
-          </v-row>
-          <v-row align="center" justify="center" dense="" class="justify-center pb-5">
-            <span class="title text-secondary py-2 font-weight-bold">{{ name }}</span>
-          </v-row>
-          <v-text-field
-            :rules="[required]"
-            label="Фамилия"
-            prepend-inner-icon="mdi-card-account-details-outline"
-          ></v-text-field>
-          <v-text-field
-            :rules="[required]"
-            label="Имя"
-            prepend-inner-icon="mdi-card-account-details-outline"
-          ></v-text-field>
-          <v-text-field
-            label="Отчество (не обязательно)"
-            prepend-inner-icon="mdi-card-account-details-outline"
-          ></v-text-field>
-          <v-text-field
-            :rules="[required]"
-            label="Логин"
-            prepend-inner-icon="mdi-alpha-l-box-outline"
-          ></v-text-field>
-          <v-text-field
-            label="Электронная почта (не обязательно)"
-            prepend-inner-icon="mdi-email-outline"
-          ></v-text-field>
-          <v-text-field
-            :rules="[required]"
-            label="Номер телефона"
-            prepend-inner-icon="mdi-phone-outline"
-          ></v-text-field>
-          <v-row align="center" justify="center">
-            <v-col cols="12" md="6">
-              <v-btn
-                color="info"
-                class="pa-6 font-weight-bold"
-                block=""
-                tile
-                elevation="0"
-              >Изменить
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-card>
+  <v-container>
+    <v-row align="center" justify="center" dense="">
+      <v-card elevation="5" style="width: 880px">
+        <v-row align="center" justify="center" dense="">
+          <v-col class="px-5" cols="12" sm="8" md="8" lg="8">
+            <v-card-text>
+              <v-img
+                class="mx-16"
+                :width="350"
+                src="/kompyuternyj-servis.png"
+              ></v-img>
+              <v-chip-group>
+                <v-chip class="chips" label>
+                  <v-icon start="" icon="mdi-card-account-details-outline"></v-icon>
+                  Фамилия Имя Отчество
+                </v-chip>
+                <v-chip class="chips" label>
+                  <v-icon start="" icon="mdi-alpha-l-box-outline"></v-icon>
+                  Логин
+                </v-chip>
+                <v-chip class="chips" label>
+                  <v-icon start="" icon="mdi-phone-outline"></v-icon>
+                  Номер телефона
+                </v-chip>
+                <v-chip class="chips" label>
+                  <v-icon start="" icon="mdi-notebook-plus-outline"></v-icon>
+                  Количество принятых заказов: 5
+                </v-chip>
+                <v-chip class="chips" label>
+                  <v-icon start="" icon="mdi-notebook-check-outline"></v-icon>
+                  Количество закрытых заказов: 3
+                </v-chip>
+              </v-chip-group>
+            </v-card-text>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+
 export default {
   name: 'ProfilePage',
   methods: {
@@ -70,3 +56,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.chips {
+  font-size: 25px;
+  width: 500px;
+  height: 50px;
+}
+</style>

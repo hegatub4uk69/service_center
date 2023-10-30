@@ -1,19 +1,34 @@
 <template>
-  <v-container style="height: 50px">
-    <v-card style="height: 40px" color="">
+  <v-container style="height: 80px">
+    <v-card style="height: 70px" color="">
       <v-row align="center" justify="center" dense="">
-        <v-col cols="12" sm="8" md="4" lg="8">
-          <v-radio-group inline>
+        <v-col cols="12" sm="8" md="6" lg="5">
+          <v-radio-group v-model="radios" inline>
             <v-spacer></v-spacer>
-            <v-radio class="radio-btn" label="Все" color="red" value="all"></v-radio>
+            <v-radio @click="getAllData"
+                     class="radio-btn" label="Все" color="red" value="all"></v-radio>
             <v-spacer></v-spacer>
-            <v-radio class="radio-btn" label="Ожидание" color="red" value="wait"></v-radio>
+            <v-radio @click="getWaitData"
+                     class="radio-btn" label="Ожидание" color="red" value="wait"></v-radio>
             <v-spacer></v-spacer>
-            <v-radio class="radio-btn" label="В_работе" color="red" value="work"></v-radio>
+            <v-radio @click="getWorkData"
+                     class="radio-btn" label="В_работе" color="red" value="work"></v-radio>
             <v-spacer></v-spacer>
-            <v-radio class="radio-btn" label="Готов" color="red" value="done"></v-radio>
+            <v-radio @click="getDoneData"
+                     class="radio-btn" label="Готов" color="red" value="done"></v-radio>
             <v-spacer></v-spacer>
           </v-radio-group>
+        </v-col>
+        <v-col cols="12" sm="8" md="4" lg="5">
+          <v-text-field
+              v-model="search"
+              variant="underlined"
+              style="height: 90px"
+              prepend-inner-icon="mdi-table-search"
+              label="Введите поисковое значение"
+              single-line
+          >
+          </v-text-field>
         </v-col>
       </v-row>
     </v-card>
@@ -22,46 +37,38 @@
     <v-row dense="">
       <v-col>
         <v-data-table
-          v-model:expanded="expanded"
-          :headers="servicesHeaders"
-          :search="search"
-          :items="services"
-          item-value="id"
-          show-expand=""
-          class="elevation-1 table"
+            v-model:expanded="expanded"
+            :headers="servicesHeaders"
+            :search="search"
+            :items="filteredItems"
+            item-value="id"
+            show-expand=""
+            class="elevation-1 table"
         >
           <template v-slot:top>
             <v-toolbar flat="" color="white">
               <v-toolbar-title style="">
                 <v-card
-                  class="text-center"
-                  position="fixed"
-                  color="success"
-                  style="bottom: 775px; top: 100px; height: 80px; width: 80px">
+                    class="text-center"
+                    position="fixed"
+                    color="success"
+                    style="bottom: 775px; top: 126px; height: 80px; width: 80px">
                   <v-icon color="" class="my-5" size="40px" icon="mdi-book"></v-icon>
                 </v-card>
                 <label style="margin-left: 100px; font-size: 25px;">Заказы</label>
               </v-toolbar-title>
-              <v-text-field
-                v-model="search"
-                variant="underlined"
-                prepend-inner-icon="mdi-table-search"
-                label="Введите поисковое значение"
-                single-line
-                hide-details
-              ></v-text-field>
               <v-spacer></v-spacer>
               <v-dialog
-                v-model="dialog"
-                max-width="500px"
+                  v-model="dialog"
+                  max-width="500px"
               >
                 <template v-slot:activator="{ props }">
                   <v-btn
-                    color="purple"
-                    dark
-                    class="mb-2"
-                    v-bind="props"
-                    variant="outlined"
+                      color="purple"
+                      dark
+                      class="mb-2"
+                      v-bind="props"
+                      variant="outlined"
                   >Оформить
                   </v-btn>
                 </template>
@@ -73,33 +80,33 @@
                     <v-container>
                       <v-row>
                         <v-col
-                          cols="12"
-                          sm="6"
-                          md="4"
+                            cols="12"
+                            sm="6"
+                            md="4"
                         >
                           <v-text-field
-                            v-model="editedItem.name"
-                            label="Наименование"
+                              v-model="editedItem.name"
+                              label="Наименование"
                           ></v-text-field>
                         </v-col>
                         <v-col
-                          cols="12"
-                          sm="6"
-                          md="4"
+                            cols="12"
+                            sm="6"
+                            md="4"
                         >
                           <v-text-field
-                            v-model="editedItem.category"
-                            label="Категория"
+                              v-model="editedItem.category"
+                              label="Категория"
                           ></v-text-field>
                         </v-col>
                         <v-col
-                          cols="12"
-                          sm="6"
-                          md="4"
+                            cols="12"
+                            sm="6"
+                            md="4"
                         >
                           <v-text-field
-                            v-model="editedItem.status"
-                            label="Статус"
+                              v-model="editedItem.status"
+                              label="Статус"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -109,16 +116,16 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                      color="blue-darken-1"
-                      variant="text"
-                      @click="close"
+                        color="blue-darken-1"
+                        variant="text"
+                        @click="close"
                     >
                       Закрыть
                     </v-btn>
                     <v-btn
-                      color="blue-darken-1"
-                      variant="text"
-                      @click="save"
+                        color="blue-darken-1"
+                        variant="text"
+                        @click="save"
                     >
                       Сохранить
                     </v-btn>
@@ -153,18 +160,18 @@
           </template>
           <template v-slot:[`item.actions`]="{ item }">
             <v-icon
-              size="small"
-              class="me-2"
-              color="info"
-              icon="mdi-pencil-outline"
-              @click="editItem(item)"
+                size="small"
+                class="me-2"
+                color="info"
+                icon="mdi-pencil-outline"
+                @click="editItem(item)"
             >
             </v-icon>
             <v-icon
-              size="small"
-              color="red"
-              icon="mdi-delete-outline"
-              @click="deleteItem(item)"
+                size="small"
+                color="red"
+                icon="mdi-delete-outline"
+                @click="deleteItem(item)"
             >
             </v-icon>
           </template>
@@ -181,7 +188,17 @@ export default {
       dialog: false,
       dialogDelete: false,
       search: '',
+      radios: 'all',
       expanded: [],
+      statuses: {
+        all_status: true,
+        wait_status: false,
+        work_status: false,
+        done_status: false,
+        wait_text: 'Ожидание',
+        work_text: 'В работе',
+        done_text: 'Готов',
+      },
       servicesHeaders: [
         {
           title: 'Номер',
@@ -296,7 +313,25 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      return this.editedIndex === -1 ? 'Новый заказ' : 'Изменение заказа'
+    },
+    filteredItems() {
+      if (this.statuses.wait_status === true && this.radios === 'wait') {
+        return this.services.filter((i) => {
+          return i.status === this.statuses.wait_text;
+        })
+      } else if (this.statuses.work_status === true && this.radios === 'work') {
+        return this.services.filter((i) => {
+          return i.status === this.statuses.work_text;
+        })
+      } else if (this.statuses.done_status === true && this.radios === 'done') {
+        return this.services.filter((i) => {
+          return i.status === this.statuses.done_text;
+        })
+      } else if (this.statuses.all_status === true && this.radios === 'all') {
+        return this.services
+      }
+      return []
     },
   },
 
@@ -310,6 +345,30 @@ export default {
   },
 
   methods: {
+    getAllData() {
+      this.statuses.all_status = true
+      this.statuses.wait_status = false
+      this.statuses.work_status = false
+      this.statuses.done_status = false
+    },
+    getWaitData() {
+      this.statuses.all_status = false
+      this.statuses.wait_status = true
+      this.statuses.work_status = false
+      this.statuses.done_status = false
+    },
+    getWorkData() {
+      this.statuses.all_status = false
+      this.statuses.wait_status = false
+      this.statuses.work_status = true
+      this.statuses.done_status = false
+    },
+    getDoneData() {
+      this.statuses.all_status = false
+      this.statuses.wait_status = false
+      this.statuses.work_status = false
+      this.statuses.done_status = true
+    },
     getColor(status) {
       if (status === 'Ожидание') return 'info'
       else if (status === 'В работе') return 'orange'
