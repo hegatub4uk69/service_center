@@ -4,8 +4,7 @@
     <v-app-bar
       app
       color="primary"
-      theme="dark"
-      image="https://www.fonstola.ru/images/201111/fonstola.ru_52146.jpg"
+      image=""
     >
       <v-app-bar-title>
         <h3 class="text-h4 white--text">{{ app_name }}</h3>
@@ -13,8 +12,7 @@
     </v-app-bar>
 
     <v-navigation-drawer
-
-      image="https://www.fonstola.ru/images/201111/fonstola.ru_52146.jpg"
+      image="https://img3.akspic.ru/crops/1/9/6/3/1/113691/113691-sinij_cvet-lazur-svet-geometricheskaya_forma-atmosfera-2048x1152.jpg"
       permanent="" expand-on-hover="" rail="">
       <v-list>
         <v-list-item

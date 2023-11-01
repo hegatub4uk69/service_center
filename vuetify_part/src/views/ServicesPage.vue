@@ -21,54 +21,56 @@
         </v-col>
         <v-col cols="12" sm="8" md="4" lg="5">
           <v-text-field
-              v-model="search"
-              variant="underlined"
-              style="height: 90px"
-              prepend-inner-icon="mdi-table-search"
-              label="Введите поисковое значение"
-              single-line
+            v-model="search"
+            variant="underlined"
+            style="height: 90px"
+            prepend-inner-icon="mdi-table-search"
+            label="Введите поисковое значение"
+            single-line
           >
           </v-text-field>
         </v-col>
       </v-row>
     </v-card>
   </v-container>
+  <!--  <v-card
+        class="text-center"
+        position="absolute"
+        color="success"
+        style="z-index: 999; top: 126px; left: 113px; height: 80px; width: 80px">
+      <v-icon color="" class="my-5" size="40px" icon="mdi-book"></v-icon>
+    </v-card>-->
   <v-container>
     <v-row dense="">
       <v-col>
         <v-data-table
-            v-model:expanded="expanded"
-            :headers="servicesHeaders"
-            :search="search"
-            :items="filteredItems"
-            item-value="id"
-            show-expand=""
-            class="elevation-1 table"
+          v-model:expanded="expanded"
+          :headers="servicesHeaders"
+          :search="search"
+          :items="filteredItems"
+          item-value="id"
+          show-expand=""
+          class="elevation-1 table"
         >
           <template v-slot:top>
             <v-toolbar flat="" color="white">
-              <v-toolbar-title style="">
-                <v-card
-                    class="text-center"
-                    position="fixed"
-                    color="success"
-                    style="bottom: 775px; top: 126px; height: 80px; width: 80px">
-                  <v-icon color="" class="my-5" size="40px" icon="mdi-book"></v-icon>
-                </v-card>
-                <label style="margin-left: 100px; font-size: 25px;">Заказы</label>
+              <v-toolbar-title style="font-size: 25px">
+                <v-icon class="mb-1"
+                        icon="mdi-book-open-outline"
+                ></v-icon> Заказы
               </v-toolbar-title>
               <v-spacer></v-spacer>
               <v-dialog
-                  v-model="dialog"
-                  max-width="500px"
+                v-model="dialog"
+                max-width="500px"
               >
                 <template v-slot:activator="{ props }">
                   <v-btn
-                      color="purple"
-                      dark
-                      class="mb-2"
-                      v-bind="props"
-                      variant="outlined"
+                    color="purple"
+                    dark
+                    class="mb-2"
+                    v-bind="props"
+                    variant="outlined"
                   >Оформить
                   </v-btn>
                 </template>
@@ -79,36 +81,16 @@
                   <v-card-text>
                     <v-container>
                       <v-row>
-                        <v-col
-                            cols="12"
-                            sm="6"
-                            md="4"
-                        >
-                          <v-text-field
-                              v-model="editedItem.name"
-                              label="Наименование"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col
-                            cols="12"
-                            sm="6"
-                            md="4"
-                        >
-                          <v-text-field
-                              v-model="editedItem.category"
-                              label="Категория"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col
-                            cols="12"
-                            sm="6"
-                            md="4"
-                        >
-                          <v-text-field
-                              v-model="editedItem.status"
-                              label="Статус"
-                          ></v-text-field>
-                        </v-col>
+                        <v-text-field
+                          v-model="editedItem.name"
+                          label="Наименование техники"
+                        ></v-text-field>
+                      </v-row>
+                      <v-row>
+                        <v-select label="Категория техники"></v-select>
+                      </v-row>
+                      <v-row>
+                        <v-textarea label="Описание"></v-textarea>
                       </v-row>
                     </v-container>
                   </v-card-text>
@@ -116,18 +98,18 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                        color="blue-darken-1"
-                        variant="text"
-                        @click="close"
+                      color="blue-darken-1"
+                      variant="text"
+                      @click="close"
                     >
                       Закрыть
                     </v-btn>
                     <v-btn
-                        color="blue-darken-1"
-                        variant="text"
-                        @click="save"
+                      color="blue-darken-1"
+                      variant="text"
+                      @click="save"
                     >
-                      Сохранить
+                      Оформить
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -160,18 +142,18 @@
           </template>
           <template v-slot:[`item.actions`]="{ item }">
             <v-icon
-                size="small"
-                class="me-2"
-                color="info"
-                icon="mdi-pencil-outline"
-                @click="editItem(item)"
+              size="small"
+              class="me-2"
+              color="info"
+              icon="mdi-pencil-outline"
+              @click="editItem(item)"
             >
             </v-icon>
             <v-icon
-                size="small"
-                color="red"
-                icon="mdi-delete-outline"
-                @click="deleteItem(item)"
+              size="small"
+              color="red"
+              icon="mdi-delete-outline"
+              @click="deleteItem(item)"
             >
             </v-icon>
           </template>
