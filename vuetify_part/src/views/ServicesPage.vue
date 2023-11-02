@@ -3,6 +3,7 @@
     <v-card style="height: 70px" color="">
       <v-row align="center" justify="center" dense="">
         <v-col cols="12" sm="8" md="6" lg="5">
+          <!--Кнопки фильтрации данных в таблице-->
           <v-radio-group v-model="radios" inline>
             <v-spacer></v-spacer>
             <v-radio @click="getAllData"
@@ -20,6 +21,7 @@
           </v-radio-group>
         </v-col>
         <v-col cols="12" sm="8" md="4" lg="5">
+          <!--Поле для поиска данных в таблице-->
           <v-text-field
             v-model="search"
             variant="underlined"
@@ -33,16 +35,10 @@
       </v-row>
     </v-card>
   </v-container>
-  <!--  <v-card
-        class="text-center"
-        position="absolute"
-        color="success"
-        style="z-index: 999; top: 126px; left: 113px; height: 80px; width: 80px">
-      <v-icon color="" class="my-5" size="40px" icon="mdi-book"></v-icon>
-    </v-card>-->
   <v-container>
     <v-row dense="">
       <v-col>
+        <!--Таблица данных заказов-->
         <v-data-table
           v-model:expanded="expanded"
           :headers="servicesHeaders"
@@ -52,18 +48,21 @@
           show-expand=""
           class="elevation-1 table"
         >
+          <!--Панель инструментов таблицы-->
           <template v-slot:top>
             <v-toolbar flat="" color="white">
+              <!--Заголовок таблицы-->
               <v-toolbar-title style="font-size: 25px">
-                <v-icon class="mb-1"
-                        icon="mdi-book-open-outline"
-                ></v-icon> Заказы
+                <v-icon class="mb-1" icon="mdi-book-open-outline"></v-icon>
+                Заказы
               </v-toolbar-title>
               <v-spacer></v-spacer>
+              <!--Диалоговое окно добавления заказа-->
               <v-dialog
                 v-model="dialog"
                 max-width="500px"
               >
+                <!--Кнопка оформления на панели инструментов таблицы-->
                 <template v-slot:activator="{ props }">
                   <v-btn
                     color="purple"
@@ -74,6 +73,7 @@
                   >Оформить
                   </v-btn>
                 </template>
+                <!--Элементы диалогового окна-->
                 <v-card>
                   <v-card-title>
                     <span class="text-h5">{{ formTitle }}</span>
@@ -89,12 +89,41 @@
                       <v-row>
                         <v-select label="Категория техники"></v-select>
                       </v-row>
+                      <!--Выпадающий список с выбором клиента-->
+                      <v-row>
+                        <v-autocomplete
+                          v-model="friends"
+                          :items="people"
+                          chips=""
+                          closable-chips
+                          color="blue-grey-lighten-2"
+                          item-title="name"
+                          item-value="name"
+                          label="Клиент"
+                          multiple=""
+                        >
+                          <template v-slot:chip="{ props, item }">
+                            <v-chip
+                              v-bind="props"
+                              :prepend-icon="item.raw.avatar"
+                              :text="item.raw.name"
+                            ></v-chip>
+                          </template>
+                          <template v-slot:item="{ props, item }">
+                            <v-list-item
+                              v-bind="props"
+                              :prepend-icon="item?.raw?.avatar"
+                              :title="item?.raw?.name"
+                              :subtitle="item?.raw?.group"
+                            ></v-list-item>
+                          </template>
+                        </v-autocomplete>
+                      </v-row>
                       <v-row>
                         <v-textarea label="Описание"></v-textarea>
                       </v-row>
                     </v-container>
                   </v-card-text>
-
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -114,6 +143,7 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+              <!--Диалоговое окно удаления заказа-->
               <v-dialog v-model="dialogDelete" max-width="500px">
                 <v-card>
                   <v-card-title class="text-h5">Вы уверены, что хотите удалить данную услугу?</v-card-title>
@@ -127,11 +157,13 @@
               </v-dialog>
             </v-toolbar>
           </template>
+          <!--Цветное выделение статуса заказа-->
           <template v-slot:[`item.status`]="{ value }">
             <v-chip :color="getColor(value)">
               {{ value }}
             </v-chip>
           </template>
+          <!--Выпадающее описание заказа-->
           <template v-slot:expanded-row="{ columns, item }">
             <tr>
               <td :colspan="columns.length">
@@ -140,6 +172,7 @@
               </td>
             </tr>
           </template>
+          <!--Кнопки действий над заказами-->
           <template v-slot:[`item.actions`]="{ item }">
             <v-icon
               size="small"
@@ -166,12 +199,31 @@
 <script>
 export default {
   data() {
+    const srcs = {
+      1: 'mdi-account-circle-outline',
+    }
     return {
       dialog: false,
       dialogDelete: false,
       search: '',
       radios: 'all',
       expanded: [],
+      client_choice: false,
+      friends: ['Sandra Adams'],
+      people: [
+        // TODO: https://github.com/vuetifyjs/vuetify/issues/15721
+        // { header: 'Group 1' },
+        {name: 'Sandra Adams', group: 'Group 1', avatar: srcs[1]},
+        {name: 'Ali Connors', group: 'Group 1', avatar: srcs[1]},
+        {name: 'Trevor Hansen', group: 'Group 1', avatar: srcs[1]},
+        {name: 'Tucker Smith', group: 'Group 1', avatar: srcs[1]},
+        // { divider: true },
+        // { header: 'Group 2' },
+        {name: 'Britta Holt', group: 'Group 2', avatar: srcs[1]},
+        {name: 'Jane Smith ', group: 'Group 2', avatar: srcs[1]},
+        {name: 'John Smith', group: 'Group 2', avatar: srcs[1]},
+        {name: 'Sandra Williams', group: 'Group 2', avatar: srcs[1]},
+      ],
       statuses: {
         all_status: true,
         wait_status: false,
@@ -391,6 +443,13 @@ export default {
         this.services.push(this.editedItem)
       }
       this.close()
+    },
+    remove(item) {
+      const index = this.friends.indexOf(item.name)
+      if (index >= 0) this.friends.splice(index, 1)
+    },
+    limitClients() {
+      if (this.friends.length > 1) this.friends.pop()
     },
   }
 }
