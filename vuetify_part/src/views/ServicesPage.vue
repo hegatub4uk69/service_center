@@ -90,35 +90,36 @@
                         <v-select label="Категория техники"></v-select>
                       </v-row>
                       <!--Выпадающий список с выбором клиента-->
-                      <v-row>
-                        <v-autocomplete
-                          v-model="friends"
-                          :items="people"
-                          chips=""
-                          closable-chips
-                          color="blue-grey-lighten-2"
-                          item-title="name"
-                          item-value="name"
-                          label="Клиент"
-                          multiple=""
-                        >
-                          <template v-slot:chip="{ props, item }">
-                            <v-chip
-                              v-bind="props"
-                              :prepend-icon="item.raw.avatar"
-                              :text="item.raw.name"
-                            ></v-chip>
-                          </template>
-                          <template v-slot:item="{ props, item }">
-                            <v-list-item
-                              v-bind="props"
-                              :prepend-icon="item?.raw?.avatar"
-                              :title="item?.raw?.name"
-                              :subtitle="item?.raw?.group"
-                            ></v-list-item>
-                          </template>
-                        </v-autocomplete>
-                      </v-row>
+                        <v-row>
+                          <v-autocomplete
+                            v-model="friends"
+                            :items="people"
+                            chips=""
+                            closable-chips
+                            color="blue-grey-lighten-2"
+                            item-title="name"
+                            item-value="name"
+                            label="Клиент"
+                            multiple=""
+                          >
+                            <template v-slot:chip="{ props, item }">
+                              <v-chip
+                                v-bind="props"
+                                :prepend-icon="item.raw.avatar"
+                                :text="item.raw.name"
+                              ></v-chip>
+                            </template>
+                            <template v-slot:item="{ props, item }">
+                              <v-list-item
+                                v-bind="props"
+                                :disabled="this.friends.length >= 1"
+                                :prepend-icon="item?.raw?.avatar"
+                                :title="item?.raw?.name"
+                                :subtitle="item?.raw?.group"
+                              ></v-list-item>
+                            </template>
+                          </v-autocomplete>
+                        </v-row>
                       <v-row>
                         <v-textarea label="Описание"></v-textarea>
                       </v-row>
@@ -203,26 +204,26 @@ export default {
       1: 'mdi-account-circle-outline',
     }
     return {
+      form: false,
       dialog: false,
       dialogDelete: false,
       search: '',
       radios: 'all',
       expanded: [],
       client_choice: false,
-      friends: ['Sandra Adams'],
+      friends: [],
       people: [
-        // TODO: https://github.com/vuetifyjs/vuetify/issues/15721
         // { header: 'Group 1' },
-        {name: 'Sandra Adams', group: 'Group 1', avatar: srcs[1]},
-        {name: 'Ali Connors', group: 'Group 1', avatar: srcs[1]},
-        {name: 'Trevor Hansen', group: 'Group 1', avatar: srcs[1]},
-        {name: 'Tucker Smith', group: 'Group 1', avatar: srcs[1]},
+        {name: 'Sandra Adams Father_name', group: 'Group 1', avatar: srcs[1]},
+        {name: 'Ali Connors Father_name', group: 'Group 1', avatar: srcs[1]},
+        {name: 'Trevor Hansen Father_name', group: 'Group 1', avatar: srcs[1]},
+        {name: 'Tucker Smith Father_name', group: 'Group 1', avatar: srcs[1]},
         // { divider: true },
         // { header: 'Group 2' },
-        {name: 'Britta Holt', group: 'Group 2', avatar: srcs[1]},
-        {name: 'Jane Smith ', group: 'Group 2', avatar: srcs[1]},
-        {name: 'John Smith', group: 'Group 2', avatar: srcs[1]},
-        {name: 'Sandra Williams', group: 'Group 2', avatar: srcs[1]},
+        {name: 'Britta Holt Father_name', group: 'Group 2', avatar: srcs[1]},
+        {name: 'Jane Smith Father_name', group: 'Group 2', avatar: srcs[1]},
+        {name: 'John Smith Father_name', group: 'Group 2', avatar: srcs[1]},
+        {name: 'Sandra Williams Father_name', group: 'Group 2', avatar: srcs[1]},
       ],
       statuses: {
         all_status: true,
@@ -242,7 +243,8 @@ export default {
         },
         {title: 'Наименование', key: 'name'},
         {title: 'Категория', key: 'category'},
-        {title: 'Сотрудник', key: 'staff'},
+        {title: 'Приемщик', key: 'staff_in'},
+        {title: 'Техник', key: 'staff_repair'},
         {title: 'Статус', key: 'status', align: 'start'},
         {title: 'Действия', key: 'actions', sortable: false},
         {title: '', key: 'data-table-expand'},
@@ -448,9 +450,7 @@ export default {
       const index = this.friends.indexOf(item.name)
       if (index >= 0) this.friends.splice(index, 1)
     },
-    limitClients() {
-      if (this.friends.length > 1) this.friends.pop()
-    },
+
   }
 }
 </script>
