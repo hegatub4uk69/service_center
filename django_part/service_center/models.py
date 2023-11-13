@@ -15,18 +15,18 @@ class Accounts(models.Model):
         return self.login
 
 class Accounts_Roles(models.Model):
-    account_id = models.ForeignKey(Accounts, related_name='Accounts_Roles_account_id', null=True, blank=True, on_delete=models.SET_NULL)
-    role_id = models.ForeignKey(Roles, related_name='Accounts_Roles_role_id', null=True, blank=True, on_delete=models.SET_NULL)
+    account = models.ForeignKey(Accounts, related_name='Accounts_Roles_account_id', null=True, blank=True, on_delete=models.SET_NULL)
+    role = models.ForeignKey(Roles, related_name='Accounts_Roles_role_id', null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return self.account_id
+        return self.account
 
 class Staff(models.Model):
     last_name = models.CharField(max_length=25, null=False, blank=False)
     first_name = models.CharField(max_length=25, null=False, blank=False)
     father_name = models.CharField(max_length=25, null=True, blank=True)
     phone_number = models.CharField(max_length=15, null=False, blank=False)
-    account_id = models.ForeignKey(Accounts, related_name='Staff_account_id', null=True, blank=True, on_delete=models.SET_NULL)
+    account = models.ForeignKey(Accounts, related_name='Staff_account_id', null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.phone_number
@@ -62,7 +62,7 @@ class Orders(models.Model):
     status = models.CharField(max_length=10, choices=CATEGORIES, default=NEW)
     client = models.ForeignKey(Clients, related_name='Orders_client_id', null=True, blank=False, on_delete=models.SET_NULL)
     staff_in = models.ForeignKey(Staff, related_name='Orders_staff_in_id', null=True, blank=False, on_delete=models.SET_NULL)
-    executor_id = models.ForeignKey(Staff, related_name='Orders_executor_id', null=True, blank=True, on_delete=models.SET_NULL)
+    executor = models.ForeignKey(Staff, related_name='Orders_executor_id', null=True, blank=True, on_delete=models.SET_NULL)
     staff_out = models.ForeignKey(Staff, related_name='Orders_staff_out_id', null=True, blank=True, on_delete=models.SET_NULL)
     created_at = models.DateField(auto_now=False, auto_now_add=False)
     repair_at = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
