@@ -94,19 +94,19 @@
                           <v-autocomplete
                             v-model="friends"
                             :items="people"
-                            chips=""
+                            :chips="true"
                             closable-chips
                             color="blue-grey-lighten-2"
                             item-title="name"
-                            item-value="name"
+                            item-value="id"
                             label="Клиент"
-                            multiple=""
+                            :multiple="true"
                           >
                             <template v-slot:chip="{ props, item }">
                               <v-chip
                                 v-bind="props"
                                 :prepend-icon="item.raw.avatar"
-                                :text="item.raw.name"
+                                :text="item.raw.name + ' ' + item.raw.group"
                               ></v-chip>
                             </template>
                             <template v-slot:item="{ props, item }">
@@ -177,6 +177,13 @@
           <template v-slot:[`item.actions`]="{ item }">
             <v-icon
               size="small"
+              color="purple"
+              class="me-2"
+              icon="mdi-account-circle-outline"
+            >
+            </v-icon>
+            <v-icon
+              size="small"
               class="me-2"
               color="info"
               icon="mdi-pencil-outline"
@@ -214,10 +221,10 @@ export default {
       friends: [],
       people: [
         // { header: 'Group 1' },
-        {name: 'Sandra Adams Father_name', group: 'Group 1', avatar: srcs[1]},
-        {name: 'Ali Connors Father_name', group: 'Group 1', avatar: srcs[1]},
-        {name: 'Trevor Hansen Father_name', group: 'Group 1', avatar: srcs[1]},
-        {name: 'Tucker Smith Father_name', group: 'Group 1', avatar: srcs[1]},
+        {id: 1, name: 'Sandra Adams Father_name', group: 'Group 1', avatar: srcs[1]},
+        {id: 2, name: 'Ali Connors Father_name', group: 'Group 1', avatar: srcs[1]},
+        {id: 3, name: 'Trevor Hansen Father_name', group: 'Group 1', avatar: srcs[1]},
+        {id: 4, name: 'Tucker Smith Father_name', group: 'Group 1', avatar: srcs[1]},
         // { divider: true },
         // { header: 'Group 2' },
         {name: 'Britta Holt Father_name', group: 'Group 2', avatar: srcs[1]},
@@ -236,13 +243,14 @@ export default {
       },
       servicesHeaders: [
         {
-          title: 'Номер',
+          title: '№',
           align: 'start',
           sortable: false,
           key: 'id',
         },
-        {title: 'Наименование', key: 'name'},
+        {title: 'Наименование техники', key: 'name'},
         {title: 'Категория', key: 'category'},
+        {title: 'Клиент', key: 'client'},
         {title: 'Приемщик', key: 'staff_in'},
         {title: 'Техник', key: 'staff_repair'},
         {title: 'Статус', key: 'status', align: 'start'},
@@ -266,7 +274,9 @@ export default {
         {
           id: 0,
           status: 'Ожидание',
-          staff: 'Test Test Test',
+          client: 'Трофимов Олег Анатольевич (+79049016731)',
+          staff_in: 'Камнев Олег Геннадьевич',
+          staff_repair: 'Камнев Олег Геннадьевич',
           name: 'gt 710',
           category: 'Видеокарты',
           description: 'Кулеры крутятся, а изображения нет',
@@ -274,7 +284,7 @@ export default {
         {
           id: 1,
           status: 'В работе',
-          staff: 'Test Test Test',
+          staff_repair: 'Отсутствует',
           name: 'gt 1030',
           category: 'Видеокарты',
           description: 'Нет изображения',
@@ -282,7 +292,7 @@ export default {
         {
           id: 2,
           status: 'Готов',
-          staff: 'Test Test Test',
+          staff_repair: 'Отсутствует',
           name: 'r5 3600',
           category: 'Процессоры',
           description: 'Не заполнено',
@@ -290,7 +300,7 @@ export default {
         {
           id: 3,
           status: 'Ожидание',
-          staff: 'Test Test Test',
+          staff_repair: 'Отсутствует',
           name: 'gt 710',
           category: 'Видеокарты',
           description: 'Не заполнено',
@@ -298,7 +308,7 @@ export default {
         {
           id: 4,
           status: 'Ожидание',
-          staff: 'Test Test Test',
+          staff_repair: 'Отсутствует',
           name: 'test',
           category: 'Видеокарты',
           description: 'Не заполнено',
@@ -306,7 +316,7 @@ export default {
         {
           id: 5,
           status: 'Ожидание',
-          staff: 'Test Test Test',
+          staff_repair: 'Отсутствует',
           name: 'test',
           category: 'Видеокарты',
           description: 'Не заполнено',
@@ -314,7 +324,7 @@ export default {
         {
           id: 6,
           status: 'Ожидание',
-          staff: 'Test Test Test',
+          staff_repair: 'Отсутствует',
           name: 'test',
           category: 'Видеокарты',
           description: 'Не заполнено',
@@ -322,7 +332,7 @@ export default {
         {
           id: 7,
           status: 'Ожидание',
-          staff: 'Test Test Test',
+          staff_repair: 'Отсутствует',
           name: 'test',
           category: 'Видеокарты',
           description: 'Не заполнено',
@@ -330,7 +340,7 @@ export default {
         {
           id: 8,
           status: 'Ожидание',
-          staff: 'Test Test Test',
+          staff_repair: 'Отсутствует',
           name: 'test',
           category: 'Видеокарты',
           description: 'Не заполнено',
@@ -338,7 +348,7 @@ export default {
         {
           id: 9,
           status: 'Ожидание',
-          staff: 'Test Test Test',
+          staff_repair: 'Отсутствует',
           name: 'test',
           category: 'Видеокарты',
           description: 'Не заполнено',

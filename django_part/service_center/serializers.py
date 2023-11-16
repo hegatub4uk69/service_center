@@ -1,3 +1,6 @@
+"""
+Используется для второго метода работы с данными.
+"""
 from rest_framework import serializers
 from .models import Roles, Accounts, Accounts_Roles, Staff, Clients, Categories, Orders
 
