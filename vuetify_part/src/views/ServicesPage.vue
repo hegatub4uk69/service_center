@@ -23,12 +23,12 @@
         <v-col cols="12" sm="8" md="4" lg="5">
           <!--Поле для поиска данных в таблице-->
           <v-text-field
-            v-model="search"
-            variant="underlined"
-            style="height: 90px"
-            prepend-inner-icon="mdi-table-search"
-            label="Введите поисковое значение"
-            single-line
+              v-model="search"
+              variant="underlined"
+              style="height: 90px"
+              prepend-inner-icon="mdi-table-search"
+              label="Введите поисковое значение"
+              single-line
           >
           </v-text-field>
         </v-col>
@@ -40,13 +40,13 @@
       <v-col>
         <!--Таблица данных заказов-->
         <v-data-table
-          v-model:expanded="expanded"
-          :headers="servicesHeaders"
-          :search="search"
-          :items="filteredItems"
-          item-value="id"
-          show-expand=""
-          class="elevation-1 table"
+            v-model:expanded="expanded"
+            :headers="servicesHeaders"
+            :search="search"
+            :items="filteredItems"
+            item-value="id"
+            show-expand=""
+            class="elevation-1 table"
         >
           <!--Панель инструментов таблицы-->
           <template v-slot:top>
@@ -59,17 +59,17 @@
               <v-spacer></v-spacer>
               <!--Диалоговое окно добавления заказа-->
               <v-dialog
-                v-model="dialog"
-                max-width="500px"
+                  v-model="dialog"
+                  max-width="500px"
               >
                 <!--Кнопка оформления на панели инструментов таблицы-->
                 <template v-slot:activator="{ props }">
                   <v-btn
-                    color="purple"
-                    dark
-                    class="mb-2"
-                    v-bind="props"
-                    variant="outlined"
+                      color="purple"
+                      dark
+                      class="mb-2"
+                      v-bind="props"
+                      variant="outlined"
                   >Оформить
                   </v-btn>
                 </template>
@@ -82,16 +82,16 @@
                     <v-container>
                       <v-row>
                         <v-text-field
-                          v-model="editedItem.name"
-                          label="Наименование техники"
+                            v-model="editedItem.name"
+                            label="Наименование техники"
                         ></v-text-field>
                       </v-row>
                       <v-row>
                         <v-select label="Категория техники"></v-select>
                       </v-row>
                       <!--Выпадающий список с выбором клиента-->
-                        <v-row>
-                          <v-autocomplete
+                      <v-row>
+                        <v-autocomplete
                             v-model="friends"
                             :items="people"
                             :chips="true"
@@ -101,25 +101,25 @@
                             item-value="id"
                             label="Клиент"
                             :multiple="true"
-                          >
-                            <template v-slot:chip="{ props, item }">
-                              <v-chip
+                        >
+                          <template v-slot:chip="{ props, item }">
+                            <v-chip
                                 v-bind="props"
                                 :prepend-icon="item.raw.avatar"
                                 :text="item.raw.name + ' ' + item.raw.group"
-                              ></v-chip>
-                            </template>
-                            <template v-slot:item="{ props, item }">
-                              <v-list-item
+                            ></v-chip>
+                          </template>
+                          <template v-slot:item="{ props, item }">
+                            <v-list-item
                                 v-bind="props"
                                 :disabled="this.friends.length >= 1"
                                 :prepend-icon="item?.raw?.avatar"
                                 :title="item?.raw?.name"
                                 :subtitle="item?.raw?.group"
-                              ></v-list-item>
-                            </template>
-                          </v-autocomplete>
-                        </v-row>
+                            ></v-list-item>
+                          </template>
+                        </v-autocomplete>
+                      </v-row>
                       <v-row>
                         <v-textarea label="Описание"></v-textarea>
                       </v-row>
@@ -128,16 +128,16 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                      color="blue-darken-1"
-                      variant="text"
-                      @click="close"
+                        color="blue-darken-1"
+                        variant="text"
+                        @click="close"
                     >
                       Закрыть
                     </v-btn>
                     <v-btn
-                      color="blue-darken-1"
-                      variant="text"
-                      @click="save"
+                        color="blue-darken-1"
+                        variant="text"
+                        @click="save"
                     >
                       Оформить
                     </v-btn>
@@ -176,25 +176,25 @@
           <!--Кнопки действий над заказами-->
           <template v-slot:[`item.actions`]="{ item }">
             <v-icon
-              size="small"
-              color="purple"
-              class="me-2"
-              icon="mdi-account-circle-outline"
+                size="small"
+                color="purple"
+                class="me-2"
+                icon="mdi-account-circle-outline"
             >
             </v-icon>
             <v-icon
-              size="small"
-              class="me-2"
-              color="info"
-              icon="mdi-pencil-outline"
-              @click="editItem(item)"
+                size="small"
+                class="me-2"
+                color="info"
+                icon="mdi-pencil-outline"
+                @click="editItem(item)"
             >
             </v-icon>
             <v-icon
-              size="small"
-              color="red"
-              icon="mdi-delete-outline"
-              @click="deleteItem(item)"
+                size="small"
+                color="red"
+                icon="mdi-delete-outline"
+                @click="deleteItem(item)"
             >
             </v-icon>
           </template>
@@ -205,6 +205,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     const srcs = {
@@ -354,7 +356,13 @@ export default {
           description: 'Не заполнено',
         },
       ],
+      test: null,
     }
+  },
+
+  mounted() {
+    axios.post('http://localhost:8000/get-orders')
+        .then(response => (this.test = response.data.result))
   },
 
   computed: {

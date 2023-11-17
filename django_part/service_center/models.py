@@ -31,11 +31,17 @@ class Staff(models.Model):
     def __str__(self):
         return self.phone_number
 
+    def get_staff_fio(self):
+        return f'{self.last_name} {self.first_name} {self.father_name}'
+
 class Clients(models.Model):
     last_name = models.CharField(max_length=25, null=False, blank=False)
     first_name = models.CharField(max_length=25, null=False, blank=False)
     father_name = models.CharField(max_length=25, null=True, blank=True)
     phone_number = models.CharField(max_length=15, null=False, blank=False, unique=True)
+
+    def get_client_fio(self):
+        return f'{self.last_name} {self.first_name} {self.father_name}'
 
     def __str__(self):
         return self.phone_number

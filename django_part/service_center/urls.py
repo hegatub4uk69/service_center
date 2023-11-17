@@ -22,6 +22,5 @@ from . import views
 urlpatterns = [
     path('get-clients', views.get_clients),
     path('get-orders', views.get_orders),
-
+    path('get-categories', views.get_categories),
 ]
-
