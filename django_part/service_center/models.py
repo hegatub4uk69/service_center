@@ -53,11 +53,11 @@ class Categories(models.Model):
         return self.name
 
 class Orders(models.Model):
-    NEW = 'N'
-    WORK = 'W'
-    DONE = 'D'
-    GIVEN = 'G'
-    DECLINE = 'DC'
+    NEW = 'Новый'
+    WORK = 'В работе'
+    DONE = 'Готов'
+    GIVEN = 'Выдан'
+    DECLINE = 'Отклонён'
     CATEGORIES = [
         (NEW, "Новый"), (WORK, "В работе"), (DONE, "Готов"), (GIVEN, "Выдан"), (DECLINE, "Отклонён")
     ]

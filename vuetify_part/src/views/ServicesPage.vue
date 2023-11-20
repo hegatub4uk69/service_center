@@ -2,25 +2,11 @@
   <v-container style="height: 80px">
     <v-card style="height: 70px" color="">
       <v-row align="center" justify="center" dense="">
-        <v-col cols="12" sm="8" md="6" lg="5">
+        <v-col cols="4" sm="4" md="4" lg="3">
           <!--Кнопки фильтрации данных в таблице-->
-          <v-radio-group v-model="radios" inline>
-            <v-spacer></v-spacer>
-            <v-radio @click="getAllData"
-                     class="radio-btn" label="Все" color="red" value="all"></v-radio>
-            <v-spacer></v-spacer>
-            <v-radio @click="getWaitData"
-                     class="radio-btn" label="Ожидание" color="red" value="wait"></v-radio>
-            <v-spacer></v-spacer>
-            <v-radio @click="getWorkData"
-                     class="radio-btn" label="В_работе" color="red" value="work"></v-radio>
-            <v-spacer></v-spacer>
-            <v-radio @click="getDoneData"
-                     class="radio-btn" label="Готов" color="red" value="done"></v-radio>
-            <v-spacer></v-spacer>
-          </v-radio-group>
+          <v-select label="Фильтрация по статусу"></v-select>
         </v-col>
-        <v-col cols="12" sm="8" md="4" lg="5">
+        <v-col cols="7" sm="6" md="6" lg="5">
           <!--Поле для поиска данных в таблице-->
           <v-text-field
               v-model="search"
@@ -44,9 +30,11 @@
             :headers="servicesHeaders"
             :search="search"
             :items="filteredItems"
+            :loading="loadingTable"
+            :show-expand="true"
             item-value="id"
-            show-expand=""
             class="elevation-1 table"
+            @update:options="loadTableItems"
         >
           <!--Панель инструментов таблицы-->
           <template v-slot:top>
@@ -168,8 +156,8 @@
           <template v-slot:expanded-row="{ columns, item }">
             <tr>
               <td :colspan="columns.length">
-                Описание дефектов {{ item.name }}:
-                {{ item.description }}
+                <v-chip color="pink" label>Описание дефектов техники</v-chip>
+                 {{ item.description }}
               </td>
             </tr>
           </template>
@@ -213,13 +201,12 @@ export default {
       1: 'mdi-account-circle-outline',
     }
     return {
-      form: false,
+      sortBy: 'id',
       dialog: false,
       dialogDelete: false,
       search: '',
       radios: 'all',
       expanded: [],
-      client_choice: false,
       friends: [],
       people: [
         // { header: 'Group 1' },
@@ -236,25 +223,20 @@ export default {
       ],
       statuses: {
         all_status: true,
-        wait_status: false,
+        new_status: false,
         work_status: false,
         done_status: false,
-        wait_text: 'Ожидание',
+        wait_text: 'Новый',
         work_text: 'В работе',
         done_text: 'Готов',
       },
       servicesHeaders: [
-        {
-          title: '№',
-          align: 'start',
-          sortable: false,
-          key: 'id',
-        },
-        {title: 'Наименование техники', key: 'name'},
-        {title: 'Категория', key: 'category'},
-        {title: 'Клиент', key: 'client'},
-        {title: 'Приемщик', key: 'staff_in'},
-        {title: 'Техник', key: 'staff_repair'},
+        {title: '№', align: 'start', key: 'id'},
+        {title: 'Наименование техники', key: 'title'},
+        {title: 'Категория', key: 'categoryTitle'},
+        {title: 'Клиент', key: 'client_FN'},
+        {title: 'Приемщик', key: 'staff_in_FN'},
+        {title: 'Техник', key: 'executor_FN'},
         {title: 'Статус', key: 'status', align: 'start'},
         {title: 'Действия', key: 'actions', sortable: false},
         {title: '', key: 'data-table-expand'},
@@ -264,105 +246,17 @@ export default {
         id: 0,
         name: '',
         category: '',
-        status: 'Ожидание',
+        status: 'Новый',
         staff: 'Test Test Test',
       },
       defaultItem: {
         name: '',
         category: '',
-        status: 'Ожидание',
+        status: 'Новый',
       },
-      services: [
-        {
-          id: 0,
-          status: 'Ожидание',
-          client: 'Трофимов Олег Анатольевич (+79049016731)',
-          staff_in: 'Камнев Олег Геннадьевич',
-          staff_repair: 'Камнев Олег Геннадьевич',
-          name: 'gt 710',
-          category: 'Видеокарты',
-          description: 'Кулеры крутятся, а изображения нет',
-        },
-        {
-          id: 1,
-          status: 'В работе',
-          staff_repair: 'Отсутствует',
-          name: 'gt 1030',
-          category: 'Видеокарты',
-          description: 'Нет изображения',
-        },
-        {
-          id: 2,
-          status: 'Готов',
-          staff_repair: 'Отсутствует',
-          name: 'r5 3600',
-          category: 'Процессоры',
-          description: 'Не заполнено',
-        },
-        {
-          id: 3,
-          status: 'Ожидание',
-          staff_repair: 'Отсутствует',
-          name: 'gt 710',
-          category: 'Видеокарты',
-          description: 'Не заполнено',
-        },
-        {
-          id: 4,
-          status: 'Ожидание',
-          staff_repair: 'Отсутствует',
-          name: 'test',
-          category: 'Видеокарты',
-          description: 'Не заполнено',
-        },
-        {
-          id: 5,
-          status: 'Ожидание',
-          staff_repair: 'Отсутствует',
-          name: 'test',
-          category: 'Видеокарты',
-          description: 'Не заполнено',
-        },
-        {
-          id: 6,
-          status: 'Ожидание',
-          staff_repair: 'Отсутствует',
-          name: 'test',
-          category: 'Видеокарты',
-          description: 'Не заполнено',
-        },
-        {
-          id: 7,
-          status: 'Ожидание',
-          staff_repair: 'Отсутствует',
-          name: 'test',
-          category: 'Видеокарты',
-          description: 'Не заполнено',
-        },
-        {
-          id: 8,
-          status: 'Ожидание',
-          staff_repair: 'Отсутствует',
-          name: 'test',
-          category: 'Видеокарты',
-          description: 'Не заполнено',
-        },
-        {
-          id: 9,
-          status: 'Ожидание',
-          staff_repair: 'Отсутствует',
-          name: 'test',
-          category: 'Видеокарты',
-          description: 'Не заполнено',
-        },
-      ],
-      test: null,
+      services: [],
+      loadingTable: true,
     }
-  },
-
-  mounted() {
-    axios.post('http://localhost:8000/get-orders')
-        .then(response => (this.test = response.data.result))
   },
 
   computed: {
@@ -370,7 +264,7 @@ export default {
       return this.editedIndex === -1 ? 'Новый заказ' : 'Изменение заказа'
     },
     filteredItems() {
-      if (this.statuses.wait_status === true && this.radios === 'wait') {
+      if (this.statuses.new_status === true && this.radios === 'new') {
         return this.services.filter((i) => {
           return i.status === this.statuses.wait_text;
         })
@@ -399,34 +293,44 @@ export default {
   },
 
   methods: {
+    loadTableItems() {
+      this.loadingTable = true
+      axios.post('http://localhost:8000/get-orders')
+          .then(response => {
+            this.services = response.data.result
+            this.loadingTable = false
+          })
+    },
     getAllData() {
       this.statuses.all_status = true
-      this.statuses.wait_status = false
+      this.statuses.new_status = false
       this.statuses.work_status = false
       this.statuses.done_status = false
     },
-    getWaitData() {
+    getNewData() {
       this.statuses.all_status = false
-      this.statuses.wait_status = true
+      this.statuses.new_status = true
       this.statuses.work_status = false
       this.statuses.done_status = false
     },
     getWorkData() {
       this.statuses.all_status = false
-      this.statuses.wait_status = false
+      this.statuses.new_status = false
       this.statuses.work_status = true
       this.statuses.done_status = false
     },
     getDoneData() {
       this.statuses.all_status = false
-      this.statuses.wait_status = false
+      this.statuses.new_status = false
       this.statuses.work_status = false
       this.statuses.done_status = true
     },
     getColor(status) {
-      if (status === 'Ожидание') return 'info'
+      if (status === 'Новый') return 'info'
       else if (status === 'В работе') return 'orange'
-      else return 'green'
+      else if (status === 'Готов') return 'green'
+      else if (status === 'Выдан') return 'purple'
+      else return 'red'
     },
     editItem(item) {
       this.editedIndex = this.services.indexOf(item)
@@ -464,11 +368,6 @@ export default {
       }
       this.close()
     },
-    remove(item) {
-      const index = this.friends.indexOf(item.name)
-      if (index >= 0) this.friends.splice(index, 1)
-    },
-
   }
 }
 </script>

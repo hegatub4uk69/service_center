@@ -56,4 +56,4 @@ def get_orders(request):
         "staff_in_FN": i.staff_in.get_staff_fio(),
         "executor_FN": i.executor.get_staff_fio(),
     } for i in Orders.objects.all().select_related('category', 'staff_in', 'staff_out', 'executor', 'client')]
-    return JsonResponse({"result": result})
+    return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
