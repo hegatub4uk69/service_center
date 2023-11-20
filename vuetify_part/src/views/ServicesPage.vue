@@ -2,9 +2,13 @@
   <v-container style="height: 80px">
     <v-card style="height: 70px" color="">
       <v-row align="center" justify="center" dense="">
-        <v-col cols="4" sm="4" md="4" lg="3">
+        <v-col cols="4" sm="4" md="4" lg="2">
           <!--Кнопки фильтрации данных в таблице-->
-          <v-select label="Фильтрация по статусу"></v-select>
+          <v-select
+              v-model="selected_status"
+              :items="statuses"
+              label="Фильтрация по статусу"
+          ></v-select>
         </v-col>
         <v-col cols="7" sm="6" md="6" lg="5">
           <!--Поле для поиска данных в таблице-->
@@ -15,8 +19,7 @@
               prepend-inner-icon="mdi-table-search"
               label="Введите поисковое значение"
               single-line
-          >
-          </v-text-field>
+          ></v-text-field>
         </v-col>
       </v-row>
     </v-card>
@@ -27,7 +30,7 @@
         <!--Таблица данных заказов-->
         <v-data-table
             v-model:expanded="expanded"
-            :headers="servicesHeaders"
+            :headers="ordersHeaders"
             :search="search"
             :items="filteredItems"
             :loading="loadingTable"
@@ -70,46 +73,58 @@
                     <v-container>
                       <v-row>
                         <v-text-field
-                            v-model="editedItem.name"
+                            v-model="editedItem.title"
                             label="Наименование техники"
                         ></v-text-field>
                       </v-row>
                       <v-row>
-                        <v-select label="Категория техники"></v-select>
+                        <v-select
+                            v-model="editedItem.category_id"
+                            :items="categories"
+                            item-title="name"
+                            item-value="id"
+                            label="Категория техники"
+                            @update:menu="loadSelectCategory"
+                        >
+                        </v-select>
                       </v-row>
                       <!--Выпадающий список с выбором клиента-->
                       <v-row>
                         <v-autocomplete
-                            v-model="friends"
-                            :items="people"
+                            v-model="editedItem.client_id"
+                            :items="clients"
+                            :multiple="true"
                             :chips="true"
                             closable-chips
                             color="blue-grey-lighten-2"
-                            item-title="name"
+                            item-title="client_FN"
                             item-value="id"
                             label="Клиент"
-                            :multiple="true"
+                            @update:menu="loadSelectClient"
                         >
                           <template v-slot:chip="{ props, item }">
                             <v-chip
                                 v-bind="props"
-                                :prepend-icon="item.raw.avatar"
-                                :text="item.raw.name + ' ' + item.raw.group"
+                                prepend-icon="mdi-account-circle-outline"
+                                :text="item.raw.full_name + ' ' + item.raw.phone"
                             ></v-chip>
                           </template>
                           <template v-slot:item="{ props, item }">
                             <v-list-item
                                 v-bind="props"
-                                :disabled="this.friends.length >= 1"
-                                :prepend-icon="item?.raw?.avatar"
-                                :title="item?.raw?.name"
-                                :subtitle="item?.raw?.group"
+                                :disabled="this.editedItem.client_id >= 1"
+                                prepend-icon="mdi-account-circle-outline"
+                                :title="item?.raw?.full_name"
+                                :subtitle="item?.raw?.phone"
                             ></v-list-item>
                           </template>
                         </v-autocomplete>
                       </v-row>
                       <v-row>
-                        <v-textarea label="Описание"></v-textarea>
+                        <v-textarea
+                            v-model="editedItem.description"
+                            label="Описание"
+                        ></v-textarea>
                       </v-row>
                     </v-container>
                   </v-card-text>
@@ -157,7 +172,7 @@
             <tr>
               <td :colspan="columns.length">
                 <v-chip color="pink" label>Описание дефектов техники</v-chip>
-                 {{ item.description }}
+                {{ item.description }}
               </td>
             </tr>
           </template>
@@ -190,6 +205,13 @@
       </v-col>
     </v-row>
   </v-container>
+  <v-alert
+      v-if="alert_success === true"
+      type="success"
+      title="zaebis"
+      :text="alert"
+  >
+  </v-alert>
 </template>
 
 <script>
@@ -197,40 +219,14 @@ import axios from "axios";
 
 export default {
   data() {
-    const srcs = {
-      1: 'mdi-account-circle-outline',
-    }
     return {
-      sortBy: 'id',
       dialog: false,
       dialogDelete: false,
       search: '',
-      radios: 'all',
       expanded: [],
-      friends: [],
-      people: [
-        // { header: 'Group 1' },
-        {id: 1, name: 'Sandra Adams Father_name', group: 'Group 1', avatar: srcs[1]},
-        {id: 2, name: 'Ali Connors Father_name', group: 'Group 1', avatar: srcs[1]},
-        {id: 3, name: 'Trevor Hansen Father_name', group: 'Group 1', avatar: srcs[1]},
-        {id: 4, name: 'Tucker Smith Father_name', group: 'Group 1', avatar: srcs[1]},
-        // { divider: true },
-        // { header: 'Group 2' },
-        {name: 'Britta Holt Father_name', group: 'Group 2', avatar: srcs[1]},
-        {name: 'Jane Smith Father_name', group: 'Group 2', avatar: srcs[1]},
-        {name: 'John Smith Father_name', group: 'Group 2', avatar: srcs[1]},
-        {name: 'Sandra Williams Father_name', group: 'Group 2', avatar: srcs[1]},
-      ],
-      statuses: {
-        all_status: true,
-        new_status: false,
-        work_status: false,
-        done_status: false,
-        wait_text: 'Новый',
-        work_text: 'В работе',
-        done_text: 'Готов',
-      },
-      servicesHeaders: [
+      selected_status: 'Все',
+      statuses: ['Все', 'Новый', 'В работе', 'Готов', 'Выдан', 'Отклонён'],
+      ordersHeaders: [
         {title: '№', align: 'start', key: 'id'},
         {title: 'Наименование техники', key: 'title'},
         {title: 'Категория', key: 'categoryTitle'},
@@ -243,19 +239,31 @@ export default {
       ],
       editedIndex: -1,
       editedItem: {
-        id: 0,
-        name: '',
-        category: '',
+        title: '',
+        category_id: null,
         status: 'Новый',
-        staff: 'Test Test Test',
+        client_id: null,
+        staff_in_id: 1,
+        executor_id: 1,
+        description: '',
       },
       defaultItem: {
-        name: '',
-        category: '',
+        title: '',
+        category_id: null,
         status: 'Новый',
+        client_id: null,
+        staff_in_id: 1,
+        executor_id: 1,
+        description: '',
       },
-      services: [],
+      clients: [],
+      selected_client: [],
+      orders: [],
+      categories: [],
+      selected_category: [],
       loadingTable: true,
+      alert: [],
+      alert_success: false,
     }
   },
 
@@ -264,22 +272,13 @@ export default {
       return this.editedIndex === -1 ? 'Новый заказ' : 'Изменение заказа'
     },
     filteredItems() {
-      if (this.statuses.new_status === true && this.radios === 'new') {
-        return this.services.filter((i) => {
-          return i.status === this.statuses.wait_text;
+      if (this.selected_status === 'Все') {
+        return this.orders
+      } else {
+        return this.orders.filter((i) => {
+          return i.status === this.selected_status;
         })
-      } else if (this.statuses.work_status === true && this.radios === 'work') {
-        return this.services.filter((i) => {
-          return i.status === this.statuses.work_text;
-        })
-      } else if (this.statuses.done_status === true && this.radios === 'done') {
-        return this.services.filter((i) => {
-          return i.status === this.statuses.done_text;
-        })
-      } else if (this.statuses.all_status === true && this.radios === 'all') {
-        return this.services
       }
-      return []
     },
   },
 
@@ -293,37 +292,25 @@ export default {
   },
 
   methods: {
+    loadSelectCategory() {
+      axios.post('http://localhost:8000/get-categories')
+          .then(response => {
+            this.categories = response.data.result
+          })
+    },
+    loadSelectClient() {
+      axios.post('http://localhost:8000/get-clients')
+          .then(response => {
+            this.clients = response.data.result
+          })
+    },
     loadTableItems() {
       this.loadingTable = true
       axios.post('http://localhost:8000/get-orders')
           .then(response => {
-            this.services = response.data.result
+            this.orders = response.data.result
             this.loadingTable = false
           })
-    },
-    getAllData() {
-      this.statuses.all_status = true
-      this.statuses.new_status = false
-      this.statuses.work_status = false
-      this.statuses.done_status = false
-    },
-    getNewData() {
-      this.statuses.all_status = false
-      this.statuses.new_status = true
-      this.statuses.work_status = false
-      this.statuses.done_status = false
-    },
-    getWorkData() {
-      this.statuses.all_status = false
-      this.statuses.new_status = false
-      this.statuses.work_status = true
-      this.statuses.done_status = false
-    },
-    getDoneData() {
-      this.statuses.all_status = false
-      this.statuses.new_status = false
-      this.statuses.work_status = false
-      this.statuses.done_status = true
     },
     getColor(status) {
       if (status === 'Новый') return 'info'
@@ -333,17 +320,17 @@ export default {
       else return 'red'
     },
     editItem(item) {
-      this.editedIndex = this.services.indexOf(item)
+      this.editedIndex = this.orders.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
     deleteItem(item) {
-      this.editedIndex = this.services.indexOf(item)
+      this.editedIndex = this.orders.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
     deleteItemConfirm() {
-      this.services.splice(this.editedIndex, 1)
+      this.orders.splice(this.editedIndex, 1)
       this.closeDelete()
     },
     close() {
@@ -361,11 +348,11 @@ export default {
       })
     },
     save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.services[this.editedIndex], this.editedItem)
-      } else {
-        this.services.push(this.editedItem)
-      }
+      axios.post('http://localhost:8000/add-order', this.editedItem)
+          .then(response => {
+            this.alert = response.data.result
+            this.alert_success = true
+          })
       this.close()
     },
   }

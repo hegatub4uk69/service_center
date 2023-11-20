@@ -23,4 +23,5 @@ urlpatterns = [
     path('get-clients', views.get_clients),
     path('get-orders', views.get_orders),
     path('get-categories', views.get_categories),
+    path('add-order', views.add_orders),
 ]
