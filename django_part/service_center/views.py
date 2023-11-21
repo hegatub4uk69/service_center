@@ -5,7 +5,7 @@ import json
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
+from datetime import datetime
 from service_center.models import Clients, Orders, Staff, Categories
 
 
@@ -62,14 +62,20 @@ def get_orders(request):
 
 @csrf_exempt
 def add_orders(request):
-    host = request.META["HTTP_HOST"]
-    user_agent = request.META["HTTP_USER_AGENT"]
-    path = request.path
     data = json.loads(request.body.decode())
-    print(f'Хост: {host}')
-    print(f'Браузер: {user_agent}')
-    print(f'Путь: {path}')
-    print(f'Данные:')
-    print(data)
-    return JsonResponse({'result': 'successful'})
+    print(f'Пришедшие данные: {data}')
+    if request.method == "POST":
+        order = Orders(
+            title=data['title'],
+            description=data['description'],
+            status=data['status'],
+            category_id=data['category_id'],
+            client_id=data['client_id'],
+            staff_in_id=data['staff_in_id'],
+            created_at=datetime.strptime(data['created_at'], "%d.%m.%Y")
+        )
+        order.save()
+    return JsonResponse({"result": 'successful'})
+
+
 
