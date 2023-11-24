@@ -56,7 +56,11 @@ def get_orders(request):
         "client_FN": i.client.get_client_fio(),
         "client_phone": i.client.phone_number,
         "staff_in_FN": i.staff_in.get_staff_fio(),
-        "executor_FN": i.executor.get_staff_fio(),
+        "executor_FN": i.get_executor_fio(),
+        "staff_out_FN": i.get_staff_out_fio(),
+        "created_at": i.created_at,
+        "repair_at": i.repair_at,
+        "closed_at": i.closed_at,
     } for i in Orders.objects.all().select_related('category', 'staff_in', 'staff_out', 'executor', 'client')]
     return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 

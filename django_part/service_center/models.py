@@ -76,3 +76,15 @@ class Orders(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_executor_fio(self):
+        if self.executor is not None:
+            return f'{self.executor.last_name} {self.executor.first_name} {self.executor.father_name}'
+        else:
+            return f'Не определён'
+
+    def get_staff_out_fio(self):
+        if self.staff_out is not None:
+            return f'{self.staff_out.last_name} {self.staff_out.first_name} {self.staff_out.father_name}'
+        else:
+            return f'Не определён'

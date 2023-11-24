@@ -160,7 +160,17 @@
           <template v-slot:expanded-row="{ columns, item }">
             <tr>
               <td :colspan="columns.length">
-                <v-chip color="pink" label>Описание дефектов техники</v-chip>
+                <v-chip label>Дата ремонта:</v-chip>
+                {{ item.repair_at }}
+                <v-chip label>Дата закрытия заказа:</v-chip>
+                {{ item.closed_at }}
+                <v-chip label>Выдал:</v-chip>
+                {{ item.staff_out_FN }}
+              </td>
+            </tr>
+            <tr>
+              <td :colspan="columns.length">
+                <v-chip label>Описание дефектов техники:</v-chip>
                 {{ item.description }}
               </td>
             </tr>
@@ -172,6 +182,7 @@
               color="purple"
               class="me-2"
               icon="mdi-account-circle-outline"
+              @click="progress"
             >
             </v-icon>
             <v-icon
@@ -201,6 +212,28 @@
     :text="alert"
   >
   </v-alert>
+  <v-snackbar
+    v-model="snackbar"
+    @click="snackbar = !snackbar"
+    color="success"
+    transition="slide-x-reverse-transition"
+    timeout="4000"
+    min-width="700px"
+    min-height="100px"
+    location="right bottom"
+    class="my-10"
+  >
+    <v-alert
+      prominent=""
+      title="Заказ успешно оформлен!"
+      type="success"
+    >
+      My text is here!
+    </v-alert>
+    <v-progress-linear
+      v-model="time"
+    ></v-progress-linear>
+  </v-snackbar>
 </template>
 
 <script>
@@ -209,6 +242,10 @@ import axios from "axios";
 export default {
   data() {
     return {
+      time: 0,
+      value: 10,
+      buffer_value: 20,
+      snackbar: false,
       dialog: false,
       dialogDelete: false,
       search: '',
@@ -222,6 +259,7 @@ export default {
         {title: 'Клиент', key: 'client_FN'},
         {title: 'Приемщик', key: 'staff_in_FN'},
         {title: 'Техник', key: 'executor_FN'},
+        {title: 'Дата оформления', align: 'start', key: 'created_at'},
         {title: 'Статус', key: 'status', align: 'start'},
         {title: 'Действия', key: 'actions', sortable: false},
         {title: '', key: 'data-table-expand'},
@@ -254,6 +292,7 @@ export default {
       loadingTable: true,
       alert: [],
       alert_success: false,
+      interval: 0,
     }
   },
 
@@ -282,6 +321,14 @@ export default {
   },
 
   methods: {
+    progress() {
+      this.snackbar = true
+      this.time = 0
+      this.interval = 0
+      this.interval = setInterval(() => {
+        this.time++
+      }, 35)
+    },
     loadSelectCategory() {
       axios.post('http://localhost:8000/get-categories')
         .then(response => {
