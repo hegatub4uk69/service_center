@@ -182,7 +182,7 @@
               color="purple"
               class="me-2"
               icon="mdi-account-circle-outline"
-              @click="progress"
+              @click="toast_msg"
             >
             </v-icon>
             <v-icon
@@ -205,47 +205,16 @@
       </v-col>
     </v-row>
   </v-container>
-  <v-alert
-    v-if="alert_success === true"
-    type="success"
-    title="zaebis"
-    :text="alert"
-  >
-  </v-alert>
-  <v-snackbar
-    v-model="snackbar"
-    @click="snackbar = !snackbar"
-    color="success"
-    transition="slide-x-reverse-transition"
-    timeout="4000"
-    min-width="700px"
-    min-height="100px"
-    location="right bottom"
-    class="my-10"
-  >
-    <v-alert
-      prominent=""
-      title="Заказ успешно оформлен!"
-      type="success"
-    >
-      My text is here!
-    </v-alert>
-    <v-progress-linear
-      v-model="time"
-    ></v-progress-linear>
-  </v-snackbar>
 </template>
 
 <script>
 import axios from "axios";
+import { toast } from "vue3-toastify"
+import "vue3-toastify/dist/index.css"
 
 export default {
   data() {
     return {
-      time: 0,
-      value: 10,
-      buffer_value: 20,
-      snackbar: false,
       dialog: false,
       dialogDelete: false,
       search: '',
@@ -285,14 +254,11 @@ export default {
         description: '',
       },
       clients: [],
-      selected_client: [],
       orders: [],
       categories: [],
-      selected_category: [],
       loadingTable: true,
       alert: [],
       alert_success: false,
-      interval: 0,
     }
   },
 
@@ -321,13 +287,15 @@ export default {
   },
 
   methods: {
-    progress() {
-      this.snackbar = true
-      this.time = 0
-      this.interval = 0
-      this.interval = setInterval(() => {
-        this.time++
-      }, 35)
+    toast_msg() {
+      toast('Successful create orders!', {
+        autoClose: 4000,
+        theme: "colored",
+        type: 'success',
+        duration: 5000,
+        position: "top-center",
+        closeButton: false,
+      })
     },
     loadSelectCategory() {
       axios.post('http://localhost:8000/get-categories')
@@ -403,13 +371,5 @@ export default {
   background: #fff;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
-}
-
-.radio-btn /deep/ label {
-  color: #181818;
-}
-
-.table-title /deep/ label {
-  color: #181818;
 }
 </style>
