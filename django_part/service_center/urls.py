@@ -23,5 +23,7 @@ urlpatterns = [
     path('get-clients', views.get_clients),
     path('get-orders', views.get_orders),
     path('get-categories', views.get_categories),
-    path('add-order', views.add_orders),
+    path('add-order', views.add_order),
+    path('update-order', views.update_order),
+    path('delete-order', views.delete_order),
 ]

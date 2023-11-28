@@ -41,7 +41,7 @@ class Clients(models.Model):
     phone_number = models.CharField(max_length=15, null=False, blank=False, unique=True)
 
     def get_client_fio(self):
-        return f'{self.last_name} {self.first_name} {self.father_name}'
+        return f'{self.first_name} ({self.phone_number})'
 
     def __str__(self):
         return self.phone_number
@@ -57,9 +57,8 @@ class Orders(models.Model):
     WORK = 'В работе'
     DONE = 'Готов'
     GIVEN = 'Выдан'
-    DECLINE = 'Отклонён'
     CATEGORIES = [
-        (NEW, "Новый"), (WORK, "В работе"), (DONE, "Готов"), (GIVEN, "Выдан"), (DECLINE, "Отклонён")
+        (NEW, "Новый"), (WORK, "В работе"), (DONE, "Готов"), (GIVEN, "Выдан")
     ]
 
     title = models.CharField(max_length=45)
@@ -76,6 +75,17 @@ class Orders(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_repair_date(self):
+        if self.repair_at is not None:
+            return self.repair_at
+        else:
+            return f'Отсутствует'
+    def get_closed_date(self):
+        if self.closed_at is not None:
+            return self.closed_at
+        else:
+            return f'Отсутствует'
 
     def get_executor_fio(self):
         if self.executor is not None:

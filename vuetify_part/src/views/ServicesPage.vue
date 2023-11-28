@@ -5,20 +5,20 @@
         <v-col cols="4" sm="4" md="4" lg="2">
           <!--Кнопки фильтрации данных в таблице-->
           <v-select
-            v-model="selected_status"
-            :items="statuses"
-            label="Фильтрация по статусу"
+              v-model="selected_status"
+              :items="statuses"
+              label="Фильтрация по статусу"
           ></v-select>
         </v-col>
         <v-col cols="7" sm="6" md="6" lg="5">
           <!--Поле для поиска данных в таблице-->
           <v-text-field
-            v-model="search"
-            variant="underlined"
-            style="height: 90px"
-            prepend-inner-icon="mdi-table-search"
-            label="Введите поисковое значение"
-            single-line
+              v-model="search"
+              variant="underlined"
+              style="height: 90px"
+              prepend-inner-icon="mdi-table-search"
+              label="Введите поисковое значение"
+              single-line
           ></v-text-field>
         </v-col>
       </v-row>
@@ -29,15 +29,13 @@
       <v-col>
         <!--Таблица данных заказов-->
         <v-data-table
-          v-model:expanded="expanded"
-          :headers="ordersHeaders"
-          :search="search"
-          :items="filteredItems"
-          :loading="loadingTable"
-          :show-expand="true"
-          item-value="id"
-          class="elevation-1 table"
-          @update:options="loadTableItems"
+            :headers="ordersHeaders"
+            :search="search"
+            :items="filteredItems"
+            :loading="loadingTable"
+            item-value="id"
+            class="elevation-1 table"
+            @update:options="loadTableItems"
         >
           <!--Панель инструментов таблицы-->
           <template v-slot:top>
@@ -50,69 +48,123 @@
               <v-spacer></v-spacer>
               <!--Диалоговое окно добавления заказа-->
               <v-dialog
-                v-model="dialog"
-                max-width="500px"
+                  v-model="dialog"
+                  max-width="700px"
               >
                 <!--Кнопка оформления на панели инструментов таблицы-->
                 <template v-slot:activator="{ props }">
                   <v-btn
-                    color="purple"
-                    dark
-                    class="mb-2"
-                    v-bind="props"
-                    variant="outlined"
+                      color="purple"
+                      dark
+                      class="mb-2"
+                      v-bind="props"
+                      variant="outlined"
                   >Оформить
                   </v-btn>
                 </template>
                 <!--Элементы диалогового окна-->
-                <v-card>
-                  <v-card-title>
-                    <span class="text-h5">{{ formTitle }}</span>
-                  </v-card-title>
+                <v-card :title="formTitle">
+                  <template v-slot:prepend>
+                    <v-icon
+                        :icon="formIcon"
+                        style="margin-left: 5px"
+                    ></v-icon>
+                  </template>
+                  <template v-if="info" v-slot:append>
+                    <v-icon
+                        :icon="info ? 'mdi-pencil' : 'mdi-information-outline'"
+                        :color="info ? 'orange' : 'blue'"
+                        @click="info = !info"
+                    >
+                    </v-icon>
+                  </template>
                   <v-card-text>
                     <v-container>
                       <v-row>
+                        <v-col style="padding-left: 0; padding-bottom: 0">
+                          <v-text-field
+                              v-if="info"
+                              :model-value="editedItem.created_at"
+                              label="Дата оформления"
+                              :readonly="true"
+                          >
+                          </v-text-field>
+                        </v-col>
+                        <v-col style="padding-bottom: 0">
+                          <v-text-field
+                              v-if="info"
+                              :model-value="editedItem.repair_at"
+                              label="Дата ремонта"
+                              :readonly="true"
+                          >
+                          </v-text-field>
+                        </v-col>
+                        <v-col style="padding-right: 0; padding-bottom: 0">
+                          <v-text-field
+                              v-if="info"
+                              :model-value="editedItem.closed_at"
+                              label="Дата выдачи"
+                              :readonly="true"
+                          >
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
                         <v-text-field
-                          v-model="editedItem.title"
-                          label="Наименование техники"
+                            v-if="info"
+                            :model-value="editedItem.staff_out_FN"
+                            label="Заказ выдал"
+                            :readonly="true"
+                        >
+                        </v-text-field>
+                      </v-row>
+                      <v-row>
+                        <v-text-field
+                            v-if="!info"
+                            :readonly="info"
+                            v-model="editedItem.title"
+                            label="Наименование техники"
                         ></v-text-field>
                       </v-row>
                       <v-row>
                         <v-select
-                          v-model="editedItem.category_id"
-                          :items="categories"
-                          item-title="name"
-                          item-value="id"
-                          label="Категория техники"
-                          @update:menu="loadSelectCategory"
+                            v-if="!info"
+                            :readonly="info"
+                            v-model="editedItem.category_id"
+                            :items="categories"
+                            item-title="name"
+                            item-value="id"
+                            label="Категория техники"
                         >
                         </v-select>
                       </v-row>
                       <!--Выпадающий список с выбором клиента-->
                       <v-row>
                         <v-autocomplete
-                          v-model="editedItem.client_id"
-                          :items="clients"
-                          color="blue-grey-lighten-2"
-                          item-title="phone"
-                          item-value="id"
-                          label="Клиент"
-                          @update:menu="loadSelectClient"
+                            v-if="!info"
+                            :readonly="info"
+                            v-model="editedItem.client_id"
+                            :items="clients"
+                            color="blue-grey-lighten-2"
+                            item-title="phone"
+                            item-value="id"
+                            label="Клиент"
                         >
                           <template v-slot:item="{ props, item }">
                             <v-list-item
-                              v-bind="props"
-                              prepend-icon="mdi-account-circle-outline"
-                              :title="item?.raw?.full_name"
-                              :subtitle="item?.raw?.phone"
+                                v-bind="props"
+                                prepend-icon="mdi-account-circle-outline"
+                                :title="item?.raw?.full_name"
+                                :subtitle="item?.raw?.phone"
                             ></v-list-item>
                           </template>
                         </v-autocomplete>
                       </v-row>
                       <v-row>
                         <v-textarea
-                          v-model="editedItem.description"
-                          label="Описание"
+                            :readonly="info"
+                            v-model="editedItem.description"
+                            label="Описание"
                         ></v-textarea>
                       </v-row>
                     </v-container>
@@ -120,31 +172,65 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                      color="blue-darken-1"
-                      variant="text"
-                      @click="close"
+                        color="blue-darken-1"
+                        variant="text"
+                        @click="close"
                     >
                       Закрыть
                     </v-btn>
                     <v-btn
-                      color="blue-darken-1"
-                      variant="text"
-                      @click="save"
+                        :disabled="info"
+                        color="blue-darken-1"
+                        variant="text"
+                        @click="save"
                     >
-                      Оформить
+                      {{ buttonTitle }}
                     </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
               <!--Диалоговое окно удаления заказа-->
-              <v-dialog v-model="dialogDelete" max-width="500px">
-                <v-card>
-                  <v-card-title class="text-h5">Вы уверены, что хотите удалить данную услугу?</v-card-title>
+              <v-dialog v-model="dialogDelete" max-width="520px">
+                <v-card
+                    title="Вы уверены, что хотите удалить данный заказ?">
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Закрыть</v-btn>
                     <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm">Удалить</v-btn>
                     <v-spacer></v-spacer>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <v-dialog v-model="dialogStaff" max-width="400px">
+                <v-card class="align-center" title="Действия над заказом">
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-switch
+                            v-model="model1"
+                            color="green"
+                            hide-details
+                            inset
+                            label="Взяться за заказ"
+                            class="font-weight-bold"
+                        >
+                        </v-switch>
+                      </v-row>
+                      <v-row>
+                        <v-switch
+                            v-model="model2"
+                            color="green"
+                            hide-details
+                            inset
+                            label="Выдать заказ"
+                            class="font-weight-bold"
+                        ></v-switch>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn color="blue-darken-1" variant="text">Сохранить</v-btn>
+                    <v-btn color="blue-darken-1" variant="text">Закрыть</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -156,48 +242,29 @@
               {{ value }}
             </v-chip>
           </template>
-          <!--Выпадающее описание заказа-->
-          <template v-slot:expanded-row="{ columns, item }">
-            <tr>
-              <td :colspan="columns.length">
-                <v-chip label>Дата ремонта:</v-chip>
-                {{ item.repair_at }}
-                <v-chip label>Дата закрытия заказа:</v-chip>
-                {{ item.closed_at }}
-                <v-chip label>Выдал:</v-chip>
-                {{ item.staff_out_FN }}
-              </td>
-            </tr>
-            <tr>
-              <td :colspan="columns.length">
-                <v-chip label>Описание дефектов техники:</v-chip>
-                {{ item.description }}
-              </td>
-            </tr>
-          </template>
           <!--Кнопки действий над заказами-->
           <template v-slot:[`item.actions`]="{ item }">
             <v-icon
-              size="small"
-              color="purple"
-              class="me-2"
-              icon="mdi-account-circle-outline"
-              @click="toast_msg"
+                size="small"
+                color="purple"
+                class="me-2"
+                icon="mdi-account-circle-outline"
+                @click="editStaff"
             >
             </v-icon>
             <v-icon
-              size="small"
-              class="me-2"
-              color="info"
-              icon="mdi-pencil-outline"
-              @click="editItem(item)"
+                size="small"
+                class="me-2"
+                color="info"
+                icon="mdi-information-outline"
+                @click="editItem(item)"
             >
             </v-icon>
             <v-icon
-              size="small"
-              color="red"
-              icon="mdi-delete-outline"
-              @click="deleteItem(item)"
+                size="small"
+                color="red"
+                icon="mdi-delete-outline"
+                @click="deleteItem(item)"
             >
             </v-icon>
           </template>
@@ -209,18 +276,21 @@
 
 <script>
 import axios from "axios";
-import { toast } from "vue3-toastify"
+import {toast} from "vue3-toastify"
 import "vue3-toastify/dist/index.css"
 
 export default {
   data() {
     return {
+      model1: true,
+      model2: true,
       dialog: false,
       dialogDelete: false,
+      dialogStaff: false,
       search: '',
-      expanded: [],
+      info: false,
       selected_status: 'Все',
-      statuses: ['Все', 'Новый', 'В работе', 'Готов', 'Выдан', 'Отклонён'],
+      statuses: ['Все', 'Новый', 'В работе', 'Готов', 'Выдан'],
       ordersHeaders: [
         {title: '№', align: 'start', key: 'id'},
         {title: 'Наименование техники', key: 'title'},
@@ -228,10 +298,8 @@ export default {
         {title: 'Клиент', key: 'client_FN'},
         {title: 'Приемщик', key: 'staff_in_FN'},
         {title: 'Техник', key: 'executor_FN'},
-        {title: 'Дата оформления', align: 'start', key: 'created_at'},
         {title: 'Статус', key: 'status', align: 'start'},
         {title: 'Действия', key: 'actions', sortable: false},
-        {title: '', key: 'data-table-expand'},
       ],
       editedIndex: -1,
       editedItem: {
@@ -252,19 +320,36 @@ export default {
         staff_in_id: 1,
         executor_id: 1,
         description: '',
+        created_at: null,
       },
       clients: [],
       orders: [],
       categories: [],
       loadingTable: true,
-      alert: [],
-      alert_success: false,
     }
   },
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'Новый заказ' : 'Изменение заказа'
+      if (this.editedIndex === -1 && this.info === false) {
+        return 'Новый заказ'
+      } else if (this.editedIndex > -1 && this.info === false) {
+        return 'Изменение данных заказа'
+      } else {
+        return 'Дополнительная инфомация о заказе'
+      }
+    },
+    formIcon() {
+      if (this.editedIndex === -1 && this.info === false) {
+        return 'mdi-text-box-plus-outline'
+      } else if (this.editedIndex > -1 && this.info === false) {
+        return 'mdi-text-box-edit-outline'
+      } else {
+        return 'mdi-text-box-outline'
+      }
+    },
+    buttonTitle() {
+      return this.editedIndex === -1 ? 'Оформить' : 'Изменить'
     },
     filteredItems() {
       if (this.selected_status === 'Все') {
@@ -278,8 +363,13 @@ export default {
   },
 
   watch: {
-    dialog(val) {
-      val || this.close()
+    dialog() {
+      if (!this.dialog) {
+        this.close();
+      } else {
+        this.loadSelectCategory();
+        this.loadSelectClient()
+      }
     },
     dialogDelete(val) {
       val || this.closeDelete()
@@ -287,35 +377,25 @@ export default {
   },
 
   methods: {
-    toast_msg() {
-      toast('Successful create orders!', {
-        autoClose: 4000,
-        theme: "colored",
-        type: 'success',
-        duration: 5000,
-        position: "top-center",
-        closeButton: false,
-      })
-    },
     loadSelectCategory() {
       axios.post('http://localhost:8000/get-categories')
-        .then(response => {
-          this.categories = response.data.result
-        })
+          .then(response => {
+            this.categories = response.data.result
+          })
     },
     loadSelectClient() {
       axios.post('http://localhost:8000/get-clients')
-        .then(response => {
-          this.clients = response.data.result
-        })
+          .then(response => {
+            this.clients = response.data.result
+          })
     },
     loadTableItems() {
       this.loadingTable = true
       axios.post('http://localhost:8000/get-orders')
-        .then(response => {
-          this.orders = response.data.result
-          this.loadingTable = false
-        })
+          .then(response => {
+            this.orders = response.data.result
+            this.loadingTable = false
+          })
     },
     getColor(status) {
       if (status === 'Новый') return 'info'
@@ -324,18 +404,43 @@ export default {
       else if (status === 'Выдан') return 'purple'
       else return 'red'
     },
+    editStaff() {
+      this.dialogStaff = true
+    },
     editItem(item) {
+      this.info = true
       this.editedIndex = this.orders.indexOf(item)
-      this.editedItem = Object.assign({}, item)
+      this.editedItem = {
+        id: item.id,
+        title: item.title,
+        description: item.description,
+        category_id: item.category_id,
+        client_id: item.client_id,
+        created_at: item.created_at,
+        repair_at: item.repair_at,
+        closed_at: item.closed_at,
+        staff_out_FN: item.staff_out_FN
+      }
       this.dialog = true
     },
     deleteItem(item) {
       this.editedIndex = this.orders.indexOf(item)
-      this.editedItem = Object.assign({}, item)
+      this.editedItem = {id: item.id}
       this.dialogDelete = true
     },
     deleteItemConfirm() {
-      this.orders.splice(this.editedIndex, 1)
+      axios.post('http://localhost:8000/delete-order', this.editedItem)
+          .then(response => {
+            toast('Заказ успешно удалён! ' + response.data.result, {
+              autoClose: 4000,
+              theme: "colored",
+              type: 'success',
+              duration: 5000,
+              position: "top-right",
+              closeButton: false,
+            })
+            this.loadTableItems()
+          })
       this.closeDelete()
     },
     close() {
@@ -343,6 +448,9 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
+        this.clients = []
+        this.categories = []
+        this.info = false
       })
     },
     closeDelete() {
@@ -353,13 +461,36 @@ export default {
       })
     },
     save() {
-      let date = new Date();
-      this.editedItem.created_at = date.toLocaleDateString('ru-RU');
-      axios.post('http://localhost:8000/add-order', this.editedItem)
-        .then(response => {
-          this.alert = response.data.result
-          this.alert_success = true
-        })
+      if (this.editedIndex > -1) {
+        axios.post('http://localhost:8000/update-order', this.editedItem)
+            .then(response => {
+              toast('Заказ успешно изменен! ' + response.data.result, {
+                autoClose: 4000,
+                theme: "colored",
+                type: 'success',
+                duration: 5000,
+                position: "top-right",
+                closeButton: false,
+              })
+              this.loadTableItems()
+            })
+        this.close()
+      } else {
+        let date = new Date();
+        this.editedItem.created_at = date.toLocaleDateString('ru-RU');
+        axios.post('http://localhost:8000/add-order', this.editedItem)
+            .then(response => {
+              toast('Заказ успешно оформлен! ' + response.data.result, {
+                autoClose: 4000,
+                theme: "colored",
+                type: 'success',
+                duration: 5000,
+                position: "top-right",
+                closeButton: false,
+              })
+              this.loadTableItems()
+            })
+      }
       this.close()
     },
   }

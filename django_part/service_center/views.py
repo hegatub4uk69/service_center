@@ -48,6 +48,7 @@ def get_orders(request):
         "client_id": i.client.pk,
         "staff_in_id": i.staff_in_id,
         "executor_id": i.executor_id,
+        "category_id": i.category_id,
         "staff_out": i.staff_out_id,
         "title": i.title,
         "description": i.description,
@@ -59,13 +60,13 @@ def get_orders(request):
         "executor_FN": i.get_executor_fio(),
         "staff_out_FN": i.get_staff_out_fio(),
         "created_at": i.created_at,
-        "repair_at": i.repair_at,
-        "closed_at": i.closed_at,
+        "repair_at": i.get_repair_date(),
+        "closed_at": i.get_closed_date(),
     } for i in Orders.objects.all().select_related('category', 'staff_in', 'staff_out', 'executor', 'client')]
     return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
 @csrf_exempt
-def add_orders(request):
+def add_order(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные: {data}')
     if request.method == "POST":
@@ -79,7 +80,28 @@ def add_orders(request):
             created_at=datetime.strptime(data['created_at'], "%d.%m.%Y")
         )
         order.save()
-    return JsonResponse({"result": 'successful'})
+    return JsonResponse({"result": 'Данные сохранены'})
 
+@csrf_exempt
+def update_order(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные: {data}')
+    if request.method == "POST":
+        order = Orders.objects.get(id = data['id'])
+        order.title = data['title']
+        order.description = data['description']
+        order.category_id = data['category_id']
+        order.client_id = data['client_id']
+        order.save()
+    return JsonResponse({"result": 'Данные изменены'})
+
+@csrf_exempt
+def delete_order(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные: {data}')
+    if request.method == "POST":
+        order = Orders.objects.get(id=data['id'])
+        order.delete()
+    return JsonResponse({"result": 'Данные удалены'})
 
 
