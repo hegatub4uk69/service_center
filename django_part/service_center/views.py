@@ -43,6 +43,8 @@ def get_staff(request):
 
 @csrf_exempt
 def get_orders(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные: {data}')
     result = [{
         "id": i.pk,
         "client_id": i.client.pk,
@@ -62,7 +64,7 @@ def get_orders(request):
         "created_at": i.created_at,
         "repair_at": i.get_repair_date(),
         "closed_at": i.get_closed_date(),
-    } for i in Orders.objects.all().select_related('category', 'staff_in', 'staff_out', 'executor', 'client')]
+    } for i in Orders.objects.all().filter(status=data['status']).select_related('category', 'staff_in', 'staff_out', 'executor', 'client')]
     return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
 @csrf_exempt
