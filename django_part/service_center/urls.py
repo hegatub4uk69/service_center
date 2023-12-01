@@ -26,4 +26,5 @@ urlpatterns = [
     path('add-order', views.add_order),
     path('update-order', views.update_order),
     path('delete-order', views.delete_order),
+    path('get-order-other-data', views.get_other_order_data)
 ]

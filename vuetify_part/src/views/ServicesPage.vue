@@ -344,6 +344,8 @@ export default {
       },
       clients: [],
       orders: [],
+      selected_order: {},
+      orders_other_data: [],
       categories: [],
       loadingTable: true,
     }
@@ -383,6 +385,9 @@ export default {
   },
 
   watch: {
+    selected_order() {
+      this.loadOtherOrderData()
+    },
     selected_status() {
       this.status_to_resp.status = this.selected_status
       this.loadTableItems()
@@ -391,8 +396,9 @@ export default {
       if (!this.dialog) {
         this.close();
       } else {
+        this.loadOtherOrderData();
         this.loadSelectCategory();
-        this.loadSelectClient()
+        this.loadSelectClient();
       }
     },
     dialogDelete(val) {
@@ -401,6 +407,12 @@ export default {
   },
 
   methods: {
+    loadOtherOrderData() {
+      axios.post('http://localhost:8000/get-order-other-data', this.selected_order)
+        .then(response => {
+          this.orders_other_data = response.data.result
+        })
+    },
     loadSelectCategory() {
       axios.post('http://localhost:8000/get-categories')
         .then(response => {
@@ -434,18 +446,19 @@ export default {
     editItem(item) {
       this.info = true
       this.editedIndex = this.orders.indexOf(item)
+      this.selected_order = item.id
       this.editedItem = {
         id: item.id,
         title: item.title,
-        description: item.description,
-        category_id: item.category_id,
-        client_id: item.client_id,
-        created_at: item.created_at,
-        repair_at: item.repair_at,
-        closed_at: item.closed_at,
-        staff_out_FN: item.staff_out_FN,
-        staff_in_FN: item.staff_in_FN,
-        executor_FN: item.executor_FN
+        description: this.orders_other_data.description,
+        category_id: this.orders_other_data.category_id,
+        client_id: this.orders_other_data.client_id,
+        created_at: this.orders_other_data.created_at,
+        repair_at: this.orders_other_data.repair_at,
+        closed_at: this.orders_other_data.closed_at,
+        staff_out_FN: this.orders_other_data.staff_out_FN,
+        staff_in_FN: this.orders_other_data.staff_in_FN,
+        executor_FN: this.orders_other_data.executor_FN
       }
       this.dialog = true
     },
@@ -476,6 +489,7 @@ export default {
         this.editedIndex = -1
         this.clients = []
         this.categories = []
+        this.orders_other_data = []
         this.info = false
       })
     },
