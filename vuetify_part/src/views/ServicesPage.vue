@@ -138,7 +138,6 @@
                       </v-row>
                       <v-row>
                         <v-text-field
-                            v-if="!info"
                             :readonly="info"
                             v-model="editedItem.title"
                             label="Наименование техники"
@@ -146,7 +145,6 @@
                       </v-row>
                       <v-row>
                         <v-select
-                            v-if="!info"
                             :readonly="info"
                             v-model="editedItem.category_id"
                             :items="categories"
@@ -159,7 +157,6 @@
                       <!--Выпадающий список с выбором клиента-->
                       <v-row>
                         <v-autocomplete
-                            v-if="!info"
                             :readonly="info"
                             v-model="editedItem.client_id"
                             :items="clients"
@@ -240,6 +237,16 @@
                             color="green"
                             hide-details
                             inset
+                            label="Заказ готов?"
+                            class="font-weight-bold"
+                        ></v-switch>
+                      </v-row>
+                      <v-row>
+                        <v-switch
+                            v-model="model3"
+                            color="green"
+                            hide-details
+                            inset
                             label="Выдать заказ"
                             class="font-weight-bold"
                         ></v-switch>
@@ -302,6 +309,7 @@ export default {
     return {
       model1: true,
       model2: true,
+      model3: true,
       dialog: false,
       dialogDelete: false,
       dialogStaff: false,
@@ -455,7 +463,7 @@ export default {
     deleteItemConfirm() {
       axios.post('http://localhost:8000/delete-order', this.editedItem)
           .then(response => {
-            toast('Заказ успешно удалён! ' + response.data.result, {
+            toast('Заказ успешно удалён!\n' + response.data.result, {
               autoClose: 4000,
               theme: "colored",
               type: 'success',
@@ -488,7 +496,7 @@ export default {
       if (this.editedIndex > -1) {
         axios.post('http://localhost:8000/update-order', this.editedItem)
             .then(response => {
-              toast('Заказ успешно изменен! ' + response.data.result, {
+              toast('Заказ успешно изменен!\n' + response.data.result, {
                 autoClose: 4000,
                 theme: "colored",
                 type: 'success',
@@ -504,7 +512,7 @@ export default {
         this.editedItem.created_at = date.toLocaleDateString('ru-RU');
         axios.post('http://localhost:8000/add-order', this.editedItem)
             .then(response => {
-              toast('Заказ успешно оформлен! ' + response.data.result, {
+              toast('Заказ успешно оформлен!\n' + response.data.result, {
                 autoClose: 4000,
                 theme: "colored",
                 type: 'success',
