@@ -401,6 +401,14 @@ export default {
       } else {
         this.loadSelectCategory();
         this.loadSelectClient();
+        toast('', {
+              autoClose: 4000,
+              theme: "colored",
+              type: 'success',
+              duration: 5000,
+              position: "top-right",
+              closeButton: false,
+        })
       }
     },
     dialogDelete(val) {

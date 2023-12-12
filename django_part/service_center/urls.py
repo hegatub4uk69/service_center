@@ -1,30 +1,15 @@
-"""
-Используется для второго метода работы с данными.
-"""
-from .api import RolesViewSet, AccountsViewSet, AccountsRolesViewSet, StaffViewSet, ClientsViewSet, CategoriesViewSet, OrdersViewSet
-from rest_framework import routers
-
-# router = routers.DefaultRouter()
-# router.register('roles', RolesViewSet, 'roles')
-# router.register('accounts', AccountsViewSet, 'accounts')
-# router.register('accounts_roles', AccountsRolesViewSet, 'accounts_roles')
-# router.register('staff', StaffViewSet, 'staff')
-# router.register('clients', ClientsViewSet, 'clients')
-# router.register('categories', CategoriesViewSet, 'categories')
-# router.register('orders', OrdersViewSet, 'orders')
-
-"""
-Используется для первого метода работы с данными.
-"""
-from django.urls import path
+from django.urls import path, include, re_path
+from rest_framework.authtoken.views import obtain_auth_token
 from . import views
 
 urlpatterns = [
+    path('get-token', obtain_auth_token, name='token'),
     path('get-clients', views.get_clients),
     path('get-orders', views.get_orders),
     path('get-categories', views.get_categories),
     path('add-order', views.add_order),
     path('update-order', views.update_order),
     path('delete-order', views.delete_order),
-    path('get-order-other-data', views.get_other_order_data)
+    path('get-order-other-data', views.get_other_order_data),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
 ]

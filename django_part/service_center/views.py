@@ -1,15 +1,16 @@
-"""
-Используется для первого метода работы с данными.
-"""
 import json
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from service_center.models import Clients, Orders, Staff, Categories
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
 def get_clients(request):
     result = [{
         "id": i.pk,
@@ -72,7 +73,8 @@ def get_other_order_data(request):
         "repair_at": i.get_repair_date(),
         "closed_at": i.get_closed_date(),
     } for i in Orders.objects.all().filter(pk=data).select_related('staff_in', 'staff_out', 'executor',
-                                                                         'client', 'category')]
+                                                                   'client', 'category')]
+    print(result[0]["id"])
     return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
 

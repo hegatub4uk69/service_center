@@ -49,7 +49,7 @@
           base-color="white"
           variant=""
           prepend-icon="mdi-card-plus-outline"
-          :title="nav_menu.btn_reg_serv"
+          :title="nav_menu.btn_add_client"
           value="new_serv">
         </v-list-item>
         <v-list-item
@@ -82,7 +82,7 @@ export default {
     nav_menu: {
       btn_lk: 'Личный кабинет',
       btn_services: 'Архив услуг',
-      btn_reg_serv: 'Оформление услуги',
+      btn_add_client: 'Добавление клиента',
       btn_logout: 'Выход',
     },
     links: {
