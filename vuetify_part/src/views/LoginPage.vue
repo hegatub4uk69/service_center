@@ -9,7 +9,7 @@
           >
             <v-card-text>
               <v-text-field
-                v-model="login"
+                v-model="username"
                 :readonly="loading"
                 :rules="[required]"
                 clearable="true"
@@ -34,18 +34,6 @@
             </v-card-text>
             <v-card-actions>
               <v-btn
-                v-model="register"
-                :disabled="!form"
-                :loading="loading"
-                type="submit"
-                variant="elevated"
-                color="info"
-                size="large"
-                class="ma-2"
-              >{{reg_btn_name}}
-              </v-btn>
-              <v-spacer></v-spacer>
-              <v-btn
                 v-model="authorize"
                 :disabled="!form"
                 :loading="loading"
@@ -54,6 +42,7 @@
                 color="success"
                 size="large"
                 class="ma-2"
+                @click="login"
               >{{log_btn_name}}
               </v-btn>
             </v-card-actions>
@@ -65,21 +54,35 @@
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
   name: 'LoginPage',
   data: () => ({
     showPassword: false,
     form: false,
-    login: null,
+    username: null,
     password: null,
+    incorrectAuth: false,
     loading: false,
     authorize: false,
-    register: false,
     log_btn_name: 'Авторизация',
-    reg_btn_name: 'Регистрация',
   }),
 
   methods: {
+    login() {
+      this.$store.dispatch('userLogin', {
+        username: this.username,
+        password: this.password
+      })
+        .then(() => {
+          router.push({name: 'profile'})
+        })
+        .catch(err => {
+          console.log(err)
+          this.incorrectAuth = true
+        })
+    },
     onSubmit() {
       if (!this.form) return
       this.loading = true

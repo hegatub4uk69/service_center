@@ -12,6 +12,7 @@
     </v-app-bar>
 
     <v-navigation-drawer
+      v-if="accessToken != null"
       image="https://img3.akspic.ru/crops/1/9/6/3/1/113691/113691-sinij_cvet-lazur-svet-geometricheskaya_forma-atmosfera-2048x1152.jpg"
       permanent="" expand-on-hover="" rail="">
       <v-list>
@@ -71,8 +72,13 @@
 </template>
 
 <script>
+import router from "@/router";
+import {mapState} from "vuex";
+
 export default {
   name: 'App',
+  computed: mapState(['accessToken']),
+
   data: () => ({
     app_name: 'Сервисный центр',
     user: {
@@ -87,10 +93,19 @@ export default {
     },
     links: {
       main: '/',
-      login: '/login',
+      log: '/login',
       profile: '/profile',
       services: '/services',
     },
   }),
+
+  methods: {
+    logout() {
+      this.$store.dispatch('userLogout')
+        .then(() => {
+          router.push({ name: 'login' })
+        })
+    }
+  }
 }
 </script>
