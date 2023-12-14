@@ -7,10 +7,15 @@ from service_center.models import Clients, Orders, Staff, Categories
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,])
+def token_verify(request):
+    return JsonResponse({"result": 'ok'})
+
+@csrf_exempt
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated,])
 def get_clients(request):
     result = [{
         "id": i.pk,

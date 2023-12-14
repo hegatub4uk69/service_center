@@ -3,6 +3,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from . import views
 
 urlpatterns = [
+    path('token-verify', views.token_verify),
     path('get-token', obtain_auth_token, name='token'),
     path('get-clients', views.get_clients),
     path('get-orders', views.get_orders),

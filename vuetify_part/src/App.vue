@@ -2,6 +2,7 @@
   <v-app>
 
     <v-app-bar
+      v-if="accessToken != null"
       app
       color="primary"
       image=""
@@ -59,6 +60,7 @@
           variant=""
           prepend-icon="mdi-logout"
           :title="nav_menu.btn_logout"
+          @click="logout"
           value="logout">
         </v-list-item>
       </v-list>
@@ -103,7 +105,11 @@ export default {
     logout() {
       this.$store.dispatch('userLogout')
         .then(() => {
-          router.push({ name: 'login' })
+          router.push({name: 'login'})
+        })
+        .catch(err => {
+          router.push({name: 'login'})
+          console.log(err)
         })
     }
   }

@@ -1,17 +1,25 @@
 // Composables
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import {store} from "@/store";
-
 
 const routes = [
   {
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/components/404NotFound.vue'),
+  },
+  {
     path: '/',
-    name: '*',
-    component: () => import('@/views/LoginPage.vue'),
+    name: 'main',
+    redirect: () => {
+      return '/login'
+    }
   },
   {
     path: '/login',
     name: 'login',
+    meta: {
+      notLogin: true
+    },
     component: () => import('@/views/LoginPage.vue'),
   },
   {
@@ -38,9 +46,15 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.matched.some(record => record.meta.requiresLogin)) {
+  if (to.matched.some(record => record.meta.requiresLogin)) {
     if (!store.getters.loggedIn) {
-      next({ name: 'login' })
+      next({name: 'login'})
+    } else {
+      next()
+    }
+  } else if (to.matched.some(record => record.meta.notLogin)) {
+    if (localStorage.getItem('token') != null) {
+      next({name: 'profile'})
     } else {
       next()
     }

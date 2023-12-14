@@ -1,9 +1,10 @@
 import {createStore} from "vuex";
 import axios from "axios";
+import {API} from "@/axios";
 
 export const store = createStore({
   state: {
-      accessToken: null,
+    accessToken: localStorage.getItem('token') || null,
   },
   mutations: {
     updateStorage(state, {access}) {
@@ -11,6 +12,7 @@ export const store = createStore({
     },
     destroyToken(state) {
       state.accessToken = null
+      localStorage.removeItem('token')
     }
   },
   getters: {
@@ -19,18 +21,17 @@ export const store = createStore({
     }
   },
   actions: {
-    userLogout(context, state) {
+    userLogout(context) {
       if (context.getters.loggedIn) {
         return new Promise((resolve, reject) => {
-          axios.post('http://localhost:8000/auth/token/logout', {
-            headers: {Authorization: `Token ${state.accessToken}`}
-          })
+          API.post('auth/token/logout')
             .then(response => {
               console.log(response)
               context.commit('destroyToken')
               resolve()
             })
             .catch(err => {
+              context.commit('destroyToken')
               reject(err)
             })
         })
@@ -43,7 +44,9 @@ export const store = createStore({
           password: usercredentials.password
         })
           .then(response => {
+            localStorage.setItem('token', response.data.token)
             context.commit('updateStorage', {access: response.data.token})
+            axios.defaults.headers.common['Authorization'] = `Token ${response.data.token}`
             resolve()
           })
           .catch(err => {
