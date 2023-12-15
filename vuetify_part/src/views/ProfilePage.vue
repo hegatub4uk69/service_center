@@ -1,11 +1,11 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col>
+    <v-row align="center" justify="center">
+      <v-col cols="12" sm="8" md="4" lg="10">
         <v-container>
           <v-row dense>
             <v-col>
-              <v-card elevation="5" style="width: 750px">
+              <v-card elevation="5">
                 <div class="d-flex flex-no-wrap">
                   <v-avatar
                     class="ma-3"
@@ -15,6 +15,42 @@
                     <v-img src="/kompyuternyj-servis.png"></v-img>
                   </v-avatar>
                   <v-card-text>
+                    <v-card-title>Личная информация</v-card-title>
+                    <v-divider style="padding-bottom: 20px"></v-divider>
+                    <v-text-field
+                      label="Фамилия Имя Отчество"
+                      model-value="Крылов Олег Геннадьевич"
+                    >
+                      <template v-slot:prepend-inner>
+                        <v-icon
+                          style="margin-left: 3px; margin-right: 10px"
+                          icon="mdi-card-account-details-outline"></v-icon>
+                      </template>
+                    </v-text-field>
+                    <v-text-field
+                      label="Логин"
+                      model-value="test_login"
+                    >
+                      <template v-slot:prepend-inner>
+                        <v-icon
+                          style="margin-left: 3px; margin-right: 10px"
+                          icon="mdi-alpha-l-box-outline"></v-icon>
+                      </template>
+                    </v-text-field>
+                    <v-text-field
+                      label="Номер телефона"
+                      model-value="+79049873747"
+                    >
+                      <template v-slot:prepend-inner>
+                        <v-icon
+                          style="margin-left: 3px; margin-right: 10px"
+                          icon="mdi-phone-outline"></v-icon>
+                      </template>
+                    </v-text-field>
+                  </v-card-text>
+                  <v-card-text>
+                    <v-card-title>Статистика заказов</v-card-title>
+                    <v-divider style="padding-bottom: 20px"></v-divider>
                     <v-text-field
                       label="Фамилия Имя Отчество"
                       model-value="Крылов Олег Геннадьевич"
@@ -47,38 +83,25 @@
                     </v-text-field>
                   </v-card-text>
                 </div>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-col>
-
-      <v-col>
-        <v-container>
-          <v-row>
-            <v-col>
-              <v-card
-                title="Принятые заказы"
-                color="info"
-              ></v-card>
-            </v-col>
-            <v-col>
-              <v-card
-                title="Исполненные заказы"
-                color="purple"
-              >
-                <div class="d-flex flex-nowrap justify-space-between">
-                  <v-icon style="margin-left: 13px" size="50px" icon="mdi-card"></v-icon>
-                  <v-text-field style="width: 50px" variant="underlined"></v-text-field>
+                <v-divider class="mx-4 mb-1" style="padding-bottom: 10px"></v-divider>
+                <div class="d-flex flex-no-wrap">
+                  <v-data-table
+                    style="padding-left: 14px; padding-right: 20px; padding-bottom: 20px"
+                  :headers="tableHeaders"
+                  >
+                    <template v-slot:top>
+                      <v-toolbar flat="" color="white">
+                        <!--Заголовок таблицы-->
+                        <v-toolbar-title style="font-size: 25px">
+                          <v-icon class="mb-1" icon="mdi-book-open-outline"></v-icon>
+                          Мои заказы
+                        </v-toolbar-title>
+                        <v-spacer></v-spacer>
+                      </v-toolbar>
+                    </template>
+                  </v-data-table>
                 </div>
-                <v-card-subtitle>test</v-card-subtitle>
               </v-card>
-            </v-col>
-            <v-col>
-              <v-card
-                title="Выданные заказы"
-                color="success"
-              ></v-card>
             </v-col>
           </v-row>
         </v-container>
@@ -91,6 +114,19 @@
 
 export default {
   name: 'ProfilePage',
+  data () {
+    return {
+      tableHeaders: [
+        {title: '№', align: 'start', key: 'id'},
+        {title: 'Наименование техники', key: 'title'},
+        {title: 'Категория', key: 'categoryTitle'},
+        {title: 'Клиент', key: 'client_FN'},
+        {title: 'Телефон клиента', key: 'client_phone'},
+        {title: 'Статус', key: 'status', align: 'start'},
+        {title: 'Действия', key: 'actions', sortable: false},
+      ],
+    }
+  },
   methods: {
     onSubmit() {
       if (!this.form) return

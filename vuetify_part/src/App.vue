@@ -2,7 +2,6 @@
   <v-app>
 
     <v-app-bar
-      v-if="accessToken != null"
       app
       color="primary"
       image=""
@@ -38,6 +37,14 @@
           value="lk">
         </v-list-item>
         <v-list-item
+          color="red"
+          base-color="white"
+          variant=""
+          prepend-icon="mdi-cog-box"
+          :title="nav_menu.btn_admin"
+          value="lk">
+        </v-list-item>
+        <v-list-item
           :to="links.services"
           color="red"
           base-color="white"
@@ -50,7 +57,7 @@
           color="red"
           base-color="white"
           variant=""
-          prepend-icon="mdi-card-plus-outline"
+          prepend-icon="mdi-account-multiple-plus-outline"
           :title="nav_menu.btn_add_client"
           value="new_serv">
         </v-list-item>
@@ -89,6 +96,7 @@ export default {
     },
     nav_menu: {
       btn_lk: 'Личный кабинет',
+      btn_admin: 'Панель администратора',
       btn_services: 'Архив услуг',
       btn_add_client: 'Добавление клиента',
       btn_logout: 'Выход',

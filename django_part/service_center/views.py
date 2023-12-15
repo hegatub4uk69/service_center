@@ -14,8 +14,8 @@ def token_verify(request):
     return JsonResponse({"result": 'ok'})
 
 @csrf_exempt
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated,])
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
 def get_clients(request):
     result = [{
         "id": i.pk,
@@ -26,6 +26,8 @@ def get_clients(request):
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
 def get_categories(request):
     result = [{
         "id": i.pk,
@@ -35,6 +37,8 @@ def get_categories(request):
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
 def get_staff(request):
     result = [{
         "id": i.pk,
@@ -48,6 +52,8 @@ def get_staff(request):
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
 def get_orders(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные: {data}')
@@ -63,6 +69,8 @@ def get_orders(request):
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
 def get_other_order_data(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные: {data}')
@@ -84,6 +92,8 @@ def get_other_order_data(request):
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
 def add_order(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные: {data}')
@@ -102,6 +112,8 @@ def add_order(request):
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
 def update_order(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные: {data}')
@@ -116,6 +128,8 @@ def update_order(request):
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
 def delete_order(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные: {data}')

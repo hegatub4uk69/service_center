@@ -1,7 +1,19 @@
 import axios from "axios";
 
-  export const API = axios.create({
+const getToken = () => {
+  let token = null
+  const localStorage = window.localStorage.getItem('token')
+  if (localStorage) token = localStorage
+  return token
+}
+
+const API = axios.create({
   baseURL: 'http://localhost:8000/',
-  timeout: 1000,
-  headers: {'Authorization': `Token ${localStorage.getItem('token')}`}
 })
+
+API.interceptors.request.use((config) => {
+  config.headers.Authorization = `Token ${getToken()}`
+  return config
+})
+
+export default API

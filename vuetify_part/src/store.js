@@ -1,6 +1,6 @@
 import {createStore} from "vuex";
 import axios from "axios";
-import {API} from "@/axios";
+import API from "@/axios";
 
 export const store = createStore({
   state: {
@@ -11,8 +11,8 @@ export const store = createStore({
       state.accessToken = access
     },
     destroyToken(state) {
-      state.accessToken = null
       localStorage.removeItem('token')
+      state.accessToken = null
     }
   },
   getters: {

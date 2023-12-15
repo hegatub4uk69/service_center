@@ -302,7 +302,9 @@
 <script>
 import {toast} from "vue3-toastify"
 import "vue3-toastify/dist/index.css"
-import {API} from "@/axios";
+import API from "@/axios";
+import {store} from "@/store";
+import router from "@/router";
 
 export default {
   data() {
@@ -414,17 +416,33 @@ export default {
           this.editedItem = Object.assign(this.editedItem, response.data.result[0])
           this.dialog = true
         })
+        .catch(function (error) {
+          if (error.response) {
+            store.dispatch('userLogout')
+            router.push({name: 'login'})
+          }
+        })
     },
     loadSelectCategory() {
       API.post('get-categories')
         .then(response => {
           this.categories = response.data.result
+        }).catch(function (error) {
+          if (error.response) {
+            store.dispatch('userLogout')
+            router.push({name: 'login'})
+          }
         })
     },
     loadSelectClient() {
       API.post('get-clients')
         .then(response => {
           this.clients = response.data.result
+        }).catch(function (error) {
+          if (error.response) {
+            store.dispatch('userLogout')
+            router.push({name: 'login'})
+          }
         })
     },
     loadTableItems() {
@@ -433,6 +451,11 @@ export default {
         .then(response => {
           this.orders = response.data.result
           this.loadingTable = false
+        }).catch(function (error) {
+          if (error.response) {
+            store.dispatch('userLogout')
+            router.push({name: 'login'})
+          }
         })
     },
     getColor(status) {
@@ -471,6 +494,11 @@ export default {
             closeButton: false,
           })
           this.loadTableItems()
+        }).catch(function (error) {
+          if (error.response) {
+            store.dispatch('userLogout')
+            router.push({name: 'login'})
+          }
         })
       this.closeDelete()
     },
@@ -504,7 +532,12 @@ export default {
               closeButton: false,
             })
             this.loadTableItems()
-          })
+          }).catch(function (error) {
+          if (error.response) {
+            store.dispatch('userLogout')
+            router.push({name: 'login'})
+          }
+        })
         this.close()
       } else {
         let date = new Date();
@@ -520,7 +553,12 @@ export default {
               closeButton: false,
             })
             this.loadTableItems()
-          })
+          }).catch(function (error) {
+          if (error.response) {
+            store.dispatch('userLogout')
+            router.push({name: 'login'})
+          }
+        })
       }
       this.close()
     },
