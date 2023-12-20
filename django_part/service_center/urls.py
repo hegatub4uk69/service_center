@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('token-verify', views.token_verify),
+    path('get-staff-data', views.get_staff),
     path('get-token', obtain_auth_token, name='token'),
     path('get-clients', views.get_clients),
     path('get-orders', views.get_orders),
@@ -12,5 +13,6 @@ urlpatterns = [
     path('update-order', views.update_order),
     path('delete-order', views.delete_order),
     path('get-order-other-data', views.get_other_order_data),
+    re_path(r'^auth/', include('djoser.urls.base')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
 ]

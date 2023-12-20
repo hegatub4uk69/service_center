@@ -1,26 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# class Roles(models.Model):
-#     name = models.CharField(max_length=20, null=False, blank=False)
-#
-#     def __str__(self):
-#         return self.name
-#
-# class Accounts(models.Model):
-#     login = models.CharField(max_length=45, null=False, blank=False)
-#     password = models.CharField(max_length=25, null=False, blank=False)
-#
-#     def __str__(self):
-#         return self.login
-#
-# class Accounts_Roles(models.Model):
-#     account = models.ForeignKey(Accounts, related_name='Accounts_Roles_account_id', null=True, blank=True, on_delete=models.SET_NULL)
-#     role = models.ForeignKey(Roles, related_name='Accounts_Roles_role_id', null=True, blank=True, on_delete=models.SET_NULL)
-#
-#     def __str__(self):
-#         return self.account
-
 class Staff(models.Model):
     last_name = models.CharField(max_length=25, null=False, blank=False)
     first_name = models.CharField(max_length=25, null=False, blank=False)

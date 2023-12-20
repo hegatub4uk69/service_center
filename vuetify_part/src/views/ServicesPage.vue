@@ -418,8 +418,8 @@ export default {
         })
         .catch(function (error) {
           if (error.response) {
-            store.dispatch('userLogout')
             router.push({name: 'login'})
+            store.dispatch('userLogout')
           }
         })
     },
@@ -429,8 +429,8 @@ export default {
           this.categories = response.data.result
         }).catch(function (error) {
           if (error.response) {
-            store.dispatch('userLogout')
             router.push({name: 'login'})
+            store.dispatch('userLogout')
           }
         })
     },
@@ -440,8 +440,8 @@ export default {
           this.clients = response.data.result
         }).catch(function (error) {
           if (error.response) {
-            store.dispatch('userLogout')
             router.push({name: 'login'})
+            store.dispatch('userLogout')
           }
         })
     },
@@ -453,8 +453,8 @@ export default {
           this.loadingTable = false
         }).catch(function (error) {
           if (error.response) {
-            store.dispatch('userLogout')
             router.push({name: 'login'})
+            store.dispatch('userLogout')
           }
         })
     },
@@ -496,8 +496,8 @@ export default {
           this.loadTableItems()
         }).catch(function (error) {
           if (error.response) {
-            store.dispatch('userLogout')
             router.push({name: 'login'})
+            store.dispatch('userLogout')
           }
         })
       this.closeDelete()
@@ -534,8 +534,8 @@ export default {
             this.loadTableItems()
           }).catch(function (error) {
           if (error.response) {
-            store.dispatch('userLogout')
             router.push({name: 'login'})
+            store.dispatch('userLogout')
           }
         })
         this.close()
@@ -555,8 +555,8 @@ export default {
             this.loadTableItems()
           }).catch(function (error) {
           if (error.response) {
-            store.dispatch('userLogout')
             router.push({name: 'login'})
+            store.dispatch('userLogout')
           }
         })
       }

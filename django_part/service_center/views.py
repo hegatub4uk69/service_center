@@ -40,14 +40,13 @@ def get_categories(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,])
 def get_staff(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные: {data}')
     result = [{
         "id": i.pk,
-        "last_name": i.last_name,
-        "first_name": i.first_name,
-        "father_name": i.father_name,
+        "full_name": i.get_staff_fio(),
         "phone": i.phone_number,
-        "account_login": i.account.login
-    } for i in Staff.objects.all().select_related('account')]
+    } for i in Staff.objects.all().filter(pk=data)]
     return JsonResponse({"result": result})
 
 

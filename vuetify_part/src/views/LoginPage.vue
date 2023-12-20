@@ -77,6 +77,7 @@ export default {
       })
         .then(() => {
           router.push({name: 'profile'})
+          this.$store.dispatch('userData')
         })
         .catch(err => {
           console.log(err)

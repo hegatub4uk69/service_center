@@ -19,8 +19,8 @@
         <v-list-item
           base-color="white"
           prepend-avatar="/kompyuternyj-servis.png"
-          :title="user.fullName"
-          :subtitle="user.email"
+          :title="user_data.staff_full_name"
+          :subtitle="user_data.staff_phone"
         ></v-list-item>
       </v-list>
 
@@ -36,14 +36,14 @@
           :title="nav_menu.btn_lk"
           value="lk">
         </v-list-item>
-        <v-list-item
-          color="red"
-          base-color="white"
-          variant=""
-          prepend-icon="mdi-cog-box"
-          :title="nav_menu.btn_admin"
-          value="lk">
-        </v-list-item>
+<!--        <v-list-item-->
+<!--          color="red"-->
+<!--          base-color="white"-->
+<!--          variant=""-->
+<!--          prepend-icon="mdi-cog-box"-->
+<!--          :title="nav_menu.btn_admin"-->
+<!--          value="lk">-->
+<!--        </v-list-item>-->
         <v-list-item
           :to="links.services"
           color="red"
@@ -86,13 +86,13 @@ import {mapState} from "vuex";
 
 export default {
   name: 'App',
-  computed: mapState(['accessToken']),
+  computed: mapState(['accessToken', 'user_data']),
 
   data: () => ({
     app_name: 'Сервисный центр',
     user: {
       fullName: 'Test Test',
-      email: 'test@gmail.com'
+      phone: 'test@gmail.com'
     },
     nav_menu: {
       btn_lk: 'Личный кабинет',
@@ -109,7 +109,16 @@ export default {
     },
   }),
 
+  mounted() {
+    if (!this.$store.getters.staffDataExist) {
+      this.staffData()
+    }
+  },
+
   methods: {
+    staffData() {
+      this.$store.dispatch('userData')
+    },
     logout() {
       this.$store.dispatch('userLogout')
         .then(() => {

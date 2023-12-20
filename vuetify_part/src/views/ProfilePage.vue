@@ -6,101 +6,107 @@
           <v-row dense>
             <v-col>
               <v-card elevation="5">
-                <div class="d-flex flex-no-wrap">
-                  <v-avatar
-                    class="ma-3"
-                    size="125"
-                    rounded="0"
-                  >
-                    <v-img src="/kompyuternyj-servis.png"></v-img>
-                  </v-avatar>
-                  <v-card-text>
-                    <v-card-title>Личная информация</v-card-title>
-                    <v-divider style="padding-bottom: 20px"></v-divider>
-                    <v-text-field
-                      label="Фамилия Имя Отчество"
-                      model-value="Крылов Олег Геннадьевич"
-                    >
-                      <template v-slot:prepend-inner>
-                        <v-icon
-                          style="margin-left: 3px; margin-right: 10px"
-                          icon="mdi-card-account-details-outline"></v-icon>
-                      </template>
-                    </v-text-field>
-                    <v-text-field
-                      label="Логин"
-                      model-value="test_login"
-                    >
-                      <template v-slot:prepend-inner>
-                        <v-icon
-                          style="margin-left: 3px; margin-right: 10px"
-                          icon="mdi-alpha-l-box-outline"></v-icon>
-                      </template>
-                    </v-text-field>
-                    <v-text-field
-                      label="Номер телефона"
-                      model-value="+79049873747"
-                    >
-                      <template v-slot:prepend-inner>
-                        <v-icon
-                          style="margin-left: 3px; margin-right: 10px"
-                          icon="mdi-phone-outline"></v-icon>
-                      </template>
-                    </v-text-field>
-                  </v-card-text>
-                  <v-card-text>
-                    <v-card-title>Статистика заказов</v-card-title>
-                    <v-divider style="padding-bottom: 20px"></v-divider>
-                    <v-text-field
-                      label="Фамилия Имя Отчество"
-                      model-value="Крылов Олег Геннадьевич"
-                    >
-                      <template v-slot:prepend-inner>
-                        <v-icon
-                          style="margin-left: 3px; margin-right: 10px"
-                          icon="mdi-card-account-details-outline"></v-icon>
-                      </template>
-                    </v-text-field>
-                    <v-text-field
-                      label="Логин"
-                      model-value="test_login"
-                    >
-                      <template v-slot:prepend-inner>
-                        <v-icon
-                          style="margin-left: 3px; margin-right: 10px"
-                          icon="mdi-alpha-l-box-outline"></v-icon>
-                      </template>
-                    </v-text-field>
-                    <v-text-field
-                      label="Номер телефона"
-                      model-value="+79049873747"
-                    >
-                      <template v-slot:prepend-inner>
-                        <v-icon
-                          style="margin-left: 3px; margin-right: 10px"
-                          icon="mdi-phone-outline"></v-icon>
-                      </template>
-                    </v-text-field>
-                  </v-card-text>
-                </div>
-                <v-divider class="mx-4 mb-1" style="padding-bottom: 10px"></v-divider>
-                <div class="d-flex flex-no-wrap">
-                  <v-data-table
-                    style="padding-left: 14px; padding-right: 20px; padding-bottom: 20px"
-                  :headers="tableHeaders"
-                  >
-                    <template v-slot:top>
-                      <v-toolbar flat="" color="white">
-                        <!--Заголовок таблицы-->
-                        <v-toolbar-title style="font-size: 25px">
-                          <v-icon class="mb-1" icon="mdi-book-open-outline"></v-icon>
-                          Мои заказы
-                        </v-toolbar-title>
-                        <v-spacer></v-spacer>
-                      </v-toolbar>
+                <v-expansion-panels variant="accordion">
+                  <v-expansion-panel>
+                    <template v-slot:title>
+                      <v-icon style="margin-right: 5px" size="35px" icon="mdi-card-account-details-outline"></v-icon>
+                      <h3>Информация о пользователе</h3>
                     </template>
-                  </v-data-table>
-                </div>
+                    <v-expansion-panel-text>
+                      <div class="d-flex flex-no-wrap">
+                        <v-avatar
+                          class="ma-3"
+                          size="125"
+                          rounded="0"
+                        >
+                          <v-img src="/kompyuternyj-servis.png"></v-img>
+                        </v-avatar>
+                        <v-card-text>
+                          <v-card-title>Личная информация</v-card-title>
+                          <v-divider style="padding-bottom: 20px"></v-divider>
+                          <v-text-field
+                            label="Фамилия Имя Отчество"
+                            :model-value="user_data.staff_full_name"
+                          >
+                            <template v-slot:prepend-inner>
+                              <v-icon
+                                style="margin-left: 3px; margin-right: 10px"
+                                icon="mdi-card-account-details-outline"></v-icon>
+                            </template>
+                          </v-text-field>
+                          <v-text-field
+                            label="Логин"
+                            :model-value="user_data.login"
+                          >
+                            <template v-slot:prepend-inner>
+                              <v-icon
+                                style="margin-left: 3px; margin-right: 10px"
+                                icon="mdi-alpha-l-box-outline"></v-icon>
+                            </template>
+                          </v-text-field>
+                          <v-text-field
+                            label="Номер телефона"
+                            :model-value="user_data.staff_phone"
+                          >
+                            <template v-slot:prepend-inner>
+                              <v-icon
+                                style="margin-left: 3px; margin-right: 10px"
+                                icon="mdi-phone-outline"></v-icon>
+                            </template>
+                          </v-text-field>
+                        </v-card-text>
+                        <v-card-text>
+                          <v-card-title>Статистика заказов</v-card-title>
+                          <v-divider style="padding-bottom: 20px"></v-divider>
+                          <v-text-field
+                            label="Фамилия Имя Отчество"
+                            model-value="Крылов Олег Геннадьевич"
+                          >
+                            <template v-slot:prepend-inner>
+                              <v-icon
+                                style="margin-left: 3px; margin-right: 10px"
+                                icon="mdi-card-account-details-outline"></v-icon>
+                            </template>
+                          </v-text-field>
+                          <v-text-field
+                            label="Логин"
+                            model-value="test_login"
+                          >
+                            <template v-slot:prepend-inner>
+                              <v-icon
+                                style="margin-left: 3px; margin-right: 10px"
+                                icon="mdi-alpha-l-box-outline"></v-icon>
+                            </template>
+                          </v-text-field>
+                          <v-text-field
+                            label="Номер телефона"
+                            model-value="+79049873747"
+                          >
+                            <template v-slot:prepend-inner>
+                              <v-icon
+                                style="margin-left: 3px; margin-right: 10px"
+                                icon="mdi-phone-outline"></v-icon>
+                            </template>
+                          </v-text-field>
+                        </v-card-text>
+                      </div>
+                    </v-expansion-panel-text>
+                  </v-expansion-panel>
+                  <v-expansion-panel>
+                    <template v-slot:title>
+                      <v-icon style="margin-right: 5px" size="35px" icon="mdi-book-open-outline"></v-icon>
+                      <h3>Мои заказы</h3>
+                    </template>
+                    <v-expansion-panel-text>
+                      <div class="d-flex flex-no-wrap">
+                        <v-data-table
+                          :headers="tableHeaders"
+                        >
+                        </v-data-table>
+                      </div>
+                    </v-expansion-panel-text>
+                  </v-expansion-panel>
+                </v-expansion-panels>
               </v-card>
             </v-col>
           </v-row>
@@ -112,9 +118,12 @@
 
 <script>
 
+import {mapState} from "vuex";
+
 export default {
   name: 'ProfilePage',
-  data () {
+  computed: mapState(['user_data']),
+  data() {
     return {
       tableHeaders: [
         {title: '№', align: 'start', key: 'id'},

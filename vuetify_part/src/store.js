@@ -5,6 +5,12 @@ import API from "@/axios";
 export const store = createStore({
   state: {
     accessToken: localStorage.getItem('token') || null,
+    uid: null,
+    user_data: {
+      staff_full_name: null,
+      staff_phone: null,
+      login: null
+    }
   },
   mutations: {
     updateStorage(state, {access}) {
@@ -13,11 +19,25 @@ export const store = createStore({
     destroyToken(state) {
       localStorage.removeItem('token')
       state.accessToken = null
+    },
+    setUserData(state, {login, uid}) {
+      state.user_data.login = login
+      state.user_data.uid = uid
+    },
+    setStaffData(state, {staff_full_name, staff_phone}) {
+      state.user_data.staff_full_name = staff_full_name
+      state.user_data.staff_phone = staff_phone
     }
   },
   getters: {
     loggedIn(state) {
       return state.accessToken != null
+    },
+    userId(state) {
+      return state.uid
+    },
+    staffDataExist(state) {
+      return state.user_data.login != null
     }
   },
   actions: {
@@ -53,6 +73,31 @@ export const store = createStore({
             reject(err)
           })
       })
+    },
+    userData(context) {
+      if (context.getters.loggedIn) {
+        return new Promise((resolve, reject) => {
+          API.get('auth/users/me/')
+            .then(response => {
+              context.commit('setUserData', {login: response.data.username, uid: response.data.id})
+              console.log(response.data.username, response.data.id)
+              API.post('get-staff-data', response.data.id)
+                .then(response => {
+                  context.commit('setStaffData', {
+                    staff_full_name: response.data.result[0]['full_name'],
+                    staff_phone: response.data.result[0]['phone']
+                  })
+                  console.log(response.data.result[0]['full_name'],)
+                  resolve()
+                }).catch(err => {
+                reject(err)
+              })
+              resolve()
+            }).catch(err => {
+            reject(err)
+          })
+        })
+      }
     }
   }
 })
