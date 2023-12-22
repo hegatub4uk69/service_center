@@ -571,5 +571,6 @@ export default {
   background: #fff;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
+  font-size: 16px;
 }
 </style>

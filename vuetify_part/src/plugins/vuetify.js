@@ -16,7 +16,7 @@ import {
   VDataTable,
   VDataTableServer,
   VDataTableVirtual,
-} from "vuetify/labs/VDataTable";
+} from "vuetify/components";
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({

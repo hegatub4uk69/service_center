@@ -31,12 +31,20 @@ const routes = [
     component: () => import('@/views/ProfilePage.vue'),
   },
   {
-    path: '/services',
-    name: 'services',
+    path: '/orders',
+    name: 'orders',
     meta: {
       requiresLogin: true
     },
-    component: () => import('@/views/ServicesPage.vue'),
+    component: () => import('@/views/OrdersPage.vue'),
+  },
+  {
+    path: '/clients',
+    name: 'clients',
+    meta: {
+      requiresLogin: true
+    },
+    component: () => import('@/views/ClientsPage.vue')
   }
 ]
 

@@ -33,6 +33,7 @@
               />
             </v-card-text>
             <v-card-actions>
+              <v-spacer></v-spacer>
               <v-btn
                 v-model="authorize"
                 :disabled="!form"
@@ -43,8 +44,9 @@
                 size="large"
                 class="ma-2"
                 @click="login"
-              >{{log_btn_name}}
+              >{{ log_btn_name }}
               </v-btn>
+              <v-spacer></v-spacer>
             </v-card-actions>
           </v-form>
         </v-col>
