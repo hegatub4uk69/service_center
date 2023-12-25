@@ -1,21 +1,27 @@
 <template>
   <v-container>
     <v-row justify="center" dense="">
-      <v-col lg="5">
+      <v-col lg="4">
         <v-card>
           <v-data-iterator
-            :items="games"
-            :items-per-page="7"
+            :items="tests"
+            :items-per-page="5"
             :search="search"
           >
             <template v-slot:header>
-              <v-toolbar class="px-2">
+              <v-toolbar>
+                <v-toolbar-title style="font-size: 25px">
+                  <v-icon class="mb-1 mr-1" icon="mdi-account-group-outline"></v-icon>
+                  Клиенты
+                </v-toolbar-title>
+                <v-spacer></v-spacer>
                 <v-text-field
+                  class="px-2"
                   v-model="search"
                   clearable
                   density="comfortable"
                   hide-details
-                  placeholder="Search"
+                  placeholder="Поиск"
                   prepend-inner-icon="mdi-magnify"
                   style="max-width: 300px;"
                   variant="solo"
@@ -25,42 +31,33 @@
 
             <template v-slot:default="{ items }">
               <v-container class="pa-2" fluid>
-                <v-row dense="">
-                  <v-col
-                    v-for="item in items"
-                    :key="item.title"
-                    cols="12"
-                    md="4"
-                    lg="3"
+                <v-list
+                  lines="two"
+                  density="compact"
+                  nav
+                >
+                  <v-list-item
+                    v-for="(item, i) in items"
+                    :key="i"
+                    :value="item"
+                    :title="item?.raw?.title"
+                    :subtitle="item?.raw?.subtitle"
+                    color="primary"
                   >
-                    <v-card class="pb-3" >
-                      <v-img :src="item.raw.img"></v-img>
-
-                      <v-list-item class="mb-2" :subtitle="item.raw.subtitle">
-                        <template v-slot:title>
-                          <strong class="text-h6 mb-2">{{ item.raw.title }}</strong>
-                        </template>
-                      </v-list-item>
-
-                      <div class="d-flex justify-space-between px-4">
-                        <div class="d-flex align-center text-caption text-medium-emphasis me-1">
-                          <v-icon icon="mdi-clock" start></v-icon>
-
-                          <div class="text-truncate">{{ item.raw.duration }}</div>
-                        </div>
-
-                        <v-btn
-                          border
-                          flat
-                          size="small"
-                          class="text-none"
-                          text="Read"
-                        >
-                        </v-btn>
-                      </div>
-                    </v-card>
-                  </v-col>
-                </v-row>
+                    <template v-slot:prepend>
+                      <v-icon
+                        style="font-size: 40px"
+                        icon="mdi-account-circle-outline">
+                      </v-icon>
+                    </template>
+                    <template v-slot:title>
+                      <v-list-item-title style="font-size: 18px">{{ item?.raw?.title }}</v-list-item-title>
+                    </template>
+                    <template v-slot:subtitle>
+                      <v-list-item-subtitle style="font-size: 15px;">{{ item?.raw?.subtitle }}</v-list-item-subtitle>
+                    </template>
+                  </v-list-item>
+                </v-list>
               </v-container>
             </template>
 
@@ -76,7 +73,7 @@
                 ></v-btn>
 
                 <div class="mx-2 text-caption">
-                  Page {{ page }} of {{ pageCount }}
+                  <span style="font-size: 15px">Страница {{ page }} из {{ pageCount }}</span>
                 </div>
 
                 <v-btn
@@ -108,6 +105,33 @@ export default {
   data() {
     return {
       search: '',
+      tests: [
+        {
+          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
+          title: 'Королёв Евгений Геннадьевич',
+          subtitle: `+79459334436`,
+        },
+        {
+          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
+          title: 'Summer BBQ',
+          subtitle: `Wish I could come, but I'm out of town this weekend.`,
+        },
+        {
+          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
+          title: 'Oui oui',
+          subtitle: 'Do you have Paris recommendations? Have you ever been?',
+        },
+        {
+          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
+          title: 'Birthday gift',
+          subtitle: 'Have any ideas about what we should get Heidi for her birthday?',
+        },
+        {
+          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
+          title: 'Recipe to try',
+          subtitle: 'We should eat this: Grate, Squash, Corn, and tomatillo Tacos.',
+        },
+      ],
       games: [
         {
           img: 'https://cdn.vuetifyjs.com/docs/images/graphics/games/4.png',

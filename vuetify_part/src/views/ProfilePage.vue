@@ -19,7 +19,7 @@
                           size="125"
                           rounded="0"
                         >
-                          <v-img src="/kompyuternyj-servis.png"></v-img>
+                          <v-img src="/free-icon-avatar-8727604.png"></v-img>
                         </v-avatar>
                         <v-card-text>
                           <v-card-title>Личная информация</v-card-title>

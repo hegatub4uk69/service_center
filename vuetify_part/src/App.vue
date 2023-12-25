@@ -18,7 +18,7 @@
       <v-list>
         <v-list-item
           base-color="white"
-          prepend-avatar="/kompyuternyj-servis.png"
+          prepend-avatar="/free-icon-avatar-8727604.png"
           :title="user_data.staff_full_name"
           :subtitle="user_data.staff_phone"
         ></v-list-item>
@@ -99,7 +99,7 @@ export default {
       btn_lk: 'Личный кабинет',
       btn_admin: 'Панель администратора',
       btn_services: 'Архив услуг',
-      btn_clients: 'Добавление клиента',
+      btn_clients: 'Клиенты',
       btn_logout: 'Выход',
     },
     links: {
