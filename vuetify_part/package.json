@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mdi/font": "7.0.96",
+    "@titou10/v-mask": "^1.1.0",
     "axios": "^1.6.2",
     "core-js": "^3.34.0",
     "roboto-fontface": "*",
@@ -17,7 +18,8 @@
     "vue-router": "^4.0.0",
     "vue3-toastify": "^0.2.1",
     "vuetify": "^3.4.8",
-    "vuex": "^4.1.0"
+    "vuex": "^4.1.0",
+    "maska": "^2.1.10"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",

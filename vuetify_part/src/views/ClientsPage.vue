@@ -4,9 +4,10 @@
       <v-col lg="4">
         <v-card>
           <v-data-iterator
-            :items="tests"
+            :items="clients"
             :items-per-page="5"
             :search="search"
+            @update:options="loadClients"
           >
             <template v-slot:header>
               <v-toolbar>
@@ -40,9 +41,9 @@
                     v-for="(item, i) in items"
                     :key="i"
                     :value="item"
-                    :title="item?.raw?.title"
-                    :subtitle="item?.raw?.subtitle"
                     color="primary"
+                    :disabled="this.selectedIndex > -1"
+                    @click="test(item?.raw?.id, item?.raw?.phone, item?.raw?.full_name, i)"
                   >
                     <template v-slot:prepend>
                       <v-icon
@@ -51,10 +52,10 @@
                       </v-icon>
                     </template>
                     <template v-slot:title>
-                      <v-list-item-title style="font-size: 18px">{{ item?.raw?.title }}</v-list-item-title>
+                      <v-list-item-title style="font-size: 18px">{{ item?.raw?.full_name }}</v-list-item-title>
                     </template>
                     <template v-slot:subtitle>
-                      <v-list-item-subtitle style="font-size: 15px;">{{ item?.raw?.subtitle }}</v-list-item-subtitle>
+                      <v-list-item-subtitle style="font-size: 15px;">{{ item?.raw?.phone }}</v-list-item-subtitle>
                     </template>
                   </v-list-item>
                 </v-list>
@@ -91,9 +92,50 @@
       </v-col>
       <v-col lg="4">
         <v-card>
+          <v-toolbar>
+            <v-toolbar-title style="font-size: 25px">
+              <v-icon class="mb-1 mr-1" icon="mdi-account-plus-outline"></v-icon>
+              Добавление клиента
+            </v-toolbar-title>
+          </v-toolbar>
           <v-card-text>
-            <v-text-field></v-text-field>
+            <v-text-field
+              v-model="last_name"
+              label="Фамилия"
+            ></v-text-field>
+            <v-text-field
+              v-model="first_name"
+              label="Имя"
+            ></v-text-field>
+            <v-text-field
+              v-model="father_name"
+              label="Отчество"
+            ></v-text-field>
+            <v-text-field
+              v-model="myVal"
+              v-mask:[options]="bindedObject"
+              label="Номер телефона"
+            ></v-text-field>
           </v-card-text>
+          <v-card-actions>
+            <v-btn
+              density="default"
+              color="blue-darken-1"
+              variant="outlined"
+              @click="btnTest2"
+            >
+              Очистить
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn
+              density="default"
+              color="blue-darken-1"
+              variant="outlined"
+              @click="btnTest"
+            >
+              Добавить
+            </v-btn>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -101,101 +143,84 @@
 </template>
 
 <script>
+import API from "@/axios";
+import router from "@/router";
+import {store} from "@/store";
+import {toast} from "vue3-toastify";
+import "vue3-toastify/dist/index.css"
+import {vMaska} from "maska";
+
 export default {
   data() {
     return {
+      options: {
+        mask: "+7 (###) ###-##-##",
+      },
+      testVal: '',
+      testVal2: '',
+      last_name: '',
+      first_name: '',
+      father_name: '',
+      myVal: '+79909786738',
       search: '',
-      tests: [
-        {
-          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-          title: 'Королёв Евгений Геннадьевич',
-          subtitle: `+79459334436`,
-        },
-        {
-          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-          title: 'Summer BBQ',
-          subtitle: `Wish I could come, but I'm out of town this weekend.`,
-        },
-        {
-          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-          title: 'Oui oui',
-          subtitle: 'Do you have Paris recommendations? Have you ever been?',
-        },
-        {
-          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-          title: 'Birthday gift',
-          subtitle: 'Have any ideas about what we should get Heidi for her birthday?',
-        },
-        {
-          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
-          title: 'Recipe to try',
-          subtitle: 'We should eat this: Grate, Squash, Corn, and tomatillo Tacos.',
-        },
-      ],
-      games: [
-        {
-          img: 'https://cdn.vuetifyjs.com/docs/images/graphics/games/4.png',
-          title: 'The Sci-Fi Shooter Experience',
-          subtitle: 'Dive into a futuristic world of intense battles and alien encounters.',
-          advanced: false,
-          duration: '8 minutes',
-        },
-        {
-          img: 'https://cdn.vuetifyjs.com/docs/images/graphics/games/2.png',
-          title: 'Epic Adventures in Open Worlds',
-          subtitle: 'Embark on a journey through vast, immersive landscapes and quests.',
-          advanced: true,
-          duration: '10 minutes',
-        },
-        {
-          img: 'https://cdn.vuetifyjs.com/docs/images/graphics/games/3.png',
-          title: 'Surviving the Space Station Horror',
-          subtitle: 'Navigate a haunted space station in this chilling survival horror game.',
-          advanced: false,
-          duration: '9 minutes',
-        },
-        {
-          img: 'https://cdn.vuetifyjs.com/docs/images/graphics/games/5.png',
-          title: 'Neon-Lit High-Speed Racing Thrills',
-          subtitle: 'Experience adrenaline-pumping races in a futuristic, neon-soaked city.',
-          advanced: true,
-          duration: '12 minutes',
-        },
-        {
-          img: 'https://cdn.vuetifyjs.com/docs/images/graphics/games/6.png',
-          title: 'Retro-Style Platformer Adventures',
-          subtitle: 'Jump and dash through pixelated worlds in this classic-style platformer.',
-          advanced: false,
-          duration: '11 minutes',
-        },
-        {
-          img: 'https://cdn.vuetifyjs.com/docs/images/graphics/games/7.png',
-          title: 'Medieval Strategic War Campaigns',
-          subtitle: 'Lead armies into epic battles and conquer kingdoms in this strategic game.',
-          advanced: true,
-          duration: '10 minutes',
-        },
-        {
-          img: 'https://cdn.vuetifyjs.com/docs/images/graphics/games/1.png',
-          title: 'Underwater VR Exploration Adventure',
-          subtitle: 'Dive deep into the ocean and discover the mysteries of the underwater world.',
-          advanced: true,
-          duration: '11 minutes',
-        },
-        {
-          img: 'https://cdn.vuetifyjs.com/docs/images/graphics/games/8.png',
-          title: '1920s Mystery Detective Chronicles',
-          subtitle: 'Solve crimes and uncover secrets in the glamourous 1920s era.',
-          advanced: false,
-          duration: '9 minutes',
-        },
-      ],
+      clients: [],
+      loadingList: true,
+      selectedIndex: -1
     }
+  },
+  directives: {
+    "mask": vMaska
   },
   methods: {
     onClickSeeAll() {
       this.itemsPerPage = this.itemsPerPage === 4 ? this.mice.length : 4
     },
+    loadClients() {
+      API.post('get-clients')
+        .then(response => {
+          this.clients = response.data.result
+        }).catch(function (error) {
+        if (error.response) {
+          router.push({name: 'login'})
+          store.dispatch('userLogout')
+        }
+      })
+    },
+    test(id, phone, full_name, i) {
+      toast('Вы выбрали клиента с идентификатором: ' + id + ' ' +
+        'Фамилией: ' + full_name.split(' ')[0] + ' ' + 'Именем: ' + full_name.split(' ')[1]+ ' ' +
+        'Отчеством: ' + full_name.split(' ')[2], {
+        autoClose: 4000,
+        theme: "colored",
+        type: 'success',
+        duration: 5000,
+        position: "top-right",
+        closeButton: false,
+      })
+      this.last_name = full_name.split(' ')[0]
+      this.first_name = full_name.split(' ')[1]
+      this.father_name = full_name.split(' ')[2]
+      this.myVal = phone
+      this.selectedIndex = i
+    },
+    btnTest() {
+      this.testVal2 = this.myVal.replace(/[^0-9+]/g, '')
+      toast('Полученный номер: ' + this.testVal2, {
+        autoClose: 4000,
+        theme: "colored",
+        type: 'success',
+        duration: 5000,
+        position: "top-right",
+        closeButton: false,
+      })
+    },
+    btnTest2() {
+      this.last_name = null
+      this.first_name = null
+      this.father_name = null
+      this.myVal = null
+      this.selectedIndex = -1
+    }
   },
 }
 </script>

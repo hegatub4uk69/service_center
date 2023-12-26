@@ -149,10 +149,5 @@ export default {
 };
 </script>
 
-<style scoped>
-.chips {
-  font-size: 25px;
-  width: 500px;
-  height: 50px;
-}
+<style>
 </style>

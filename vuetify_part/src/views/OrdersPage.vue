@@ -428,22 +428,22 @@ export default {
         .then(response => {
           this.categories = response.data.result
         }).catch(function (error) {
-          if (error.response) {
-            router.push({name: 'login'})
-            store.dispatch('userLogout')
-          }
-        })
+        if (error.response) {
+          router.push({name: 'login'})
+          store.dispatch('userLogout')
+        }
+      })
     },
     loadSelectClient() {
       API.post('get-clients')
         .then(response => {
           this.clients = response.data.result
         }).catch(function (error) {
-          if (error.response) {
-            router.push({name: 'login'})
-            store.dispatch('userLogout')
-          }
-        })
+        if (error.response) {
+          router.push({name: 'login'})
+          store.dispatch('userLogout')
+        }
+      })
     },
     loadTableItems() {
       this.loadingTable = true
@@ -452,11 +452,11 @@ export default {
           this.orders = response.data.result
           this.loadingTable = false
         }).catch(function (error) {
-          if (error.response) {
-            router.push({name: 'login'})
-            store.dispatch('userLogout')
-          }
-        })
+        if (error.response) {
+          router.push({name: 'login'})
+          store.dispatch('userLogout')
+        }
+      })
     },
     getColor(status) {
       if (status === 'Новый') return 'info'
@@ -495,11 +495,11 @@ export default {
           })
           this.loadTableItems()
         }).catch(function (error) {
-          if (error.response) {
-            router.push({name: 'login'})
-            store.dispatch('userLogout')
-          }
-        })
+        if (error.response) {
+          router.push({name: 'login'})
+          store.dispatch('userLogout')
+        }
+      })
       this.closeDelete()
     },
     close() {
