@@ -6,8 +6,8 @@
           <v-row dense>
             <v-col>
               <v-card elevation="5">
-                <v-expansion-panels variant="accordion">
-                  <v-expansion-panel>
+                <v-expansion-panels v-model="this.panel" variant="accordion">
+                  <v-expansion-panel value="user">
                     <template v-slot:title>
                       <v-icon style="margin-right: 5px" size="35px" icon="mdi-card-account-details-outline"></v-icon>
                       <h3>Информация о пользователе</h3>
@@ -125,6 +125,7 @@ export default {
   computed: mapState(['user_data']),
   data() {
     return {
+      panel: ['user'],
       tableHeaders: [
         {title: '№', align: 'start', key: 'id'},
         {title: 'Наименование техники', key: 'title'},

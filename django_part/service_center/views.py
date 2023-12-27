@@ -96,19 +96,32 @@ def get_other_order_data(request):
 def add_order(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные: {data}')
-    if request.method == "POST":
-        order = Orders(
-            title=data['title'],
-            description=data['description'],
-            status=data['status'],
-            category_id=data['category_id'],
-            client_id=data['client_id'],
-            staff_in_id=data['staff_in_id'],
-            created_at=datetime.strptime(data['created_at'], "%d.%m.%Y")
-        )
-        order.save()
+    order = Orders(
+        title=data['title'],
+        description=data['description'],
+        status=data['status'],
+        category_id=data['category_id'],
+        client_id=data['client_id'],
+        staff_in_id=data['staff_in_id'],
+        created_at=datetime.strptime(data['created_at'], "%d.%m.%Y")
+    )
+    order.save()
     return JsonResponse({"result": 'Данные сохранены'})
 
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
+def add_client(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные: {data}')
+    client = Clients(
+        last_name=data['last_name'],
+        first_name=data['first_name'],
+        father_name=data['father_name'],
+        phone_number=data['phone_number']
+    )
+    client.save()
+    return JsonResponse({"result": 'Клиент успешно добавлен!'})
 
 @csrf_exempt
 @api_view(['POST'])
@@ -116,15 +129,27 @@ def add_order(request):
 def update_order(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные: {data}')
-    if request.method == "POST":
-        order = Orders.objects.get(id=data['id'])
-        order.title = data['title']
-        order.description = data['description']
-        order.category_id = data['category_id']
-        order.client_id = data['client_id']
-        order.save()
+    order = Orders.objects.get(id=data['id'])
+    order.title = data['title']
+    order.description = data['description']
+    order.category_id = data['category_id']
+    order.client_id = data['client_id']
+    order.save()
     return JsonResponse({"result": 'Данные изменены'})
 
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
+def update_client(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные: {data}')
+    client = Clients.objects.get(id=data['id'])
+    client.last_name = data['last_name']
+    client.first_name = data['first_name']
+    client.father_name = data['father_name']
+    client.phone_number = data['phone_number']
+    client.save()
+    return JsonResponse({"result": 'Данные клиента успешно изменены!'})
 
 @csrf_exempt
 @api_view(['POST'])
@@ -132,7 +157,6 @@ def update_order(request):
 def delete_order(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные: {data}')
-    if request.method == "POST":
-        order = Orders.objects.get(id=data['id'])
-        order.delete()
+    order = Orders.objects.get(id=data['id'])
+    order.delete()
     return JsonResponse({"result": 'Данные удалены'})

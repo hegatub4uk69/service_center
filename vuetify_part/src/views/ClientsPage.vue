@@ -19,7 +19,7 @@
                 <v-text-field
                   class="px-2"
                   v-model="search"
-                  clearable
+                  clearable="true"
                   density="comfortable"
                   hide-details
                   placeholder="Поиск"
@@ -33,17 +33,18 @@
             <template v-slot:default="{ items }">
               <v-container class="pa-2" fluid>
                 <v-list
+                  id="list"
                   lines="two"
                   density="compact"
                   nav
                 >
                   <v-list-item
                     v-for="(item, i) in items"
+                    color="primary"
                     :key="i"
                     :value="item"
-                    color="primary"
-                    :disabled="this.selectedIndex > -1"
-                    @click="test(item?.raw?.id, item?.raw?.phone, item?.raw?.full_name, i)"
+                    :active="item.value === currentlyActiveItem.value"
+                    @click="toUpdateClient(item?.raw?.id, item?.raw?.phone, item?.raw?.full_name, i, item)"
                   >
                     <template v-slot:prepend>
                       <v-icon
@@ -94,46 +95,69 @@
         <v-card>
           <v-toolbar>
             <v-toolbar-title style="font-size: 25px">
-              <v-icon class="mb-1 mr-1" icon="mdi-account-plus-outline"></v-icon>
-              Добавление клиента
+              <v-icon class="mb-1 mr-1" :icon="formIcon"></v-icon>
+              {{ formTitle }}
             </v-toolbar-title>
+            <v-btn
+              v-if="editStatus"
+              icon="mdi-close-outline"
+              color="red"
+              @click="closeEdit"
+              style="font-size: 20px"></v-btn>
           </v-toolbar>
           <v-card-text>
             <v-text-field
-              v-model="last_name"
+              v-model="clientData.last_name"
               label="Фамилия"
+              clearable="true"
             ></v-text-field>
             <v-text-field
-              v-model="first_name"
+              v-model="clientData.first_name"
               label="Имя"
+              clearable="true"
             ></v-text-field>
             <v-text-field
-              v-model="father_name"
+              v-model="clientData.father_name"
               label="Отчество"
+              clearable="true"
             ></v-text-field>
             <v-text-field
-              v-model="myVal"
-              v-mask:[options]="bindedObject"
+              v-model="phoneVal"
+              v-mask:[options]
               label="Номер телефона"
+              clearable="true"
             ></v-text-field>
           </v-card-text>
           <v-card-actions>
             <v-btn
+              style="margin-bottom: 4px"
               density="default"
               color="blue-darken-1"
               variant="outlined"
-              @click="btnTest2"
+              @click="clearForm"
             >
               Очистить
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn
+              style="margin-bottom: 4px"
+              v-if="editStatus"
+              density="default"
+              color="red-darken-1"
+              variant="outlined"
+              @click="deleteClient"
+            >
+              Удалить
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn
+              style="margin-bottom: 4px"
               density="default"
               color="blue-darken-1"
               variant="outlined"
-              @click="btnTest"
+              @click="actionClient"
             >
-              Добавить
+              {{ btnFormTitle }}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -156,20 +180,52 @@ export default {
       options: {
         mask: "+7 (###) ###-##-##",
       },
-      testVal: '',
-      testVal2: '',
-      last_name: '',
-      first_name: '',
-      father_name: '',
-      myVal: '+79909786738',
+      clientData: {
+        id: null,
+        last_name: '',
+        first_name: '',
+        father_name: '',
+        phone_number: ''
+      },
+      phoneVal: '',
       search: '',
       clients: [],
+      listItemEl: null,
+      editStatus: false,
       loadingList: true,
-      selectedIndex: -1
+      selectedIndex: -1,
+      currentlyActiveItem: {
+        value: null,
+        selectable: false
+      },
+      pointer: 'none',
     }
   },
   directives: {
     "mask": vMaska
+  },
+  computed: {
+    formTitle() {
+      if (this.selectedIndex === -1 && this.editStatus === false) {
+        return 'Добавление клиента'
+      } else if (this.selectedIndex > -1 && this.editStatus === true) {
+        return 'Изменение данных клиента'
+      } else return 'Добавление клиента'
+    },
+    formIcon() {
+      if (this.selectedIndex === -1 && this.editStatus === false) {
+        return 'mdi-account-plus-outline'
+      } else if (this.selectedIndex > -1 && this.editStatus === true) {
+        return 'mdi-account-edit-outline'
+      } else return 'mdi-account-plus-outline'
+    },
+    btnFormTitle() {
+      if (this.selectedIndex === -1 && this.editStatus === false) {
+        return 'Добавить'
+      } else if (this.selectedIndex > -1 && this.editStatus === true) {
+        return 'Изменить'
+      } else return 'Добавить'
+    }
   },
   methods: {
     onClickSeeAll() {
@@ -186,10 +242,8 @@ export default {
         }
       })
     },
-    test(id, phone, full_name, i) {
-      toast('Вы выбрали клиента с идентификатором: ' + id + ' ' +
-        'Фамилией: ' + full_name.split(' ')[0] + ' ' + 'Именем: ' + full_name.split(' ')[1]+ ' ' +
-        'Отчеством: ' + full_name.split(' ')[2], {
+    deleteClient() {
+      toast('', {
         autoClose: 4000,
         theme: "colored",
         type: 'success',
@@ -197,30 +251,79 @@ export default {
         position: "top-right",
         closeButton: false,
       })
-      this.last_name = full_name.split(' ')[0]
-      this.first_name = full_name.split(' ')[1]
-      this.father_name = full_name.split(' ')[2]
-      this.myVal = phone
+    },
+    actionClient() {
+      if (this.editStatus === false) {
+        this.clientData.phone_number = this.phoneVal.replace(/[^0-9+]/g, '')
+        API.post('add-client', this.clientData)
+          .then(response => {
+            toast(response.data.result, {
+              autoClose: 4000,
+              theme: "colored",
+              type: 'success',
+              duration: 5000,
+              position: "top-right",
+              closeButton: false,
+            })
+            this.loadClients()
+          }).catch(function (error) {
+          if (error.response) {
+            router.push({name: 'login'})
+            store.dispatch('userLogout')
+          }
+        })
+      } else {
+        this.clientData.phone_number = this.phoneVal.replace(/[^0-9+]/g, '')
+        API.post('update-client', this.clientData)
+          .then(response => {
+            toast(response.data.result, {
+              autoClose: 4000,
+              theme: "colored",
+              type: 'success',
+              duration: 5000,
+              position: "top-right",
+              closeButton: false,
+            })
+            this.loadClients()
+          }).catch(function (error) {
+          if (error.response) {
+            router.push({name: 'login'})
+            store.dispatch('userLogout')
+          }
+        })
+      }
+    },
+    toUpdateClient(id, phone, full_name, i, item) {
+      this.currentlyActiveItem = item
+      this.editStatus = true
+      this.clientData.id = id
+      this.clientData.last_name = full_name.split(' ')[0]
+      this.clientData.first_name = full_name.split(' ')[1]
+      this.clientData.father_name = full_name.split(' ')[2]
+      this.phoneVal = phone
       this.selectedIndex = i
+      this.listItemEl = document.getElementById('list')
+      this.listItemEl.style.pointerEvents='none'
     },
-    btnTest() {
-      this.testVal2 = this.myVal.replace(/[^0-9+]/g, '')
-      toast('Полученный номер: ' + this.testVal2, {
-        autoClose: 4000,
-        theme: "colored",
-        type: 'success',
-        duration: 5000,
-        position: "top-right",
-        closeButton: false,
-      })
-    },
-    btnTest2() {
-      this.last_name = null
-      this.first_name = null
-      this.father_name = null
-      this.myVal = null
+    closeEdit() {
+      this.editStatus = false
+      this.clientData.last_name = null
+      this.clientData.first_name = null
+      this.clientData.father_name = null
+      this.phoneVal = null
       this.selectedIndex = -1
-    }
+      this.currentlyActiveItem = {
+        value: null,
+        selectable: null
+      }
+      this.listItemEl.style.pointerEvents='auto'
+    },
+    clearForm() {
+      this.clientData.last_name = null
+      this.clientData.first_name = null
+      this.clientData.father_name = null
+      this.phoneVal = null
+    },
   },
 }
 </script>
