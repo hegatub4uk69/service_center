@@ -6,7 +6,15 @@
           <v-form
             v-model="form"
             @submit.prevent="onSubmit"
+            align="center"
           >
+            <v-avatar
+              class="ma-3"
+              size="200"
+              rounded="0"
+            >
+              <v-img src="/komp-servis.png"></v-img>
+            </v-avatar>
             <v-card-text>
               <v-text-field
                 v-model="username"
@@ -42,7 +50,6 @@
                 variant="elevated"
                 color="success"
                 size="large"
-                class="ma-2"
                 @click="login"
               >{{ log_btn_name }}
               </v-btn>
@@ -57,6 +64,8 @@
 
 <script>
 import router from "@/router";
+import {createToast} from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css'
 
 export default {
   name: 'LoginPage',
@@ -81,9 +90,17 @@ export default {
           router.push({name: 'profile'})
           this.$store.dispatch('userData')
         })
-        .catch(err => {
-          console.log(err)
-          this.incorrectAuth = true
+        .catch(function (err) {
+          if (err.response) {
+            createToast('Неверные аутентификационные данные!', {
+              showIcon: 'true',
+              showCloseButton: false,
+              type: 'danger',
+              position: "top-center",
+              timeout: 3000,
+              toastBackgroundColor: '#ff5252'
+            })
+          }
         })
     },
     onSubmit() {

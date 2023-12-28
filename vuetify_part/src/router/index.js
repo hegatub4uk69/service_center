@@ -1,6 +1,7 @@
 // Composables
 import {createRouter, createWebHistory} from 'vue-router'
 import {store} from "@/store";
+import API from "@/axios";
 
 const routes = [
   {

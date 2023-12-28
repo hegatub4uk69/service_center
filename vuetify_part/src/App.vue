@@ -4,8 +4,15 @@
     <v-app-bar
       app
       color="primary"
-      image=""
     >
+      <template v-slot:prepend>
+        <v-avatar
+          size="54"
+          rounded="0"
+        >
+          <v-img src="/komp-servis.png"></v-img>
+        </v-avatar>
+      </template>
       <v-app-bar-title>
         <h3 class="text-h4 white--text">{{ app_name }}</h3>
       </v-app-bar-title>
@@ -84,6 +91,9 @@
 <script>
 import router from "@/router";
 import {mapState} from "vuex";
+import API from "@/axios";
+import {createToast} from "mosha-vue-toastify";
+import 'mosha-vue-toastify/dist/style.css'
 
 export default {
   name: 'App',
@@ -98,7 +108,7 @@ export default {
     nav_menu: {
       btn_lk: 'Личный кабинет',
       btn_admin: 'Панель администратора',
-      btn_services: 'Архив услуг',
+      btn_services: 'Клиентские заказы',
       btn_clients: 'Клиенты',
       btn_logout: 'Выход',
     },
@@ -111,6 +121,25 @@ export default {
     },
   }),
 
+  created() {
+    API.interceptors.response.use(
+      response => response,
+      error => {
+        if (error) {
+          router.push({name: 'login'})
+          this.$store.dispatch('userLogout').then(
+            createToast('Неверные аутентификационные данные!', {
+              showIcon: 'true',
+              showCloseButton: false,
+              type: 'danger',
+              position: "top-center",
+              timeout: 3000,
+              toastBackgroundColor: '#ff5252'
+            })
+          )
+        }
+      });
+  },
   mounted() {
     if (!this.$store.getters.staffDataExist) {
       this.staffData()

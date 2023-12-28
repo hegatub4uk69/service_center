@@ -16,10 +16,15 @@
                       <div class="d-flex flex-no-wrap">
                         <v-avatar
                           class="ma-3"
-                          size="125"
+                          size="160"
                           rounded="0"
                         >
-                          <v-img src="/free-icon-avatar-8727604.png"></v-img>
+                          <v-card-text>
+                            <v-img src="/free-icon-avatar-8727604.png" class="mb-2"></v-img>
+                            <v-card elevation="2">
+                              Администратор
+                            </v-card>
+                          </v-card-text>
                         </v-avatar>
                         <v-card-text>
                           <v-card-title>Личная информация</v-card-title>

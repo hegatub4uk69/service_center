@@ -10,7 +10,8 @@ export const store = createStore({
       staff_full_name: null,
       staff_phone: null,
       login: null
-    }
+    },
+    verifyStatus: null,
   },
   mutations: {
     updateStorage(state, {access}) {
@@ -27,6 +28,9 @@ export const store = createStore({
     setStaffData(state, {staff_full_name, staff_phone}) {
       state.user_data.staff_full_name = staff_full_name
       state.user_data.staff_phone = staff_phone
+    },
+    tokenVerify(state, {status}) {
+      state.verifyStatus = status
     }
   },
   getters: {

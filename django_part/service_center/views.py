@@ -22,7 +22,7 @@ def get_clients(request):
         "full_name": i.get_client_fio(),
         "phone": i.phone_number,
     } for i in Clients.objects.all()]
-    return JsonResponse({"result": result})
+    return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
 
 @csrf_exempt
@@ -106,7 +106,7 @@ def add_order(request):
         created_at=datetime.strptime(data['created_at'], "%d.%m.%Y")
     )
     order.save()
-    return JsonResponse({"result": 'Данные сохранены'})
+    return JsonResponse({"result": 'Заказ успешно сформирован!'})
 
 @csrf_exempt
 @api_view(['POST'])
@@ -135,7 +135,7 @@ def update_order(request):
     order.category_id = data['category_id']
     order.client_id = data['client_id']
     order.save()
-    return JsonResponse({"result": 'Данные изменены'})
+    return JsonResponse({"result": 'Данные заказа успешно изменены!'})
 
 @csrf_exempt
 @api_view(['POST'])
@@ -159,4 +159,14 @@ def delete_order(request):
     print(f'Пришедшие данные: {data}')
     order = Orders.objects.get(id=data['id'])
     order.delete()
-    return JsonResponse({"result": 'Данные удалены'})
+    return JsonResponse({"result": 'Данные заказа успешно удалены!'})
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
+def delete_client(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные: {data}')
+    client = Clients.objects.get(id=data['id'])
+    client.delete()
+    return JsonResponse({"result": 'Данные клиента успешно удалены!'})

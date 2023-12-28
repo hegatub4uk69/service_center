@@ -216,45 +216,12 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
-              <v-dialog v-model="dialogStaff" max-width="400px">
-                <v-card class="align-center" title="Действия над заказом">
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-switch
-                          v-model="model1"
-                          color="green"
-                          hide-details
-                          inset
-                          label="Взяться за заказ"
-                          class="font-weight-bold"
-                        >
-                        </v-switch>
-                      </v-row>
-                      <v-row>
-                        <v-switch
-                          v-model="model2"
-                          color="green"
-                          hide-details
-                          inset
-                          label="Заказ готов?"
-                          class="font-weight-bold"
-                        ></v-switch>
-                      </v-row>
-                      <v-row>
-                        <v-switch
-                          v-model="model3"
-                          color="green"
-                          hide-details
-                          inset
-                          label="Выдать заказ"
-                          class="font-weight-bold"
-                        ></v-switch>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
+              <v-dialog v-model="dialogStaff" max-width="500px">
+                <v-card class="align-center"
+                        title="Вы уверены, что хотите взять данный заказ?"
+                >
                   <v-card-actions>
-                    <v-btn color="blue-darken-1" variant="text">Сохранить</v-btn>
+                    <v-btn color="blue-darken-1" variant="text">Подтвердить</v-btn>
                     <v-btn color="blue-darken-1" variant="text">Закрыть</v-btn>
                   </v-card-actions>
                 </v-card>
@@ -300,11 +267,9 @@
 </template>
 
 <script>
-import {toast} from "vue3-toastify"
-import "vue3-toastify/dist/index.css"
 import API from "@/axios";
-import {store} from "@/store";
-import router from "@/router";
+import {createToast} from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css'
 
 export default {
   data() {
@@ -338,7 +303,7 @@ export default {
         status: 'Новый',
         client_id: null,
         staff_in_id: 1,
-        executor_id: 1,
+        executor_id: null,
         description: '',
         created_at: null,
       },
@@ -394,14 +359,6 @@ export default {
       } else {
         this.loadSelectCategory();
         this.loadSelectClient();
-        toast('', {
-          autoClose: 4000,
-          theme: "colored",
-          type: 'success',
-          duration: 5000,
-          position: "top-right",
-          closeButton: false,
-        })
       }
     },
     dialogDelete(val) {
@@ -416,34 +373,18 @@ export default {
           this.editedItem = Object.assign(this.editedItem, response.data.result[0])
           this.dialog = true
         })
-        .catch(function (error) {
-          if (error.response) {
-            router.push({name: 'login'})
-            store.dispatch('userLogout')
-          }
-        })
     },
     loadSelectCategory() {
       API.post('get-categories')
         .then(response => {
           this.categories = response.data.result
-        }).catch(function (error) {
-        if (error.response) {
-          router.push({name: 'login'})
-          store.dispatch('userLogout')
-        }
-      })
+        })
     },
     loadSelectClient() {
       API.post('get-clients')
         .then(response => {
           this.clients = response.data.result
-        }).catch(function (error) {
-        if (error.response) {
-          router.push({name: 'login'})
-          store.dispatch('userLogout')
-        }
-      })
+        })
     },
     loadTableItems() {
       this.loadingTable = true
@@ -451,12 +392,7 @@ export default {
         .then(response => {
           this.orders = response.data.result
           this.loadingTable = false
-        }).catch(function (error) {
-        if (error.response) {
-          router.push({name: 'login'})
-          store.dispatch('userLogout')
-        }
-      })
+        })
     },
     getColor(status) {
       if (status === 'Новый') return 'info'
@@ -485,21 +421,16 @@ export default {
     deleteItemConfirm() {
       API.post('delete-order', this.editedItem)
         .then(response => {
-          toast('Заказ успешно удалён!\n' + response.data.result, {
-            autoClose: 4000,
-            theme: "colored",
-            type: 'success',
-            duration: 5000,
-            position: "top-right",
-            closeButton: false,
+          createToast(response.data.result, {
+            showIcon: 'true',
+            showCloseButton: false,
+            type: 'danger',
+            position: "top-center",
+            timeout: 3000,
+            toastBackgroundColor: '#4caf50'
           })
           this.loadTableItems()
-        }).catch(function (error) {
-        if (error.response) {
-          router.push({name: 'login'})
-          store.dispatch('userLogout')
-        }
-      })
+        })
       this.closeDelete()
     },
     close() {
@@ -519,46 +450,42 @@ export default {
         this.editedIndex = -1
       })
     },
+    closeTake() {
+      this.dialogStaff = false
+    },
+    takeOrder() {
+
+    },
     save() {
       if (this.editedIndex > -1) {
         API.post('update-order', this.editedItem)
           .then(response => {
-            toast('Заказ успешно изменен!\n' + response.data.result, {
-              autoClose: 4000,
-              theme: "colored",
-              type: 'success',
-              duration: 5000,
-              position: "top-right",
-              closeButton: false,
+            createToast(response.data.result, {
+              showIcon: 'true',
+              showCloseButton: false,
+              type: 'danger',
+              position: "top-center",
+              timeout: 3000,
+              toastBackgroundColor: '#4caf50'
             })
             this.loadTableItems()
-          }).catch(function (error) {
-          if (error.response) {
-            router.push({name: 'login'})
-            store.dispatch('userLogout')
-          }
-        })
+          })
         this.close()
       } else {
         let date = new Date();
         this.editedItem.created_at = date.toLocaleDateString('ru-RU');
         API.post('add-order', this.editedItem)
           .then(response => {
-            toast('Заказ успешно оформлен!\n' + response.data.result, {
-              autoClose: 4000,
-              theme: "colored",
-              type: 'success',
-              duration: 5000,
-              position: "top-right",
-              closeButton: false,
+            createToast(response.data.result, {
+              showIcon: 'true',
+              showCloseButton: false,
+              type: 'danger',
+              position: "top-center",
+              timeout: 3000,
+              toastBackgroundColor: '#4caf50'
             })
             this.loadTableItems()
-          }).catch(function (error) {
-          if (error.response) {
-            router.push({name: 'login'})
-            store.dispatch('userLogout')
-          }
-        })
+          })
       }
       this.close()
     },

@@ -17,6 +17,7 @@ urlpatterns = [
     path('update-client', views.update_client),
 
     path('delete-order', views.delete_order),
+    path('delete-client', views.delete_client),
 
     path('token-verify', views.token_verify),
     re_path(r'^auth/', include('djoser.urls.base')),

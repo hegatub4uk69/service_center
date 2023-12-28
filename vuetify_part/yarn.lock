@@ -274,13 +274,6 @@
   resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.9.1.tgz#d146db7a5949e10837b323ce933ed882ac878262"
   integrity sha512-PyJsSsafjmIhVgaI1Zdj7m8BB8mMckFah/xbpplObyHfiXzKcI5UOUXRyOdHW7nz4DpMCuzLnF7v5IWHenCwYA==
 
-"@titou10/v-mask@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@titou10/v-mask/-/v-mask-1.1.0.tgz#b0015b08cb047df708aa5de29defaff902d1c684"
-  integrity sha512-lhMf899mV3cF2Hy++B7tX6lUtMbln61ofX0I9jQUGGYVfHzqF0QHAMlp8v5zG9NZ0BbJcp2M8lb2bjNkl9Fp3w==
-  dependencies:
-    lodash "^4.17.21"
-
 "@ungap/structured-clone@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
@@ -1053,6 +1046,11 @@ minimatch@^3.0.5, minimatch@^3.1.1, minimatch@^3.1.2:
   integrity sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==
   dependencies:
     brace-expansion "^1.1.7"
+
+mosha-vue-toastify@^1.0.23:
+  version "1.0.23"
+  resolved "https://registry.yarnpkg.com/mosha-vue-toastify/-/mosha-vue-toastify-1.0.23.tgz#eaa5de2a4ee0ca1167421132a42c1ac55ebb7e26"
+  integrity sha512-K9fij3e3H+E/Lj82ISrgmyKrtM5RNmtZC/KG/KH47+oZGmzAkN/Zuz39kBdT/Mp8OxaHuIWQntEUMP+HdmK1xA==
 
 ms@2.1.2:
   version "2.1.2"

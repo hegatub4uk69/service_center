@@ -18,7 +18,7 @@ class Clients(models.Model):
     last_name = models.CharField(max_length=25, null=False, blank=False)
     first_name = models.CharField(max_length=25, null=False, blank=False)
     father_name = models.CharField(max_length=25, null=True, blank=True)
-    phone_number = models.CharField(max_length=15, null=False, blank=False, unique=True)
+    phone_number = models.CharField(max_length=15, null=False, blank=False)
 
     def get_client_fio(self):
         return f'{self.last_name} {self.first_name} {self.father_name}'
@@ -45,7 +45,7 @@ class Orders(models.Model):
     description = models.TextField(null=True, blank=True)
     category = models.ForeignKey(Categories, null=True, blank=False, on_delete=models.SET_NULL)
     status = models.CharField(max_length=10, choices=CATEGORIES, default=NEW)
-    client = models.ForeignKey(Clients, related_name='Orders_client_id', null=True, blank=False, on_delete=models.SET_NULL)
+    client = models.ForeignKey(Clients, related_name='Orders_client_id', null=True, blank=False, on_delete=models.CASCADE)
     staff_in = models.ForeignKey(Staff, related_name='Orders_staff_in_id', null=True, blank=False, on_delete=models.SET_NULL)
     executor = models.ForeignKey(Staff, related_name='Orders_executor_id', null=True, blank=True, on_delete=models.SET_NULL)
     staff_out = models.ForeignKey(Staff, related_name='Orders_staff_out_id', null=True, blank=True, on_delete=models.SET_NULL)

@@ -168,9 +168,8 @@
 
 <script>
 import API from "@/axios";
-import router from "@/router";
-import {store} from "@/store";
-import {toast} from "vue3-toastify";
+import {createToast} from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css'
 import "vue3-toastify/dist/index.css"
 import {vMaska} from "maska";
 
@@ -194,6 +193,7 @@ export default {
       editStatus: false,
       loadingList: true,
       selectedIndex: -1,
+      clientIdToDelete: null,
       currentlyActiveItem: {
         value: null,
         selectable: false
@@ -228,69 +228,56 @@ export default {
     }
   },
   methods: {
-    onClickSeeAll() {
-      this.itemsPerPage = this.itemsPerPage === 4 ? this.mice.length : 4
-    },
     loadClients() {
       API.post('get-clients')
         .then(response => {
           this.clients = response.data.result
-        }).catch(function (error) {
-        if (error.response) {
-          router.push({name: 'login'})
-          store.dispatch('userLogout')
-        }
-      })
+        })
     },
     deleteClient() {
-      toast('', {
-        autoClose: 4000,
-        theme: "colored",
-        type: 'success',
-        duration: 5000,
-        position: "top-right",
-        closeButton: false,
-      })
+      API.post('delete-client', this.clientIdToDelete)
+        .then(response => {
+          createToast(response.data.result, {
+            showIcon: 'true',
+            showCloseButton: false,
+            type: 'danger',
+            position: "top-center",
+            timeout: 3000,
+            toastBackgroundColor: '#4caf50'
+          })
+          this.closeEdit()
+          this.loadClients()
+        })
     },
     actionClient() {
       if (this.editStatus === false) {
         this.clientData.phone_number = this.phoneVal.replace(/[^0-9+]/g, '')
         API.post('add-client', this.clientData)
           .then(response => {
-            toast(response.data.result, {
-              autoClose: 4000,
-              theme: "colored",
-              type: 'success',
-              duration: 5000,
-              position: "top-right",
-              closeButton: false,
+            createToast(response.data.result, {
+              showIcon: 'true',
+              showCloseButton: false,
+              type: 'danger',
+              position: "top-center",
+              timeout: 3000,
+              toastBackgroundColor: '#4caf50'
             })
             this.loadClients()
-          }).catch(function (error) {
-          if (error.response) {
-            router.push({name: 'login'})
-            store.dispatch('userLogout')
-          }
-        })
+          })
       } else {
         this.clientData.phone_number = this.phoneVal.replace(/[^0-9+]/g, '')
         API.post('update-client', this.clientData)
           .then(response => {
-            toast(response.data.result, {
-              autoClose: 4000,
-              theme: "colored",
-              type: 'success',
-              duration: 5000,
-              position: "top-right",
-              closeButton: false,
+            createToast(response.data.result, {
+              showIcon: 'true',
+              showCloseButton: false,
+              type: 'danger',
+              position: "top-center",
+              timeout: 3000,
+              toastBackgroundColor: '#4caf50'
             })
             this.loadClients()
-          }).catch(function (error) {
-          if (error.response) {
-            router.push({name: 'login'})
-            store.dispatch('userLogout')
-          }
-        })
+          })
       }
     },
     toUpdateClient(id, phone, full_name, i, item) {
@@ -301,9 +288,10 @@ export default {
       this.clientData.first_name = full_name.split(' ')[1]
       this.clientData.father_name = full_name.split(' ')[2]
       this.phoneVal = phone
+      this.clientIdToDelete = {id: item.raw.id}
       this.selectedIndex = i
       this.listItemEl = document.getElementById('list')
-      this.listItemEl.style.pointerEvents='none'
+      this.listItemEl.style.pointerEvents = 'none'
     },
     closeEdit() {
       this.editStatus = false
@@ -311,12 +299,13 @@ export default {
       this.clientData.first_name = null
       this.clientData.father_name = null
       this.phoneVal = null
+      this.clientIdToDelete = null
       this.selectedIndex = -1
       this.currentlyActiveItem = {
         value: null,
         selectable: null
       }
-      this.listItemEl.style.pointerEvents='auto'
+      this.listItemEl.style.pointerEvents = 'auto'
     },
     clearForm() {
       this.clientData.last_name = null
