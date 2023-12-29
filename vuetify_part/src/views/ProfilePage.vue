@@ -22,7 +22,7 @@
                           <v-card-text>
                             <v-img src="/free-icon-avatar-8727604.png" class="mb-2"></v-img>
                             <v-card elevation="2">
-                              Администратор
+                              {{ user_data.post }}
                             </v-card>
                           </v-card-text>
                         </v-avatar>
@@ -30,6 +30,7 @@
                           <v-card-title>Личная информация</v-card-title>
                           <v-divider style="padding-bottom: 20px"></v-divider>
                           <v-text-field
+                            readonly=""
                             label="Фамилия Имя Отчество"
                             :model-value="user_data.staff_full_name"
                           >
@@ -40,6 +41,7 @@
                             </template>
                           </v-text-field>
                           <v-text-field
+                            readonly=""
                             label="Логин"
                             :model-value="user_data.login"
                           >
@@ -50,6 +52,7 @@
                             </template>
                           </v-text-field>
                           <v-text-field
+                            readonly=""
                             label="Номер телефона"
                             :model-value="user_data.staff_phone"
                           >
@@ -64,33 +67,36 @@
                           <v-card-title>Статистика заказов</v-card-title>
                           <v-divider style="padding-bottom: 20px"></v-divider>
                           <v-text-field
-                            label="Фамилия Имя Отчество"
-                            model-value="Крылов Олег Геннадьевич"
+                            readonly=""
+                            class="text-black"
+                            :model-value="'Количество принятых заказов: ' + orders_count.orders_in"
                           >
                             <template v-slot:prepend-inner>
                               <v-icon
                                 style="margin-left: 3px; margin-right: 10px"
-                                icon="mdi-card-account-details-outline"></v-icon>
+                                icon="mdi-clipboard-text-clock-outline"></v-icon>
                             </template>
                           </v-text-field>
                           <v-text-field
-                            label="Логин"
-                            model-value="test_login"
+                            readonly=""
+                            class="text-black"
+                            :model-value="'Количество готовых заказов: ' + orders_count.orders_done"
                           >
                             <template v-slot:prepend-inner>
                               <v-icon
                                 style="margin-left: 3px; margin-right: 10px"
-                                icon="mdi-alpha-l-box-outline"></v-icon>
+                                icon="mdi-toolbox-outline"></v-icon>
                             </template>
                           </v-text-field>
                           <v-text-field
-                            label="Номер телефона"
-                            model-value="+79049873747"
+                            readonly=""
+                            class="text-black"
+                            :model-value="'Количество выданных заказов: ' + orders_count.orders_out"
                           >
                             <template v-slot:prepend-inner>
                               <v-icon
                                 style="margin-left: 3px; margin-right: 10px"
-                                icon="mdi-phone-outline"></v-icon>
+                                icon="mdi-check-outline"></v-icon>
                             </template>
                           </v-text-field>
                         </v-card-text>
@@ -106,7 +112,26 @@
                       <div class="d-flex flex-no-wrap">
                         <v-data-table
                           :headers="tableHeaders"
+                          :items="orders"
+                          :loading="loadingTable"
+                          item-value="id"
+                          class="elevation-1 table"
+                          @update:options="loadTableItems"
                         >
+                          <template v-slot:[`item.status`]="{ value }">
+                            <v-chip :color="getColor(value)">
+                              {{ value }}
+                            </v-chip>
+                          </template>
+                          <!--Кнопки действий над заказами-->
+                          <template v-slot:[`item.actions`]="{ item }">
+                            <v-btn
+                              color="success"
+                              variant="outlined"
+                              @click="orderDoneOrOut(item)"
+                            >
+                            </v-btn>
+                          </template>
                         </v-data-table>
                       </div>
                     </v-expansion-panel-text>
@@ -124,6 +149,7 @@
 <script>
 
 import {mapState} from "vuex";
+import API from "@/axios";
 
 export default {
   name: 'ProfilePage',
@@ -140,9 +166,44 @@ export default {
         {title: 'Статус', key: 'status', align: 'start'},
         {title: 'Действия', key: 'actions', sortable: false},
       ],
+      orders_count: {
+        orders_in: null,
+        orders_done: null,
+        orders_out: null
+      },
+      orders: [],
+      loadingTable: true,
     }
   },
+  mounted() {
+  this.ordersStat()
+  },
   methods: {
+    loadTableItems() {
+      this.loadingTable = true
+      API.post('get-my-orders', {executor_id: this.$store.state.user_data.staff_id})
+        .then(response => {
+          this.orders = response.data.result
+          this.loadingTable = false
+        })
+    },
+    ordersStat() {
+      API.post('get-my-orders-count', {staff_id: this.$store.state.user_data.staff_id})
+        .then(response => {
+          this.orders_count.orders_in = response.data.result.orders_in
+          this.orders_count.orders_done = response.data.result.orders_done
+          this.orders_count.orders_out = response.data.result.orders_out
+        })
+    },
+    orderDoneOrOut(item) {
+      item
+    },
+    getColor(status) {
+      if (status === 'В работе') return 'orange'
+      else if (status === 'Готов') return 'green'
+      else if (status === 'Выдан') return 'purple'
+      else return 'red'
+    },
     onSubmit() {
       if (!this.form) return
       this.loading = true

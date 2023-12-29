@@ -9,9 +9,10 @@ export const store = createStore({
     user_data: {
       staff_full_name: null,
       staff_phone: null,
+      staff_id: null,
+      post: null,
       login: null
     },
-    verifyStatus: null,
   },
   mutations: {
     updateStorage(state, {access}) {
@@ -20,18 +21,23 @@ export const store = createStore({
     destroyToken(state) {
       localStorage.removeItem('token')
       state.accessToken = null
+      state.uid = null
+      state.user_data.staff_full_name = null
+      state.user_data.staff_phone = null
+      state.user_data.staff_id = null
+      state.user_data.post = null
+      state.user_data.login = null
     },
     setUserData(state, {login, uid}) {
       state.user_data.login = login
-      state.user_data.uid = uid
+      state.uid = uid
     },
-    setStaffData(state, {staff_full_name, staff_phone}) {
+    setStaffData(state, {staff_full_name, staff_phone, post, staff_id}) {
       state.user_data.staff_full_name = staff_full_name
       state.user_data.staff_phone = staff_phone
+      state.user_data.staff_id = staff_id
+      state.user_data.post = post
     },
-    tokenVerify(state, {status}) {
-      state.verifyStatus = status
-    }
   },
   getters: {
     loggedIn(state) {
@@ -89,7 +95,9 @@ export const store = createStore({
                 .then(response => {
                   context.commit('setStaffData', {
                     staff_full_name: response.data.result[0]['full_name'],
-                    staff_phone: response.data.result[0]['phone']
+                    staff_phone: response.data.result[0]['phone'],
+                    staff_id: response.data.result[0]['id'],
+                    post: response.data.result[0]['post']
                   })
                   console.log(response.data.result[0]['full_name'],)
                   resolve()

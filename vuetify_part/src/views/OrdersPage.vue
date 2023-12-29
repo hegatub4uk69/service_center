@@ -221,8 +221,8 @@
                         title="Вы уверены, что хотите взять данный заказ?"
                 >
                   <v-card-actions>
-                    <v-btn color="blue-darken-1" variant="text">Подтвердить</v-btn>
-                    <v-btn color="blue-darken-1" variant="text">Закрыть</v-btn>
+                    <v-btn color="blue-darken-1" variant="text" @click="takeOrder">Подтвердить</v-btn>
+                    <v-btn color="blue-darken-1" variant="text" @click="closeTake">Закрыть</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -241,7 +241,7 @@
               color="purple"
               class="me-2"
               icon="mdi-account-circle-outline"
-              @click="editStaff"
+              @click="editStaff(item)"
             >
             </v-icon>
             <v-icon
@@ -274,14 +274,12 @@ import 'mosha-vue-toastify/dist/style.css'
 export default {
   data() {
     return {
-      model1: true,
-      model2: true,
-      model3: true,
       dialog: false,
       dialogDelete: false,
       dialogStaff: false,
       search: '',
       info: false,
+      orderIdToTake: null,
       selected_status: 'Новый',
       status_to_resp: {
         status: 'Новый'
@@ -302,7 +300,7 @@ export default {
         category_id: null,
         status: 'Новый',
         client_id: null,
-        staff_in_id: 1,
+        staff_in_id: this.$store.state.user_data.staff_id,
         executor_id: null,
         description: '',
         created_at: null,
@@ -312,8 +310,7 @@ export default {
         category_id: null,
         status: 'Новый',
         client_id: null,
-        staff_in_id: 1,
-        executor_id: 1,
+        staff_in_id: this.$store.state.user_data.staff_id,
         description: '',
         created_at: null,
       },
@@ -401,7 +398,8 @@ export default {
       else if (status === 'Выдан') return 'purple'
       else return 'red'
     },
-    editStaff() {
+    editStaff(item) {
+      this.orderIdToTake = item.id
       this.dialogStaff = true
     },
     editItem(item) {
@@ -424,7 +422,7 @@ export default {
           createToast(response.data.result, {
             showIcon: 'true',
             showCloseButton: false,
-            type: 'danger',
+            type: 'success',
             position: "top-center",
             timeout: 3000,
             toastBackgroundColor: '#4caf50'
@@ -452,9 +450,25 @@ export default {
     },
     closeTake() {
       this.dialogStaff = false
+      this.orderIdToTake = null
     },
     takeOrder() {
-
+      API.post('take-order', {
+        id: this.orderIdToTake,
+        executor_id: this.$store.state.user_data.staff_id,
+        status: 'В работе'})
+        .then(response => {
+          createToast(response.data.result, {
+              showIcon: 'true',
+              showCloseButton: false,
+              type: 'success',
+              position: "top-center",
+              timeout: 3000,
+              toastBackgroundColor: '#4caf50'
+            })
+            this.loadTableItems()
+        })
+      this.closeTake()
     },
     save() {
       if (this.editedIndex > -1) {
@@ -463,7 +477,7 @@ export default {
             createToast(response.data.result, {
               showIcon: 'true',
               showCloseButton: false,
-              type: 'danger',
+              type: 'success',
               position: "top-center",
               timeout: 3000,
               toastBackgroundColor: '#4caf50'
@@ -479,7 +493,7 @@ export default {
             createToast(response.data.result, {
               showIcon: 'true',
               showCloseButton: false,
-              type: 'danger',
+              type: 'success',
               position: "top-center",
               timeout: 3000,
               toastBackgroundColor: '#4caf50'

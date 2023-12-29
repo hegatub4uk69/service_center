@@ -1,5 +1,6 @@
 import json
 
+from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
@@ -46,6 +47,7 @@ def get_staff(request):
         "id": i.pk,
         "full_name": i.get_staff_fio(),
         "phone": i.phone_number,
+        "post": i.post
     } for i in Staff.objects.all().filter(pk=data)]
     return JsonResponse({"result": result})
 
@@ -66,6 +68,34 @@ def get_orders(request):
     } for i in Orders.objects.all().filter(status=data['status']).select_related('category', 'client')]
     return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
+def get_my_orders(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные: {data}')
+    result = [{
+        "id": i.pk,
+        "title": i.title,
+        "status": i.status,
+        "categoryTitle": i.category.name,
+        "client_FN": i.client.get_client_fio(),
+        "client_phone": i.client.phone_number,
+    } for i in Orders.objects.all().filter(executor_id=data['executor_id']).select_related('category', 'client')]
+    return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
+def get_my_orders_count(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные: {data}')
+    orders_in = Orders.objects.filter(Q(staff_in=data['staff_id']) & Q(status='Новый')).count()
+    orders_done = Orders.objects.filter(Q(executor_id=data['staff_id']) & Q(status='Готов')).count()
+    orders_out = Orders.objects.filter(Q(staff_out=data['staff_id']) & Q(status='Выдан')).count()
+    result = [{ "orders_in": orders_in, "orders_done": orders_done, "orders_out": orders_out }]
+    print(result[0])
+    return JsonResponse({"result": result})
 
 @csrf_exempt
 @api_view(['POST'])
@@ -136,6 +166,18 @@ def update_order(request):
     order.client_id = data['client_id']
     order.save()
     return JsonResponse({"result": 'Данные заказа успешно изменены!'})
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
+def take_order(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные: {data}')
+    order = Orders.objects.get(id=data['id'])
+    order.executor_id = data['executor_id']
+    order.status = data['status']
+    order.save()
+    return JsonResponse({"result": 'Вы приняли заказ!'})
 
 @csrf_exempt
 @api_view(['POST'])

@@ -3,11 +3,11 @@ from .models import Staff, Clients, Categories, Orders
 
 @admin.register(Staff)
 class StaffAdmin(admin.ModelAdmin):
-    list_display = ('id', 'last_name', 'first_name', 'father_name', 'phone_number', 'account')
+    list_display = ('id', 'last_name', 'first_name', 'father_name', 'phone_number', 'post', 'account')
     list_display_links = ('id',)
-    search_fields = ('id', 'last_name', 'first_name', 'father_name', 'phone_number')
-    list_editable = ('last_name', 'first_name', 'father_name', 'phone_number', 'account')
-    list_filter = ('last_name', 'first_name', 'father_name', 'phone_number')
+    search_fields = ('id', 'last_name', 'first_name', 'father_name', 'phone_number', 'post',)
+    list_editable = ('last_name', 'first_name', 'father_name', 'phone_number', 'post', 'account')
+    list_filter = ('last_name', 'first_name', 'father_name', 'phone_number', 'post',)
 @admin.register(Clients)
 class ClientsAdmin(admin.ModelAdmin):
     list_display = ('id', 'last_name', 'first_name', 'father_name', 'phone_number')

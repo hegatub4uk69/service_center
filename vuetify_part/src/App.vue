@@ -44,6 +44,7 @@
           value="lk">
         </v-list-item>
         <v-list-item
+          v-if="user_data.post === 'Администратор'"
           color="red"
           base-color="white"
           variant=""
@@ -154,6 +155,7 @@ export default {
       this.$store.dispatch('userLogout')
         .then(() => {
           router.push({name: 'login'})
+          window.location.reload()
         })
         .catch(err => {
           router.push({name: 'login'})

@@ -2,10 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Staff(models.Model):
+    ADM = 'Администратор'
+    TECH = 'Техник'
+    POSTS = [
+        (ADM, 'Администратор'), (TECH, 'Техник')
+    ]
+
     last_name = models.CharField(max_length=25, null=False, blank=False)
     first_name = models.CharField(max_length=25, null=False, blank=False)
     father_name = models.CharField(max_length=25, null=True, blank=True)
     phone_number = models.CharField(max_length=15, null=False, blank=False)
+    post = models.CharField(max_length=25, choices=POSTS, default=TECH)
     account = models.ForeignKey(User, related_name='Staff_account_id', null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
