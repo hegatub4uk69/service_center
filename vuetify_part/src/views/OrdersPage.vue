@@ -1,5 +1,5 @@
 <template>
-  <v-container style="height: 80px">
+  <v-container fluid="" style="height: 80px">
     <v-card style="height: 70px" color="">
       <v-row align="center" justify="center" dense="">
         <v-col cols="4" sm="4" md="4" lg="2">
@@ -24,7 +24,7 @@
       </v-row>
     </v-card>
   </v-container>
-  <v-container>
+  <v-container fluid="">
     <v-row dense="">
       <v-col>
         <!--Таблица данных заказов-->

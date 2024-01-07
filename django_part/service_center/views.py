@@ -1,6 +1,6 @@
 import json
 
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
@@ -42,7 +42,7 @@ def get_categories(request):
 @permission_classes([IsAuthenticated,])
 def get_staff(request):
     data = json.loads(request.body.decode())
-    print(f'Пришедшие данные: {data}')
+    print(f'Пришедшие данные (данные_сотрудника): {data}')
     result = [{
         "id": i.pk,
         "full_name": i.get_staff_fio(),
@@ -57,7 +57,7 @@ def get_staff(request):
 @permission_classes([IsAuthenticated,])
 def get_orders(request):
     data = json.loads(request.body.decode())
-    print(f'Пришедшие данные: {data}')
+    print(f'Пришедшие данные (данные_заказов): {data}')
     result = [{
         "id": i.pk,
         "title": i.title,
@@ -73,7 +73,7 @@ def get_orders(request):
 @permission_classes([IsAuthenticated,])
 def get_my_orders(request):
     data = json.loads(request.body.decode())
-    print(f'Пришедшие данные: {data}')
+    print(f'Пришедшие данные (данные_моих_заказов): {data}')
     result = [{
         "id": i.pk,
         "title": i.title,
@@ -89,12 +89,13 @@ def get_my_orders(request):
 @permission_classes([IsAuthenticated,])
 def get_my_orders_count(request):
     data = json.loads(request.body.decode())
-    print(f'Пришедшие данные: {data}')
-    orders_in = Orders.objects.filter(Q(staff_in=data['staff_id']) & Q(status='Новый')).count()
-    orders_done = Orders.objects.filter(Q(executor_id=data['staff_id']) & Q(status='Готов')).count()
-    orders_out = Orders.objects.filter(Q(staff_out=data['staff_id']) & Q(status='Выдан')).count()
-    result = [{ "orders_in": orders_in, "orders_done": orders_done, "orders_out": orders_out }]
-    print(result[0])
+    print(f'Пришедшие данные (данные_кол-во_моих_заказов): {data}')
+    result = Orders.objects.aggregate(
+        orders_in = Count('pk', filter=Q(staff_in=data['staff_id'])),
+        orders_done = Count('pk', filter=Q(executor_id=data['staff_id'])),
+        orders_out = Count('pk', filter=Q(staff_out=data['staff_id']))
+    )
+    print(result)
     return JsonResponse({"result": result})
 
 @csrf_exempt
@@ -102,7 +103,7 @@ def get_my_orders_count(request):
 @permission_classes([IsAuthenticated,])
 def get_other_order_data(request):
     data = json.loads(request.body.decode())
-    print(f'Пришедшие данные: {data}')
+    print(f'Пришедшие данные (полные_данные_заказа): {data}')
     result = [{
         "id": i.pk,
         "client_id": i.client.pk,
@@ -125,7 +126,7 @@ def get_other_order_data(request):
 @permission_classes([IsAuthenticated,])
 def add_order(request):
     data = json.loads(request.body.decode())
-    print(f'Пришедшие данные: {data}')
+    print(f'Пришедшие данные (добавление_заказа): {data}')
     order = Orders(
         title=data['title'],
         description=data['description'],
@@ -143,7 +144,7 @@ def add_order(request):
 @permission_classes([IsAuthenticated,])
 def add_client(request):
     data = json.loads(request.body.decode())
-    print(f'Пришедшие данные: {data}')
+    print(f'Пришедшие данные (добавление_клиента): {data}')
     client = Clients(
         last_name=data['last_name'],
         first_name=data['first_name'],
@@ -158,7 +159,7 @@ def add_client(request):
 @permission_classes([IsAuthenticated,])
 def update_order(request):
     data = json.loads(request.body.decode())
-    print(f'Пришедшие данные: {data}')
+    print(f'Пришедшие данные (изменение_данных_заказа): {data}')
     order = Orders.objects.get(id=data['id'])
     order.title = data['title']
     order.description = data['description']
@@ -172,7 +173,7 @@ def update_order(request):
 @permission_classes([IsAuthenticated,])
 def take_order(request):
     data = json.loads(request.body.decode())
-    print(f'Пришедшие данные: {data}')
+    print(f'Пришедшие данные (взятие_заказа): {data}')
     order = Orders.objects.get(id=data['id'])
     order.executor_id = data['executor_id']
     order.status = data['status']
@@ -184,7 +185,7 @@ def take_order(request):
 @permission_classes([IsAuthenticated,])
 def update_client(request):
     data = json.loads(request.body.decode())
-    print(f'Пришедшие данные: {data}')
+    print(f'Пришедшие данные (изменение_данных_клиента): {data}')
     client = Clients.objects.get(id=data['id'])
     client.last_name = data['last_name']
     client.first_name = data['first_name']
@@ -198,7 +199,7 @@ def update_client(request):
 @permission_classes([IsAuthenticated,])
 def delete_order(request):
     data = json.loads(request.body.decode())
-    print(f'Пришедшие данные: {data}')
+    print(f'Пришедшие данные (удаление_заказа): {data}')
     order = Orders.objects.get(id=data['id'])
     order.delete()
     return JsonResponse({"result": 'Данные заказа успешно удалены!'})
@@ -208,7 +209,7 @@ def delete_order(request):
 @permission_classes([IsAuthenticated,])
 def delete_client(request):
     data = json.loads(request.body.decode())
-    print(f'Пришедшие данные: {data}')
+    print(f'Пришедшие данные (удаление_клиента): {data}')
     client = Clients.objects.get(id=data['id'])
     client.delete()
     return JsonResponse({"result": 'Данные клиента успешно удалены!'})

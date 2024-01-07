@@ -43,8 +43,8 @@ export const store = createStore({
     loggedIn(state) {
       return state.accessToken != null
     },
-    userId(state) {
-      return state.uid
+    staffId(state) {
+      return state.user_data.staff_id
     },
     staffDataExist(state) {
       return state.user_data.login != null

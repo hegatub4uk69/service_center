@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center" dense="">
-      <v-col lg="4">
+      <v-col lg="6">
         <v-card>
           <v-data-iterator
             :items="clients"
@@ -91,7 +91,7 @@
           </v-data-iterator>
         </v-card>
       </v-col>
-      <v-col lg="4">
+      <v-col lg="6">
         <v-card>
           <v-toolbar>
             <v-toolbar-title style="font-size: 25px">
