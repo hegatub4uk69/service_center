@@ -81,7 +81,7 @@ def get_my_orders(request):
         "categoryTitle": i.category.name,
         "client_FN": i.client.get_client_fio(),
         "client_phone": i.client.phone_number,
-    } for i in Orders.objects.all().filter(executor_id=data['executor_id']).select_related('category', 'client')]
+    } for i in Orders.objects.all().filter(Q(executor_id=data['executor_id']) & Q(status=data['status'])).select_related('category', 'client')]
     return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
 @csrf_exempt
@@ -179,6 +179,31 @@ def take_order(request):
     order.status = data['status']
     order.save()
     return JsonResponse({"result": 'Вы приняли заказ!'})
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
+def order_done(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные (взятие_заказа): {data}')
+    order = Orders.objects.get(id=data['id'])
+    order.repair_at = datetime.strptime(data['repair_at'], "%d.%m.%Y")
+    order.status = data['status']
+    order.save()
+    return JsonResponse({"result": 'Заказ переведен в состояние готовности!'})
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
+def order_out(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные (взятие_заказа): {data}')
+    order = Orders.objects.get(id=data['id'])
+    order.closed_at = datetime.strptime(data['closed_at'], "%d.%m.%Y")
+    order.staff_out_id = data['staff_out']
+    order.status = data['status']
+    order.save()
+    return JsonResponse({"result": 'Заказ выдан клиенту!'})
 
 @csrf_exempt
 @api_view(['POST'])

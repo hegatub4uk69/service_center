@@ -18,6 +18,8 @@ urlpatterns = [
     path('update-order', views.update_order),
     path('update-client', views.update_client),
     path('take-order', views.take_order),
+    path('order-done', views.order_done),
+    path('order-out', views.order_out),
 
     path('delete-order', views.delete_order),
     path('delete-client', views.delete_client),
