@@ -28,8 +28,7 @@
   </section>
 </template>
 
-<script>
-</script>
+<script></script>
 
 <style>
 .page_404 {

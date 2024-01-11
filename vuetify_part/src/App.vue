@@ -45,6 +45,7 @@
         </v-list-item>
         <v-list-item
           v-if="user_data.post === 'Администратор'"
+          :to="links.admin"
           color="red"
           base-color="white"
           variant=""
@@ -57,7 +58,7 @@
           color="red"
           base-color="white"
           variant=""
-          prepend-icon="mdi-archive-outline"
+          prepend-icon="mdi-checkbook"
           :title="nav_menu.btn_services"
           value="archive">
         </v-list-item>
@@ -109,7 +110,7 @@ export default {
     nav_menu: {
       btn_lk: 'Личный кабинет',
       btn_admin: 'Панель администратора',
-      btn_services: 'Клиентские заказы',
+      btn_services: 'Заказы',
       btn_clients: 'Клиенты',
       btn_logout: 'Выход',
     },
@@ -118,7 +119,8 @@ export default {
       log: '/login',
       profile: '/profile',
       orders: '/orders',
-      clients: '/clients'
+      clients: '/clients',
+      admin: '/admin'
     },
   }),
 

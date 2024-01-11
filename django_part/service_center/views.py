@@ -25,6 +25,18 @@ def get_clients(request):
     } for i in Clients.objects.all()]
     return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,])
+def get_clients_for_adm(request):
+    result = [{
+        "id": i.pk,
+        "last_name": i.last_name,
+        "first_name": i.first_name,
+        "father_name": i.father_name,
+        "phone": i.phone_number,
+    } for i in Clients.objects.all()]
+    return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
 @csrf_exempt
 @api_view(['POST'])

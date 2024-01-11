@@ -6,6 +6,7 @@ urlpatterns = [
     path('get-staff-data', views.get_staff),
     path('get-token', obtain_auth_token, name='token'),
     path('get-clients', views.get_clients),
+    path('get-clients-for-adm', views.get_clients_for_adm),
     path('get-orders', views.get_orders),
     path('get-my-orders', views.get_my_orders),
     path('get-my-orders-count', views.get_my_orders_count),

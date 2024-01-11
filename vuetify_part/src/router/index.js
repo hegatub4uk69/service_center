@@ -5,7 +5,7 @@ import {store} from "@/store";
 const routes = [
   {
     path: '/:pathMatch(.*)*',
-    component: () => import('@/components/404NotFound.vue'),
+    component: () => import('@/components/Err404NotFound.vue'),
   },
   {
     path: '/',
@@ -45,6 +45,14 @@ const routes = [
       requiresLogin: true
     },
     component: () => import('@/views/ClientsPage.vue')
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    meta: {
+      requiresLogin: true
+    },
+    component: () => import('@/views/AdminPanel.vue')
   }
 ]
 
