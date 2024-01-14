@@ -8,6 +8,7 @@ urlpatterns = [
     path('get-clients', views.get_clients),
     path('get-clients-for-adm', views.get_clients_for_adm),
     path('get-orders', views.get_orders),
+    path('get-orders-for-adm', views.get_orders_for_adm),
     path('get-my-orders', views.get_my_orders),
     path('get-my-orders-count', views.get_my_orders_count),
     path('get-categories', views.get_categories),
@@ -15,15 +16,18 @@ urlpatterns = [
 
     path('add-order', views.add_order),
     path('add-client', views.add_client),
+    path('add-category', views.add_category),
 
     path('update-order', views.update_order),
     path('update-client', views.update_client),
+    path('update-category', views.update_category),
     path('take-order', views.take_order),
     path('order-done', views.order_done),
     path('order-out', views.order_out),
 
     path('delete-order', views.delete_order),
     path('delete-client', views.delete_client),
+    path('delete-category', views.delete_category),
 
     path('token-verify', views.token_verify),
     re_path(r'^auth/', include('djoser.urls.base')),

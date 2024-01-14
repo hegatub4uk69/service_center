@@ -8,15 +8,17 @@ from service_center.models import Clients, Orders, Staff, Categories
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-@csrf_exempt
-@api_view(['POST'])
-@permission_classes([IsAuthenticated,])
-def token_verify(request):
-    return JsonResponse({"result": 'ok'})
 
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
+def token_verify(request):
+    return JsonResponse({"result": 'ok'})
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
 def get_clients(request):
     result = [{
         "id": i.pk,
@@ -25,9 +27,10 @@ def get_clients(request):
     } for i in Clients.objects.all()]
     return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
+
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def get_clients_for_adm(request):
     result = [{
         "id": i.pk,
@@ -38,20 +41,21 @@ def get_clients_for_adm(request):
     } for i in Clients.objects.all()]
     return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
+
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def get_categories(request):
     result = [{
         "id": i.pk,
         "name": i.name,
     } for i in Categories.objects.all()]
-    return JsonResponse({"result": result})
+    return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
 
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def get_staff(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (данные_сотрудника): {data}')
@@ -66,7 +70,28 @@ def get_staff(request):
 
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
+def get_orders_for_adm(request):
+    result = [{
+        "id": i.pk,
+        "title": i.title,
+        "description": i.description,
+        "category": i.category_id,
+        "status": i.status,
+        "client": i.client_id,
+        "staff_in": i.staff_in_id,
+        "executor": i.executor_id,
+        "staff_out": i.staff_out_id,
+        "created_at": i.created_at,
+        "repair_at": i.repair_at,
+        "closed_at": i.closed_at
+    } for i in Orders.objects.all()]
+    return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
 def get_orders(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (данные_заказов): {data}')
@@ -80,9 +105,10 @@ def get_orders(request):
     } for i in Orders.objects.all().filter(status=data['status']).select_related('category', 'client')]
     return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
+
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def get_my_orders(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (данные_моих_заказов): {data}')
@@ -93,26 +119,30 @@ def get_my_orders(request):
         "categoryTitle": i.category.name,
         "client_FN": i.client.get_client_fio(),
         "client_phone": i.client.phone_number,
-    } for i in Orders.objects.all().filter(Q(executor_id=data['executor_id']) & Q(status=data['status'])).select_related('category', 'client')]
+    } for i in
+        Orders.objects.all().filter(Q(executor_id=data['executor_id']) & Q(status=data['status'])).select_related(
+            'category', 'client')]
     return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
+
 
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def get_my_orders_count(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (данные_кол-во_моих_заказов): {data}')
     result = Orders.objects.aggregate(
-        orders_in = Count('pk', filter=Q(staff_in=data['staff_id'])),
-        orders_done = Count('pk', filter=Q(executor_id=data['staff_id'])),
-        orders_out = Count('pk', filter=Q(staff_out=data['staff_id']))
+        orders_in=Count('pk', filter=Q(staff_in=data['staff_id'])),
+        orders_done=Count('pk', filter=Q(executor_id=data['staff_id'])),
+        orders_out=Count('pk', filter=Q(staff_out=data['staff_id']))
     )
     print(result)
     return JsonResponse({"result": result})
 
+
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def get_other_order_data(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (полные_данные_заказа): {data}')
@@ -135,7 +165,7 @@ def get_other_order_data(request):
 
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def add_order(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (добавление_заказа): {data}')
@@ -151,9 +181,10 @@ def add_order(request):
     order.save()
     return JsonResponse({"result": 'Заказ успешно сформирован!'})
 
+
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def add_client(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (добавление_клиента): {data}')
@@ -166,9 +197,23 @@ def add_client(request):
     client.save()
     return JsonResponse({"result": 'Клиент успешно добавлен!'})
 
+
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
+def add_category(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные (добавление_категории): {data}')
+    category = Categories(
+        name=data['name']
+    )
+    category.save()
+    return JsonResponse({"result": 'Категория успешно добавлена!'})
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
 def update_order(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (изменение_данных_заказа): {data}')
@@ -180,9 +225,10 @@ def update_order(request):
     order.save()
     return JsonResponse({"result": 'Данные заказа успешно изменены!'})
 
+
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def take_order(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (взятие_заказа): {data}')
@@ -192,9 +238,10 @@ def take_order(request):
     order.save()
     return JsonResponse({"result": 'Вы приняли заказ!'})
 
+
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def order_done(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (взятие_заказа): {data}')
@@ -204,9 +251,10 @@ def order_done(request):
     order.save()
     return JsonResponse({"result": 'Заказ переведен в состояние готовности!'})
 
+
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def order_out(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (взятие_заказа): {data}')
@@ -217,9 +265,10 @@ def order_out(request):
     order.save()
     return JsonResponse({"result": 'Заказ выдан клиенту!'})
 
+
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def update_client(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (изменение_данных_клиента): {data}')
@@ -231,9 +280,22 @@ def update_client(request):
     client.save()
     return JsonResponse({"result": 'Данные клиента успешно изменены!'})
 
+
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
+def update_category(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные (изменение_данных_категории): {data}')
+    category = Categories.objects.get(id=data['id'])
+    category.name = data['name']
+    category.save()
+    return JsonResponse({"result": 'Данные категории успешно изменены!'})
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
 def delete_order(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (удаление_заказа): {data}')
@@ -241,12 +303,24 @@ def delete_order(request):
     order.delete()
     return JsonResponse({"result": 'Данные заказа успешно удалены!'})
 
+
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def delete_client(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (удаление_клиента): {data}')
     client = Clients.objects.get(id=data['id'])
     client.delete()
     return JsonResponse({"result": 'Данные клиента успешно удалены!'})
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
+def delete_category(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные (удаление_категории): {data}')
+    category = Categories.objects.get(id=data['id'])
+    category.delete()
+    return JsonResponse({"result": 'Данные категории успешно удалены!'})

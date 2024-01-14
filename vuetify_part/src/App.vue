@@ -20,7 +20,7 @@
 
     <v-navigation-drawer
       v-if="accessToken != null"
-      image="https://img3.akspic.ru/crops/1/9/6/3/1/113691/113691-sinij_cvet-lazur-svet-geometricheskaya_forma-atmosfera-2048x1152.jpg"
+      image="/nav_drawer_back.jpg"
       permanent="" expand-on-hover="" rail="">
       <v-list>
         <v-list-item
@@ -58,7 +58,7 @@
           color="red"
           base-color="white"
           variant=""
-          prepend-icon="mdi-checkbook"
+          prepend-icon="mdi-notebook-outline"
           :title="nav_menu.btn_services"
           value="archive">
         </v-list-item>

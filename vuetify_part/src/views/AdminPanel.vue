@@ -8,29 +8,32 @@
               bg-color="primary"
               align-tabs="center"
           >
-            <v-tab prepend-icon="mdi-account-box" value="tab-1">
+            <v-tab prepend-icon="mdi-account-box" value="tab-staff">
               Сотрудники
             </v-tab>
-            <v-tab prepend-icon="mdi-account-cash" value="tab-2">
+            <v-tab prepend-icon="mdi-account-cash" value="tab-clients">
               Клиенты
             </v-tab>
-            <v-tab prepend-icon="mdi-book-cog-outline" value="tab-3">
+            <v-tab prepend-icon="mdi-book-cog-outline" value="tab-orders">
               Заказы
             </v-tab>
-            <v-tab prepend-icon="mdi-shape" value="tab-1">
+            <v-tab prepend-icon="mdi-shape" value="tab-categories">
               Категории техники
             </v-tab>
           </v-tabs>
 
           <v-window v-model="tab">
-            <v-window-item style="transition: none" value="tab-1">
-              <test2 v-if="tab === 'tab-1'"></test2>
+            <v-window-item style="transition: none" value="tab-staff">
+              <Staff v-if="tab === 'tab-staff'"></Staff>
             </v-window-item>
-            <v-window-item style="transition: none" value="tab-2">
-              <test3 v-if="tab === 'tab-2'"></test3>
+            <v-window-item style="transition: none" value="tab-clients">
+              <Clients v-if="tab === 'tab-clients'"></Clients>
             </v-window-item>
-            <v-window-item style="transition: none" value="tab-3">
-              <test2 v-if="tab === 'tab-1'"></test2>
+            <v-window-item style="transition: none" value="tab-orders">
+              <Orders v-if="tab === 'tab-orders'"></Orders>
+            </v-window-item>
+            <v-window-item style="transition: none" value="tab-categories">
+              <Categories v-if="tab === 'tab-categories'"></Categories>
             </v-window-item>
           </v-window>
         </v-card>
@@ -41,17 +44,21 @@
 
 <script>
 import Categories from "@/components/Categories.vue";
-import Staff from "@/components/Clients.vue";
+import Staff from "@/components/Staff.vue";
+import Clients from "@/components/Clients.vue";
+import Orders from "@/components/Orders.vue";
 
 export default {
   name: 'AdminPanel',
   components: {
-    'test2': Categories,
-    'test3': Staff
+    'Categories': Categories,
+    'Staff': Staff,
+    'Clients': Clients,
+    'Orders': Orders
   },
   data() {
     return {
-      tab: 'tab-2',
+      tab: 'tab-orders',
     }
   },
 }
