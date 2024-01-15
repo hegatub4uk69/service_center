@@ -2,33 +2,33 @@
   <v-card>
     <v-card-title class="d-flex align-center pe-2">
       <v-text-field
-          v-model="search"
-          prepend-inner-icon="mdi-magnify"
-          density="compact"
-          label="Поиск"
-          single-line
-          flat
-          hide-details
-          variant="solo-filled"
+        v-model="search"
+        prepend-inner-icon="mdi-magnify"
+        density="compact"
+        label="Поиск"
+        single-line
+        flat
+        hide-details
+        variant="solo-filled"
       ></v-text-field>
       <v-spacer></v-spacer>
       <v-btn
-          color="info"
-          dark
-          variant="outlined"
-          @click="dialog_add_order = true"
+        color="info"
+        dark
+        variant="outlined"
+        @click="dialog_add_order = true"
       >Добавить
       </v-btn>
     </v-card-title>
     <v-divider></v-divider>
     <v-data-table
-        :headers="headers"
-        :items="orders"
-        :search="search"
-        :items-per-page="10"
-        item-value="id"
-        class="elevation-1 table"
-        @update:options="loadOrders"
+      :headers="headers"
+      :items="orders"
+      :search="search"
+      :items-per-page="10"
+      item-value="id"
+      class="elevation-1 table"
+      @update:options="loadOrders"
     >
       <template v-slot:[`item.title`]="{item}">
         <v-text-field
@@ -120,15 +120,15 @@
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon
-          size="small"
-          class="me-2"
+          size="23px"
+          class="me-2 ml-1"
           color="warning"
           icon="mdi-pencil-outline"
           @click="editOrder(item)"
         >
         </v-icon>
         <v-icon
-          size="small"
+          size="23px"
           color="red"
           icon="mdi-delete-outline"
           @click="deleteOrder(item)"
@@ -140,7 +140,6 @@
 </template>
 
 <script>
-import {createToast} from "mosha-vue-toastify";
 import 'mosha-vue-toastify/dist/style.css';
 import API from "@/axios";
 
@@ -152,19 +151,20 @@ export default {
       search: '',
       dialog_add_order: false,
       headers: [
-        {title: 'ID', key: 'id', width: '50px'},
-        {title: 'Наименование техники', key: 'title', width: '500px'},
-        {title: 'Категория', key: 'category', width: '350px'},
-        {title: 'Статус', key: 'status', width: '350px'},
-        {title: 'Клиент', key: 'client', width: '350px'},
-        {title: 'Приемщик', key: 'staff_in', width: '350px'},
-        {title: 'Техник', key: 'executor', width: '350px'},
-        {title: 'Выдал', key: 'staff_out', width: '350px'},
-        {title: 'Дата создания', key: 'created_at', width: '350px'},
-        {title: 'Дата ремонта', key: 'repair_at', width: '350px'},
-        {title: 'Дата выдачи', key: 'closed_at', width: '350px'},
-        {title: 'Описание', key: 'description', width: '350px'},
-        {title: 'Действия', key: 'actions', sorted: false, width: '350px'},
+        {title: 'Действия', key: 'actions', fixed: true, sortable: false},
+        {title: 'ID', key: 'id'},
+        {title: 'Наименование техники', key: 'title', width: 17999999},
+        {title: 'Категория', key: 'category', width: 17999999},
+        {title: 'Статус', key: 'status', width: 5000000},
+        {title: 'Клиент', key: 'client', width: 50000000},
+        {title: 'Приемщик', key: 'staff_in', width: 50000000},
+        {title: 'Техник', key: 'executor', width: 50000000},
+        {title: 'Выдал', key: 'staff_out', width: 50000000},
+        {title: 'Дата создания', key: 'created_at', width: 9000000},
+        {title: 'Дата ремонта', key: 'repair_at', width: 9000000},
+        {title: 'Дата выдачи', key: 'closed_at', width: 9000000},
+        {title: 'Описание', key: 'description', width: 50000000},
+        {title: '', width: 1}
       ],
       orders: [],
 
@@ -177,7 +177,7 @@ export default {
       })
     },
     addOrder() {
-     //
+      //
     },
     editOrder() {
       //
@@ -195,6 +195,5 @@ export default {
   /*border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;*/
   font-size: 16px;
-  white-space: nowrap;
 }
 </style>

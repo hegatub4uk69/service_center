@@ -520,6 +520,13 @@ color-name@~1.1.4:
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
 
+column-resizer@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/column-resizer/-/column-resizer-1.4.0.tgz#baebab36acd81102787aec5cd966193159340186"
+  integrity sha512-KM5Jh/UBKwVUr01oEGN/OvxF6gZIEn4c1Qde4iHSqNru9hxq93ao3u93qb9N1E1TZ2Sxjh4x7OHGe8v/P8FgkA==
+  dependencies:
+    string-hash "~1.1.3"
+
 combined-stream@^1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
@@ -564,6 +571,13 @@ csstype@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.3.tgz#d80ff294d114fb0e6ac500fbf85b60137d7eff81"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
+
+custom-column-resizer@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/custom-column-resizer/-/custom-column-resizer-1.0.2.tgz#3fac47db6122aaeaa6186d96b13e0ac998806e9a"
+  integrity sha512-HWo3rAxGABkt+xcllyrcwtl7wud5n0uMnZ4ohYfQFJ0nLU4DSH7eu0geU5oF0o2YmHKCff+Ema7yd6kcZKVN+A==
+  dependencies:
+    string-hash "~1.1.3"
 
 debug@^4.1.1, debug@^4.3.2, debug@^4.3.3, debug@^4.3.4:
   version "4.3.4"
@@ -1282,6 +1296,11 @@ source-map@^0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
+
+string-hash@~1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/string-hash/-/string-hash-1.1.3.tgz#e8aafc0ac1855b4666929ed7dd1275df5d6c811b"
+  integrity sha512-kJUvRUFK49aub+a7T1nNE66EJbZBMnBgoC1UbCZ5n6bsZKBRga4KgBRTMn/pFkeCZSYtNeSyMxPDM0AXWELk2A==
 
 strip-ansi@^6.0.1:
   version "6.0.1"

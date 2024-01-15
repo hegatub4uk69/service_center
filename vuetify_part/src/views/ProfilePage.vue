@@ -15,9 +15,9 @@
                     <v-expansion-panel-text>
                       <div class="d-flex flex-no-wrap">
                         <v-avatar
-                            class="ma-3"
-                            size="160"
-                            rounded="0"
+                          class="ma-3"
+                          size="160"
+                          rounded="0"
                         >
                           <v-card-text>
                             <v-img src="/free-icon-avatar-8727604.png" class="mb-2"></v-img>
@@ -30,36 +30,36 @@
                           <v-card-title>Личная информация</v-card-title>
                           <v-divider style="padding-bottom: 20px"></v-divider>
                           <v-text-field
-                              readonly=""
-                              label="Фамилия Имя Отчество"
-                              :model-value="user_data.staff_full_name"
+                            readonly=""
+                            label="Фамилия Имя Отчество"
+                            :model-value="user_data.staff_full_name"
                           >
                             <template v-slot:prepend-inner>
                               <v-icon
-                                  style="margin-left: 3px; margin-right: 10px"
-                                  icon="mdi-card-account-details-outline"></v-icon>
+                                style="margin-left: 3px; margin-right: 10px"
+                                icon="mdi-card-account-details-outline"></v-icon>
                             </template>
                           </v-text-field>
                           <v-text-field
-                              readonly=""
-                              label="Логин"
-                              :model-value="user_data.login"
+                            readonly=""
+                            label="Логин"
+                            :model-value="user_data.login"
                           >
                             <template v-slot:prepend-inner>
                               <v-icon
-                                  style="margin-left: 3px; margin-right: 10px"
-                                  icon="mdi-alpha-l-box-outline"></v-icon>
+                                style="margin-left: 3px; margin-right: 10px"
+                                icon="mdi-alpha-l-box-outline"></v-icon>
                             </template>
                           </v-text-field>
                           <v-text-field
-                              readonly=""
-                              label="Номер телефона"
-                              :model-value="user_data.staff_phone"
+                            readonly=""
+                            label="Номер телефона"
+                            :model-value="user_data.staff_phone"
                           >
                             <template v-slot:prepend-inner>
                               <v-icon
-                                  style="margin-left: 3px; margin-right: 10px"
-                                  icon="mdi-phone-outline"></v-icon>
+                                style="margin-left: 3px; margin-right: 10px"
+                                icon="mdi-phone-outline"></v-icon>
                             </template>
                           </v-text-field>
                         </v-card-text>
@@ -67,36 +67,36 @@
                           <v-card-title>Статистика заказов</v-card-title>
                           <v-divider style="padding-bottom: 20px"></v-divider>
                           <v-text-field
-                              readonly=""
-                              class="text-black"
-                              :model-value="'Количество принятых заказов: ' + orders_count.orders_in"
+                            readonly=""
+                            class="text-black"
+                            :model-value="'Количество принятых заказов: ' + orders_count.orders_in"
                           >
                             <template v-slot:prepend-inner>
                               <v-icon
-                                  style="margin-left: 3px; margin-right: 10px"
-                                  icon="mdi-clipboard-text-clock-outline"></v-icon>
+                                style="margin-left: 3px; margin-right: 10px"
+                                icon="mdi-clipboard-text-clock-outline"></v-icon>
                             </template>
                           </v-text-field>
                           <v-text-field
-                              readonly=""
-                              class="text-black"
-                              :model-value="'Количество взятых заказов: ' + orders_count.orders_done"
+                            readonly=""
+                            class="text-black"
+                            :model-value="'Количество взятых заказов: ' + orders_count.orders_done"
                           >
                             <template v-slot:prepend-inner>
                               <v-icon
-                                  style="margin-left: 3px; margin-right: 10px"
-                                  icon="mdi-toolbox-outline"></v-icon>
+                                style="margin-left: 3px; margin-right: 10px"
+                                icon="mdi-toolbox-outline"></v-icon>
                             </template>
                           </v-text-field>
                           <v-text-field
-                              readonly=""
-                              class="text-black"
-                              :model-value="'Количество выданных заказов: ' + orders_count.orders_out"
+                            readonly=""
+                            class="text-black"
+                            :model-value="'Количество выданных заказов: ' + orders_count.orders_out"
                           >
                             <template v-slot:prepend-inner>
                               <v-icon
-                                  style="margin-left: 3px; margin-right: 10px"
-                                  icon="mdi-check-outline"></v-icon>
+                                style="margin-left: 3px; margin-right: 10px"
+                                icon="mdi-check-outline"></v-icon>
                             </template>
                           </v-text-field>
                         </v-card-text>
@@ -116,26 +116,26 @@
                               <v-row align="center" justify="center">
                                 <v-col cols="3" style="padding-bottom: 0">
                                   <v-select
-                                      v-if="expanded"
-                                      v-model="selected_status"
-                                      :items="statuses"
-                                      density="default"
-                                      color="blue"
-                                      label="Фильтрация по статусу"
-                                      @click.stop="disable_panel = true"
+                                    v-if="expanded"
+                                    v-model="selected_status"
+                                    :items="statuses"
+                                    density="default"
+                                    color="blue"
+                                    label="Фильтрация по статусу"
+                                    @click.stop="disable_panel = true"
                                   ></v-select>
                                 </v-col>
                                 <v-col cols="6" style="padding-bottom: 0; padding-top: 0">
                                   <v-text-field
-                                      v-if="expanded"
-                                      v-model="search"
-                                      color="blue"
-                                      density="default"
-                                      style="height: 90px; padding-bottom: 0; padding-top: 12px"
-                                      prepend-inner-icon="mdi-table-search"
-                                      label="Введите поисковое значение"
-                                      single-line
-                                      @click.stop
+                                    v-if="expanded"
+                                    v-model="search"
+                                    color="blue"
+                                    density="default"
+                                    style="height: 90px; padding-bottom: 0; padding-top: 12px"
+                                    prepend-inner-icon="mdi-table-search"
+                                    label="Введите поисковое значение"
+                                    single-line
+                                    @click.stop
                                   ></v-text-field>
                                 </v-col>
                               </v-row>
@@ -145,33 +145,31 @@
                       </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
-                      <div class="d-flex flex-no-wrap">
-                        <v-data-table
-                            :headers="tableHeaders"
-                            :items="orders"
-                            :loading="loadingTable"
-                            :search="search"
-                            item-value="id"
-                            class="elevation-1 table"
-                            @update:options="loadTableItems"
-                        >
-                          <template v-slot:[`item.status`]="{ value }">
-                            <v-chip :color="getColor(value)">
-                              {{ value }}
-                            </v-chip>
-                          </template>
-                          <!--Кнопки действий над заказами-->
-                          <template v-slot:[`item.actions`]="{ item }">
-                            <v-btn
-                                :text="btn_name"
-                                color="success"
-                                variant="outlined"
-                                @click="orderDoneOrOut(item)"
-                            >
-                            </v-btn>
-                          </template>
-                        </v-data-table>
-                      </div>
+                      <v-data-table
+                        :headers="tableHeaders"
+                        :items="orders"
+                        :loading="loadingTable"
+                        :search="search"
+                        item-value="id"
+                        class="elevation-1 table"
+                        @update:options="loadTableItems"
+                      >
+                        <template v-slot:[`item.status`]="{ value }">
+                          <v-chip :color="getColor(value)">
+                            {{ value }}
+                          </v-chip>
+                        </template>
+                        <!--Кнопки действий над заказами-->
+                        <template v-slot:[`item.actions`]="{ item }">
+                          <v-btn
+                            :text="btn_name"
+                            color="success"
+                            variant="outlined"
+                            @click="orderDoneOrOut(item)"
+                          >
+                          </v-btn>
+                        </template>
+                      </v-data-table>
                     </v-expansion-panel-text>
                   </v-expansion-panel>
                 </v-expansion-panels>
@@ -198,9 +196,13 @@ export default {
       return this.$store.state.user_data.staff_id
     },
     btn_name() {
-      if (this.selected_status === 'В работе') {return 'Готов'}
-      else if (this.selected_status === 'Готов') {return 'Выдать'}
-      else {return 'Готов'}
+      if (this.selected_status === 'В работе') {
+        return 'Готов'
+      } else if (this.selected_status === 'Готов') {
+        return 'Выдать'
+      } else {
+        return 'Готов'
+      }
     },
   },
 
@@ -255,18 +257,18 @@ export default {
     loadTableItems() {
       this.loadingTable = true
       API.post('get-my-orders', {executor_id: this.$store.state.user_data.staff_id, status: this.status_to_resp})
-          .then(response => {
-            this.orders = response.data.result
-            this.loadingTable = false
-          })
+        .then(response => {
+          this.orders = response.data.result
+          this.loadingTable = false
+        })
     },
     ordersStat(staff_id) {
       API.post('get-my-orders-count', {staff_id: staff_id})
-          .then(response => {
-            this.orders_count.orders_in = response.data.result.orders_in
-            this.orders_count.orders_done = response.data.result.orders_done
-            this.orders_count.orders_out = response.data.result.orders_out
-          })
+        .then(response => {
+          this.orders_count.orders_in = response.data.result.orders_in
+          this.orders_count.orders_done = response.data.result.orders_done
+          this.orders_count.orders_out = response.data.result.orders_out
+        })
     },
     orderDoneOrOut(item) {
       let date = new Date();
@@ -276,16 +278,16 @@ export default {
           status: 'Готов',
           repair_at: date.toLocaleDateString('ru-RU')
         }).then(response => {
-              createToast(response.data.result, {
-                showIcon: 'true',
-                showCloseButton: false,
-                type: 'danger',
-                position: "top-center",
-                timeout: 3000,
-                toastBackgroundColor: '#4caf50'
-              })
-              this.loadTableItems()
-            })
+          createToast(response.data.result, {
+            showIcon: 'true',
+            showCloseButton: false,
+            type: 'danger',
+            position: "top-center",
+            timeout: 3000,
+            toastBackgroundColor: '#4caf50'
+          })
+          this.loadTableItems()
+        })
       } else if (this.selected_status === 'Готов') {
         API.post('order-out', {
           id: item.id,
