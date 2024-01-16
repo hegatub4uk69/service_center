@@ -131,7 +131,7 @@ export default {
         if (error) {
           router.push({name: 'login'})
           this.$store.dispatch('userLogout').then(
-            createToast('Неверные аутентификационные данные!', {
+            createToast('Произошла ошибка!', {
               showIcon: 'true',
               showCloseButton: false,
               type: 'danger',

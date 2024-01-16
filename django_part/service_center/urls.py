@@ -3,7 +3,8 @@ from rest_framework.authtoken.views import obtain_auth_token
 from . import views
 
 urlpatterns = [
-    path('get-staff-data', views.get_staff),
+    path('get-staff-data', views.get_staff_data),
+    path('get-staff', views.get_staff),
     path('get-token', obtain_auth_token, name='token'),
     path('get-clients', views.get_clients),
     path('get-clients-for-adm', views.get_clients_for_adm),
@@ -15,10 +16,12 @@ urlpatterns = [
     path('get-order-other-data', views.get_other_order_data),
 
     path('add-order', views.add_order),
+    path('add-order-adm', views.add_order_adm),
     path('add-client', views.add_client),
     path('add-category', views.add_category),
 
     path('update-order', views.update_order),
+    path('update-order-adm', views.update_order_adm),
     path('update-client', views.update_client),
     path('update-category', views.update_category),
     path('take-order', views.take_order),

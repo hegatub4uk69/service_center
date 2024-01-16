@@ -56,7 +56,7 @@ def get_categories(request):
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, ])
-def get_staff(request):
+def get_staff_data(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (данные_сотрудника): {data}')
     result = [{
@@ -67,6 +67,16 @@ def get_staff(request):
     } for i in Staff.objects.all().filter(pk=data)]
     return JsonResponse({"result": result})
 
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
+def get_staff(request):
+    result = [{
+        "id": i.pk,
+        "full_name": i.get_staff_fio(),
+        "post": i.post
+    } for i in Staff.objects.all()]
+    return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
 @csrf_exempt
 @api_view(['POST'])
@@ -181,6 +191,27 @@ def add_order(request):
     order.save()
     return JsonResponse({"result": 'Заказ успешно сформирован!'})
 
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
+def add_order_adm(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные (добавление_заказа-adm): {data}')
+    order = Orders(
+        title=data['title'],
+        description=data['description'],
+        status=data['status'],
+        category_id=data['category_id'],
+        client_id=data['client_id'],
+        staff_in_id=data['staff_in'],
+        executor_id=data['executor'],
+        staff_out_id=data['staff_out'],
+        created_at=datetime.strptime(data['created_at'], "%Y-%m-%d"),
+        repair_at=datetime.strptime(data['repair_at'], "%Y-%m-%d"),
+        closed_at=datetime.strptime(data['closed_at'], "%Y-%m-%d"),
+    )
+    order.save()
+    return JsonResponse({"result": 'Заказ успешно добавлен!'})
 
 @csrf_exempt
 @api_view(['POST'])
@@ -225,6 +256,26 @@ def update_order(request):
     order.save()
     return JsonResponse({"result": 'Данные заказа успешно изменены!'})
 
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
+def update_order_adm(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные (изменение_данных_заказa-adm): {data}')
+    order = Orders.objects.get(id=data['id'])
+    order.title = data['title']
+    order.status = data['status']
+    order.description = data['description']
+    order.category_id = data['category_id']
+    order.staff_in_id = data['staff_in']
+    order.executor_id = data['executor']
+    order.staff_out_id = data['staff_out']
+    order.client_id = data['client_id']
+    order.created_at = data['created_at']
+    order.repair_at = data['repair_at']
+    order.closed_at = data['closed_at']
+    order.save()
+    return JsonResponse({"result": 'Данные заказа успешно изменены!'})
 
 @csrf_exempt
 @api_view(['POST'])
