@@ -1,10 +1,12 @@
 import json
 
+from django.contrib.auth.hashers import make_password
 from django.db.models import Q, Count
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from service_center.models import Clients, Orders, Staff, Categories
+from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
@@ -53,6 +55,7 @@ def get_categories(request):
     return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
 
 
+# Получение личных данных сотрудника
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, ])
@@ -67,6 +70,8 @@ def get_staff_data(request):
     } for i in Staff.objects.all().filter(pk=data)]
     return JsonResponse({"result": result})
 
+
+# Получение данных сотрудников для выпадающего списка
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, ])
@@ -77,6 +82,35 @@ def get_staff(request):
         "post": i.post
     } for i in Staff.objects.all()]
     return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
+
+
+# Получение данных сотрудников для панели администратора
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
+def get_staff_adm_panel(request):
+    result = [{
+        "id": i.pk,
+        "last_name": i.last_name,
+        "first_name": i.first_name,
+        "father_name": i.father_name,
+        "phone_number": i.phone_number,
+        "account_id": i.account_id,
+        "post": i.post
+    } for i in Staff.objects.all()]
+    return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['id'])})
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
+def get_accounts(request):
+    result = [{
+        "account_id": i.pk,
+        "username": i.username
+    } for i in User.objects.all()]
+    return JsonResponse({"result": sorted(result, key=lambda sort_by: sort_by['account_id'])})
+
 
 @csrf_exempt
 @api_view(['POST'])
@@ -191,6 +225,7 @@ def add_order(request):
     order.save()
     return JsonResponse({"result": 'Заказ успешно сформирован!'})
 
+
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, ])
@@ -213,6 +248,7 @@ def add_order_adm(request):
     order.save()
     return JsonResponse({"result": 'Заказ успешно добавлен!'})
 
+
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, ])
@@ -227,6 +263,25 @@ def add_client(request):
     )
     client.save()
     return JsonResponse({"result": 'Клиент успешно добавлен!'})
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
+def add_staff(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные (добавление_сотрудника): {data}')
+    staff = Staff(
+        last_name=data['last_name'],
+        first_name=data['first_name'],
+        father_name=data['father_name'],
+        phone_number=data['phone_number'],
+        account_id=data['account_id'],
+        post=data['post'],
+    )
+    staff.save()
+    return JsonResponse(
+        {"result": f'Сотрудник "{data["last_name"]} {data["first_name"]} {data["father_name"]}" успешно добавлен!'})
 
 
 @csrf_exempt
@@ -256,6 +311,7 @@ def update_order(request):
     order.save()
     return JsonResponse({"result": 'Данные заказа успешно изменены!'})
 
+
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, ])
@@ -276,6 +332,7 @@ def update_order_adm(request):
     order.closed_at = data['closed_at']
     order.save()
     return JsonResponse({"result": 'Данные заказа успешно изменены!'})
+
 
 @csrf_exempt
 @api_view(['POST'])
@@ -347,6 +404,35 @@ def update_category(request):
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, ])
+def update_staff(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные (изменение_данных_сотрудника): {data}')
+    staff = Staff.objects.get(id=data['id'])
+    staff.last_name = data['last_name']
+    staff.first_name = data['first_name']
+    staff.father_name = data['father_name']
+    staff.phone_number = data['phone_number']
+    staff.account_id = data['account_id']
+    staff.post = data['post']
+    staff.save()
+    return JsonResponse({"result": 'Данные сотрудника успешно изменены!'})
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
+def update_account(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные (измененые_данных_учетной_записи): {data}')
+    user = User.objects.get(username=data['username'])
+    user.password = make_password(data['password'], hasher='default')
+    user.save()
+    return JsonResponse({"result": 'Данные учетной записи успешно изменены!'})
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
 def delete_order(request):
     data = json.loads(request.body.decode())
     print(f'Пришедшие данные (удаление_заказа): {data}')
@@ -375,3 +461,14 @@ def delete_category(request):
     category = Categories.objects.get(id=data['id'])
     category.delete()
     return JsonResponse({"result": 'Данные категории успешно удалены!'})
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, ])
+def delete_staff(request):
+    data = json.loads(request.body.decode())
+    print(f'Пришедшие данные (удаление_сотрудника): {data}')
+    staff = Staff.objects.get(id=data['id'])
+    staff.delete()
+    return JsonResponse({"result": 'Данные сотрудника успешно удалены!'})
