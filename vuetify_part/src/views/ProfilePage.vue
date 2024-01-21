@@ -2,7 +2,7 @@
   <v-container fluid="">
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="4" lg="12">
-        <v-container>
+        <v-container fluid="">
           <v-row dense>
             <v-col>
               <v-card elevation="5">
@@ -144,14 +144,15 @@
                         </v-row>
                       </template>
                     </v-expansion-panel-title>
-                    <v-expansion-panel-text>
+                    <v-expansion-panel-text id="exp-panel">
                       <v-data-table
                         :headers="tableHeaders"
                         :items="orders"
                         :loading="loadingTable"
                         :search="search"
+                        id="exp-panel-table"
                         item-value="id"
-                        class="elevation-1 table"
+                        class="elevation-1"
                         @update:options="loadTableItems"
                       >
                         <template v-slot:[`item.status`]="{ value }">
@@ -325,5 +326,11 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+#exp-panel > * {
+  padding: 0;
+}
+#exp-panel-table {
+  font-size: 15px;
+}
 </style>

@@ -11,9 +11,9 @@
             <v-tab prepend-icon="mdi-account-box" value="tab-staff">
               Сотрудники
             </v-tab>
-            <v-tab prepend-icon="mdi-account-settings-outline" value="tab-accounts">
+<!--            <v-tab prepend-icon="mdi-account-settings-outline" value="tab-accounts">
               Аккаунты
-            </v-tab>
+            </v-tab>-->
             <v-tab prepend-icon="mdi-account-cash" value="tab-clients">
               Клиенты
             </v-tab>

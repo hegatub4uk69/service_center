@@ -11,12 +11,12 @@
                 variant="flat"
                 class="link_404 "
                 text="Покинуть страницу"
+                @click="leavePage"
               >
                 <template v-slot:prepend>
                   <v-icon
                     icon="mdi-home-alert-outline"
                     size="30px"
-
                   ></v-icon>
                 </template>
               </v-btn>
@@ -28,7 +28,18 @@
   </section>
 </template>
 
-<script></script>
+<script>
+import router from "@/router";
+
+export default {
+  name: 'Err404NotFound',
+  methods: {
+    leavePage() {
+      router.push({name: 'login'})
+    }
+  }
+}
+</script>
 
 <style>
 .page_404 {
